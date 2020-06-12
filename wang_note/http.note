@@ -1,0 +1,47 @@
+1.http请求由三部分组成，分别是：请求行、消息报头、请求正文。
+    请求行：以方法符号开头，以空格分开，后跟请求的URL和协议版本，格式如下：
+        eg. Method Request-URI HTTP-Version CRLF
+            CRLF 表示回车和换行。
+2.http协议响应也是由三个部分主成：状态行、消息报头、响应正文。
+    状态行：HTTP-Version Status-Code Reason-Phrase CRLF
+            Reason-Phrase表示状态代码的文本描述。
+            Status-Code:1xx:指示信息
+                        2XX:成功
+                        3XX:重定向
+                        4XX:客户端错误：请求有语法错误或请求无法实现
+                        5XX:服务器端错误
+
+    响应正文：就是服务器返回的资源的内容。
+
+3.消息报头：HTTP消息报头包括普通报头、请求报头、相应报头、实体报头。
+            每个报头域都是由名字＋":"＋空格＋值 组成，和大小写无关。
+   
+    <1>   普通报头：
+    在普通报头中，有少数报头域用于所有的请求和响应消息，但并不用于被传输的实体，只用于传输的消息。
+    eg.
+        Cache-Control 用于指定缓存指令，缓存指令是单向的（响应中出现的缓存指令在请求中未必会出现）且是独立的（一个消息的缓存指令不会影响另一个消息处理的缓存机制）
+    请求时的缓存指令包括：no-cache（用于指示请求或响应消息不能缓存）、no-store、max-age、max-stale、min-fresh、only-if-cached;
+    响应时的缓存指令包括：public、private、no-cache、no-store、no-transform、must-revalidate、proxy-revalidate、max-age、s-maxage.
+    
+    eg.
+        为了指示IE浏览器（客户端）不要缓存页面，服务器端的JSP程序可以编写如下：response.sehHeader("Cache-Control","no-cache");
+    //response.setHeader("Pragma","no-cache");作用相当于上述代码，通常两者//合用
+    这句代码将在发送的响应消息中设置普通报头域：Cache-Control:no-cache
+
+    <2>请求报头
+    请求报头允许客户端向服务器端传递请求的附加信息以及客户端自身的信息。
+    Accept：imgage/gif、Accept-Charset:iso-8859-1,gb2312、Accept-Encoding:gzip.deflate........
+
+    <3>响应报头
+    响应报头允许服务器传递不能放在状态行中的附加响应信息，以及关于服务器的信息和对Request-URI所标识的资源进行下一步访问的信息。
+    
+    Location：响应报头域用于重定向接受者到一个新的位置。Location响应报头域常用在更换域名的时候
+   
+    Server:响应报头域包含了服务器用来处理请求的软件信息。与User-Agent请求报头域是相对应的。
+    eg.
+        Server：Apache-Coyote/1.1
+
+    WWW-Authenticate:
+
+    <4>实体报头
+

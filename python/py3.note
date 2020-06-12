@@ -1,0 +1,631 @@
+1、if is_py3:
+      def u(s):
+        return s
+   else:
+      def u(s):
+        return s.decode('unicode-escape')
+可以让一个函数根据情况自动选择适当的定义。
+
+2、初始化一个类时，如果类的初始化函数定义的格式def __init__（a = 1,b = 2,c = 3,d =4 ）格式时，若参数是列表需要加一个* ,若是字典时需要加**表示。
+3、函数加默认值时，有默认值的参数必须在没有默认值参数的后面，如:def a(a,b,c=1,d=2)，这样，顺序不能乱，赋值时可以都用列表，也可以都用字典，如: a(1,3,*[3,4]),a(**{"a":1,"b":2,"c":3,"d":4}),a(1,2,*[3],**{"d":4})
+4、类函数中定义的函数如果有self说明时类实例函数，需要实例对象以后由对象调用，如果类中函数第一个参数时cls，用@classmethod修饰器修饰，说明时类方法。
+
+注意：@classmethod 仅仅适用于单独的，与类本身的数据结构无关函数，其实用了它的函数，与使用普通函数无异，甚至不能在参数里加入 self，如果要在其中使用类的数据结构，仍然需要将类实例化一次才可以，所以要小心使用。classmethod修饰的函数第一个参数应该是cls，即调用类为第一个参数，而不能为空。
+cls代表是类本身，如果没有用@classmethod装饰器装饰的话，调用带有cls参数的方法时需要把类本身当作参数传进来。
+
+5、enumerate接受列表或数组。
+def enumerate (collection ): 
+  'Generates an indexed series:  (0,coll[0]), (1,coll[1]) ...'       
+  i = 0 
+  it = iter (collection ) 
+  while 1 : 
+       yield (i , it . next ()) 
+       i += 1 
+
+6、要创建一个generator，有很多种方法。第一种方法很简单，只要把一个列表生成式的[]改成()，就创建了一个generator：
+    eg.  g = (x * x for x in range(10))
+         g
+         <generator object <genexpr> at 0x11...>
+7、yield生成器函数:函数是顺序执行，遇到return语句或者最后一行函数语句就返回。而变成generator的函数，在每次调用next()的时候执行，遇到yield语句返回，再次执行时从上次返回的yield语句处继续执行。
+
+8、如果要让内部属性不被外部访问，可以把属性的名称前加上两个下划线__，在Python中，实例的变量名如果以__开头，就变成了一个私有变量（private），只有内部可以访问，外部不能访问,需要注意的是，在Python中，变量名类似__xxx__的，也就是以双下划线开头，并且以双下划线结尾的，是特殊变量，特殊变量是可以直接访问的，不是private变量，所以，不能用__name__、__score__这样的变量名。
+有些时候，你会看到以一个下划线开头的实例变量名，比如_name，这样的实例变量外部是可以访问的，但是，按照约定俗成的规定，当你看到这样的变量时，意思就是，“虽然我可以被访问，但是，请把我视为私有变量，不要随意访问”。
+双下划线开头的实例变量是不是一定不能从外部访问呢？其实也不是。不能直接访问__name是因为Python解释器对外把__name变量改成了_Student__name，所以，仍然可以通过_Student__name来访问__name变量：
+
+9、字典推导
+my_phrase = ["No", "one", "expects", "the", "Spanish", "Inquisition"]
+my_dict = {key: value for value, key in enumerate(my_phrase)}
+print(my_dict)
+reversed_dict = {value: key for key, value in my_dict.items()}
+print(reversed_dict)
+
+10.高阶函数：
+    map
+    from functools import reduce，reduce
+    filter
+    sorted：它可以接受一个key函数来实现自定义的排序，key指定的函数将作用于list的每一个元素上，并根据key函数返回的结果进行排序。
+
+11.闭包
+def lazy_sum(*args):
+    def sum():
+        ax = 0
+        for n in args:
+            ax = ax + n
+        return ax
+    return sum
+
+f = lazy_sum(1,2,3,4,5)
+f
+<function lazy_sum.<locals>.sum at0x0101ad>
+在这个例子中，我们在函数lazy_sum中又定义了函数sum，并且，内部函数sum可以引用外部函数lazy_sum的参数和局部变量，当lazy_sum返回函数sum时，相关参数和变量都保存在返回的函数中，这种称为“闭包（Closure）”的程序结构拥有极大的威力
+
+12.@coroutine decorator的定义如下
+
+def coroutine(func):
+    def start(*args,**kwargs):
+        cr = func(*args,**kwargs)
+        cr.next()
+        return cr
+    return start
+
+这是因为需要使用yield，但可能忘记第一次初始化，next(target)或者target.send(None),所以写来这个装饰器，将yield的第一次next加上。
+
+import time
+from tornado.gen import coroutine
+
+def follow(thefile,target):
+    thefile.seek(0,2)   #go to the end of the file
+    while True:
+        line = thefile.readline()
+        if not line:
+            time.sleep(0.1)
+            continue
+        target.send(line)
+
+@coroutine
+def printer():
+    while True:
+        line = (yield)
+        print(line)
+
+if __name__ == '__main__':
+    f = open("t.txt")                                                           
+    follow(f,printer())
+
+协程使用的就是yield关键字方法，像一个生成器。
+
+
+13.__slots__ 方法:限制实例的属性
+    eg.     
+        class Student(object):
+            __slots__ = ('name','age') #用tuple定义允许绑定的属性名称。
+
+    1>注意，__slots__定义的属性仅对当前类实例起作用，对继承的子类是不起作用的。子类如果需要，可以重新定义__slots__.
+
+14.@property
+    
+    eg.
+        class Student(object):
+
+            @property
+            def score(self):
+                return self._score
+
+            @score.setter
+            def score(self, value):
+                if not isinstance(value, int):
+                    raise ValueError('score must be an integer!')
+                if value < 0 or value > 100:
+                    raise ValueError('score must between 0 ~ 100!')
+                self._score = value
+
+    1> Python内置的@property装饰器就是负责把一个方法变成属性调用的
+    
+   2>  把一个getter方法变成属性，只需要加上@property就可以了，此时，@property本身又创建了另一个装饰器@score.setter，负责把一个setter方法变成属性赋值，于是，我们就拥有一个可控的属性操作
+        
+    s = Student()
+    s.score = 60
+    s.score
+>>> 60
+
+15.
+    elf, name='world'): # 先定义函数
+                          ...     print('Hello, %s.' % name)ype()函数既可以返回一个对象的类型，又可以创建出新的类型，比如，我们可以通过type()函数创建出Hello类，而无需通过class Hello(object)...的定义
+    
+    通过type()函数创建的类和直接写class是完全一样的，因为Python解释器遇到class定义时，仅仅是扫描一下class定义的语法，然后调用type()函数创建出class。
+    eg.
+
+    >>> def fn(self, name='world'): # 先定义函数
+    ...     print('Hello, %s.' % name)
+            Hello = type('Hello', (object,), dict(hello=fn)) # 创建Hello class
+            h = Hello()
+            h.hello()
+    Hello, world
+
+    要创建一个class对象，type()函数依次传入3个参数：
+
+    1.class的名称；
+    2.继承的父类集合，注意Python支持多重继承，如果只有一个父类，别忘了tuple的单元素写法；
+    3.class的方法名称与函数绑定，这里我们把函数fn绑定到方法名hello上。
+
+15.可迭代对象指的是内部有一下三个方法之一的对象。
+    __iter__()或者__next__()或者__getitem__() 方法
+
+16.python2 定义可迭代对象时对象内部定义next()方法，python3中需定义__next__()方法。
+
+17.偏函数：
+    partial函数，它可以重新绑定函数的可选参数，生成一个callable的partial对象：
+    它默认绑定了一个参数，可以用key=value的方法，改变那个默认的参数。
+    >>>from functools import partial
+    >>>int2 = partial(int,2)
+    >>>int2('10')
+    TypeError:xxxxxxxxxx
+    
+    在使用partial函数是，必须声明绑定参数的形参名。
+    >>>int2 = partial(int,base=2)
+    >>>int2('10')
+    >>>2
+    
+    可以在调用偏函数时，重载默认绑定的形参。
+    >>>int2('10',3)
+    TypeError: int() takes at most 2 arguments (3 given)
+    偏函数默认绑定了一个参数
+    
+    >>>int2('10',base=3)
+    >>>3 
+    重载了形参，偏函数没有生效。
+
+18.update_wrapper函数，它可以把被封装函数的__name__,__module__,__doc__和__dict__都复制到封装函数去：
+
+19.wraps函数
+def wraps(wrapped,assigned = WRAPPER_ASSIGNMENTS,updated = WRAPPER_UPDATES):
+    return partial(update_wrapper, wrapped=wrapped,
+                     assigned=assigned, updated=updated)
+从wraps的定义可以看出wraps是update_wrapper的偏函数。
+    eg.
+        import sys
+
+        debug_log = sys.stderr
+
+        def trace(func):
+          if debug_log:
+            def callf(*args, **kwargs):
+              """A wrapper function."""
+              debug_log.write('Calling function: {}\n'.format(func.__name__))
+              res = func(*args, **kwargs)
+              debug_log.write('Return value: {}\n'.format(res))
+              return res
+            return callf
+          else:
+            return func
+
+        @trace
+        def square(x):
+          """Calculate the square of the given number."""
+          return x * x
+
+       >> import square
+       >> help(square)  #print(square.__doc__)
+       calf(*args,**kwargs)
+            A wrapper function.
+
+    装饰器是返回一个函数，然后把函数重新复制给原函数名，即：
+        def _square(x):
+            return x * x
+        square = trace(_square)
+    所以使用过装饰器以后，原函数的__name__,__doc__ ....一类的环境变量会变成装饰器的环境变量，使用@functools.wraps(func)装饰器修饰返回的函数时，可以将原函数的环境变量赋予装饰器本身的环境变量。
+        
+20.给一类的实例绑定一个方法需要使用MethodType方法
+    eg.
+        >>>def set_age(self,age):
+                self.age = age
+        >>>from types import MethodType
+        >>>s.set_age = MethodType(set_age,s)
+        >>>s.set_age(25)
+        >>>s.age
+        25
+
+    如果不是用MethodType方法而直接将s.set_age=set_age会导致调用方法时self参数也需要指定对象，即set_age方法只是一个普通函数，不会自动指定self参数。
+    而且s.set_age只是对set_age方法的引用，他们指针位置相同。
+    >>>a.set_age
+    <function set_age at 0x10493cbf8>
+    >>>set_age
+    <function set_age at 0x10493cbf8>
+
+21. 但是如果用MethodType绑定方法到一个实例中，那其他的实例是不起作用的，如果想给所有实例都绑定方法，可以给class绑定方法：
+    >>>Student.set_score = MethodType(set_score,Student)
+
+    通常情况下，这些可以直接定义在class中，但动态绑定允许我们在程序运行过程中动态的添加功能。
+
+22.
+   如果一个类想被用于for ... in 循环，类似list或tuple那样，就必须实现一个 __iter__方法， 该方法返回一个迭代对象，然后python的for循环就会不断调用该迭代对象的__next__()方法拿到循环的下一个值。
+
+23.__getitem__
+    按照下标取出元素，需要实现__getitem__()方法：
+    eg.
+        class Fib(object):
+            def __getitem__(self,n):
+                a,b = 1,1
+                for x in range(n):
+                    a,b = b,a+b
+                return a
+
+24.任何类，只需要定义一个__call__()方法，就可以直接对实例进行调用。
+25.yield
+
+yield 相当于两句话
+    eg.
+    ret = yield sum,[a,b] == yield sum,[a,b]
+                             ret = yield
+
+另外，yield sum,[a,b]这个返回的命令会阻塞程序，相当于renturn，而ret = yield
+这些接受参数的命令不会阻塞。
+
+eg.
+   
+def loop1():
+  """ 循环1负责抛出一个函数和对应的参数, 并接收结果
+  """
+  a = 0
+  ret = 1
+  while True:
+    ret = yield sum, [a, ret]  //!!!!!!!!!!!此处相当于两句话，如果next()调用的是第一句话，yeild sum,[a,ret],执行完这句话阻塞程序。然后再次send()方法调用第二句话，ret ＝yield，此处不阻塞程序。
+    a, ret = ret, a
+    print("Loop1 ret", ret)
+
+def loop2():
+  """ 循环2 负责接收函数并计算结果, 然后 yield 出结果
+  """
+  while True:
+    func, args = yield
+    print('yield 1')
+    yield func(args)
+    print('yield 2')
+    print("Loop2")
+
+
+l1 = loop1()
+l2 = loop2()
+tmp = next(l1)
+
+for i in range(10):
+  next(l2)
+  ret = l2.send(tmp)
+  tmp = l1.send(ret) 
+
+26.json.dumps
+    1.python 中的字符串分普通字符串和unicode字符串，一般从数据库读取的字符串会自动被转换为unicode字符串
+    该函数默认转化为普通字符，如果转化的对象中有unicode值，需要加上一个参数，即json.dumps(obj,ensure_ascii=False)
+
+    2.default
+    default是一个函数，返回将对象转化为json的方法。这个函数的对象是要转化的课迭代对象中的一个。
+    eg.
+        c={'b': 'hello', 'a': datetime.datetime(2016, 1, 4, 22, 54, 14, 868667)}
+        def d(obj):
+        ...   if isinstance(obj,datetime.datetime):
+        ...     return obj.strftime('%Y-%m-%d %H:%M:%S')
+        ...   else: 
+        ...     raise 'type error'
+        e = json.dumps(c,default=d)
+        e
+        '{"b": "hello", "a": "2016-01-04 22:54:14"}'
+        所以可以用来转化哪些字典或列表或其他对象中的不规范的对象。default定义的函数似乎只有在不是dumps能解析的常规类型才会去调用，如果不是函数定义的几种类型，可以最后加一个类型报错。
+
+27.
+    协程时使用send方法，生成器主要使用next方法，协程不是异步，除非协程调用的是异步io，异步io需要系统底层支持。
+
+28.celery，rabbitmq
+    celery 分布式任务队列
+
+29. __file__
+(1).当"print os.path.dirname(__file__)"所在脚本是以完整路径被运行的， 那么将输出该脚本所在的完整路径，就是文件所在的目录，比如：
+
+             python d:/pythonSrc/test/test.py
+
+             那么将输出 d:/pythonSrc/test
+
+ (2).当"print os.path.dirname(__file__)"所在脚本是以相对路径被运行的， 那么将输出空目录，比如：
+
+         python test.py
+
+         那么将输出空字符串
+
+ (3).sys.path[0] 也可以输出文件运行的目录。它不管运行的目录时绝对路径还是相对路径，都输出绝对路径。
+
+30.类的__dict__方法，注意这个方法不能把继承类的所有方法输出为字典。
+        class Fruit:
+            price = 0
+            __a = 22
+            def __init__(self):
+                self.__color = "red"
+                self.__price = 11
+
+        class Apple(Fruit):             # Apple继承了Fruit
+            __b = 10
+            c = 33  
+
+        if __name__ == "__main__":
+            apple = Apple()
+
+            print apple.__dict__ 
+
+只有color,price是用self.来操作的，表示他们并不是类属性，而是实例属性。apple=Apple()中apple就是实例，Apple是类。apple.__dict__显示的是apple这个实例的属性，就是用self修饰的属性，也就是在父类中的__color和__price。
+
+你可以试试print Apple.__dict__ 坐下对比
+
+31.http post 提交时，如果是key－value格式，即字典格式，tornado接收在self.request.arguments中，若是string格式，即json格式，没有key的话，tornado接收在body中，需要自己去body中转化json格式。如果传过来的是key－value的话，body中时用&拼接的key－value。
+
+32.http post 请求有四种方式。对应不同的数据格式。
+
+33.requests
+    get方法的params 参数值时字典格式，requests会自动将参数拼接为正常的get参数方法。
+    post方法，data参数格式应该是字典，json参数后跟字典，但会自动转化为json。       post(url,data=json.dumps(dic)) == post(url,json=dic) 
+
+34.super 不代表父类，super指的是MRO中的下一个类。
+    def super(cls,inst):
+        mro = inst__class__.mro()
+        return mro[mro.index(cls) + 1]
+
+    eg.
+        class Root(object):
+            pass
+        class B(Root):
+            pass
+        class C(Root):
+            pass
+        class D(B,C):
+            pass
+        d = D()
+        print(d.__class__.mro())
+
+        >>>(<class '__main__.D'>, <class '__main__.B'>, <class '__main__.C'>, <class '__main__.Root'>, <type 'object'>)
+
+35.mongoengine:一个新的文档创建保存，但此时这个文档对象的id不可访问，product.reload()或许可以解决
+
+36.mongoengine 自动递加递减：
+
+自动更新
+你而已对一个QuerySet()使用update_one()或update()来实现自动更新，有一些可以与这两个方法结合使用的操作符： 
+set – 设置成一个指定的值
+unset – 删除一个指定的值
+inc – 将值加上一个给定的数
+dec – 将值减去一个给定的数
+pop – 将 list 里面的最后一项移除
+push – 在 list 里面添加一个值
+push_all – 在 list 里面添加好几个值
+pull – 将一个值从 list 里面移除
+pull_all – 将好几个值从 list 里面移除
+add_to_set – 如果list里面没有这个值，则添加这个值自动更新的语法与查询的语法基本相同，区别在于操作符写在字段之前：
+    eg.
+    >>> post = BlogPost(title='Test', page_views=0, tags=['database'])  
+    >>> post.save()  
+    >>> BlogPost.objects(id=post.id).update_one(inc__page_views=1)  
+    >>> post.reload()  # the document has been changed, so we need to reload it  
+    >>> post.page_views  
+    1  
+    >>> BlogPost.objects(id=post.id).update_one(set__title='Example Post')  
+    >>> post.reload()  
+    >>> post.title  
+    'Example Post'  
+    >>> BlogPost.objects(id=post.id).update_one(push__tags='nosql')  
+    >>> post.reload()  
+    >>> post.tags  
+注意reload的使用
+
+37.tornado finsh和write的区别
+@安江泽
+    self.finish()代表回应生成的终结，并不代表着请求处理逻辑的终结。假设你有一个block的逻辑是和回应无关的，那么放在self.finish()的后面可以显著的缩短响应时间。所以，如果你确定自己的逻辑需要立即返回，可以在self.finish()后立刻return。Tornado在将这个自由留给了你自己。
+
+    另外一个理由是，在call stack里让顶端的函数去弹出一个非顶端的函数，这个逻辑有点奇怪。唯一能够提供退出的机制就是异常了。但是在正常逻辑里面使用异常去实现一个功能，也是很怪的逻辑。
+
+    @杨昆
+    没错  同理还有self.render/self.write
+    我们在所有这种response语句前加return 例如  return self.redirect(‘/’)
+
+    至此，这个问题得到了完美的解决和解答，而我想后者才是更重要的。
+
+38.花三分钟接入ssl证书
+http://www.tuicool.com/articles/mU7nErr
+
+39.正则表达式
+4. 零宽断言
+1) 常用零宽断言语法
+(?=exp) 匹配exp前面的位置
+(?<=exp) 匹配exp后面的位置
+(?!exp) 匹配后面跟的不是exp的位置
+(?<!exp) 匹配前面不是exp的位置
+
+39.
+同步IO和异步IO的区别就在于：数据拷贝的时候进程是否阻塞！
+
+阻塞IO和非阻塞IO的区别就在于：应用程序的调用是否立即返回！
+
+40.
+__new__()是在新式类中新出现的方法，它作用在构造方法建造实例之前，可以这么理解，在Python中 存在于类里面的构造方法__init__()负责将类的实例化，而在__init__()启动之前，__new__()决定是否 要使用该__init__()方法，因为__new__()可以调用其他类的构造方法或者直接返回别的对象来作为本类 的实例。
+注意：这个函数必须有返回值，返回类的实例对象。
+
+第一个参数cls是当前正在实例化的类。
+   如果要得到当前类的实例，应当在当前类中的__new__()方法语句中调用当前类的父类 的__new__()方法。
+   例如，如果当前类是直接继承自object，那当前类的__new__()方法返回的对象应该为：
+   def __new__(cls, *args, **kwargs):
+       return object.__new__(cls)
+
+在制造Stranger实例时，会自动调用 object.__new__(cls)
+通常来说，新式类开始实例化时，__new__()方法会返回cls（cls指代当前类）的实例，然后该类的 __init__()方法作为构造方法会接收这个实例（即self）作为自己的第一个参数，然后依次传入__new__ ()方法中接收的位置参数和命名参数。
+注意：如果__new__()没有返回cls（即当前类）的实例，那么当前类的__init__()方法是不会被调用 的。如果__new__()返回其他类（新式类或经典类均可）的实例，那么只会调用被返回的那个类的构造方 法。
+class Foo(object):
+    def __init__(self, *args, **kwargs):
+        ...
+    def __new__(cls, *args, **kwargs):
+        return object.__new__(Stranger, *args, **kwargs)  
+    
+class Stranger(object):
+    ...
+    
+foo = Foo()
+print type(foo)    
+    
+# 打印的结果显示foo其实是Stranger类的实例。
+    
+# 因此可以这么描述__new__()和__ini__()的区别，在新式类中__new__()才是真正的实例化方法，为类
+ 
+提供外壳制造出实例框架，然后调用该框架内的构造方法__init__()使其丰满。
+# 如果以建房子做比喻，__new__()方法负责开发地皮，打下地基，并将原料存放在工地。而__init__()
+ 
+方法负责从工地取材料建造出地皮开发招标书中规定的大楼，__init__()负责大楼的细节设计，建造，装
+ 
+修使其可交付给客户。
+
+41.
+类方法的隐含调用参数是类，而类实例方法的隐含调用参数是类的实例，静态方法没有隐含调用参数
+
+42.python 中的闭包：http://www.jb51.net/article/54498.htm
+
+43.闭包经典错误
+def multipliers():
+    return [lambda x : i * x for i in range(4)]
+
+print [m(2) for m in multipliers()]
+
+(1)输出是什么
+(2)为什么会出现这种情况
+(3)怎么修改函数得出想要的结果
+
+答案：
+(1)  [6, 6, 6, 6]
+
+(2)
+当循环结束以后，循环体中的临时变量i不会销毁，而是继续存在于执行环境中。
+python的函数只有在执行时，才会去找函数体里的变量的值。
+
+(3)
+def multipliers():
+    return [lambda x, i=i : i * x for i in range(4)]
+    
+44.python 10大易错知识点
+
+    1》在函数中乱用表达式作为默认值
+    Python允许给一个函数的某个参数设置默认值以使该参数成为一个可选参数。尽管这是这门语言很棒的一个功能，但是这当这个默认值是可变对象（mutable）时，那就有些麻烦了。例如，看下面这个Python函数定义：
+
+    >>> def foo(bar=[]):        
+    ...    bar.append("baz")    
+    ...    return bar
+
+    人们常犯的一个错误是认为每次调用这个函数时不给这个可选参数赋值的话，它总是会被赋予这个默认表达式的值。例如，在上面的代码中，程序员可能会认为重复调用函数foo() （不传参数bar给这个函数），这个函数会总是返回‘baz’，因为我们假定认为每次调用foo()的时候（不传bar），参数bar会被置为[]（即，一个空的列表）。
+
+    >>> foo()
+    ["baz"]
+    >>> foo()
+    ["baz", "baz"]
+    >>> foo()
+    ["baz", "baz", "baz"]
+
+    答案是一个函数参数的默认值，仅仅在该函数定义的时候，被赋值一次。如此，只有当函数foo()第一次被定义的时候，才讲参数bar的默认值初始化到它的默认值（即一个空的列表）。当调用foo()的时候（不给参数bar），会继续使用bar最早初始化时的那个列表。
+
+    >>> def foo(bar=None):
+        ...    if bar is None:      
+# 或者用 if not bar:
+       ...        bar = []
+       ...    bar.append("baz")
+       ...    return bar
+       ...
+       >>> foo()
+    ["baz"]
+    >>> foo()
+    ["baz"]
+    >>> foo()
+    ["baz"]
+
+    在给函数的参数赋值时，不要用可变对象
+
+    2》
+
+>>> class A(object):
+...     x = 1
+...
+>>> class B(A):
+...     pass
+...
+>>> class C(A):
+...     pass
+...
+>>> print A.x, B.x, C.x
+1 1 1
+
+    在Python里，类变量通常在内部被当做字典来处理并遵循通常所说的方法解析顺序（Method Resolution Order (MRO)）。因此在上面的代码中，因为属性x在类C中找不到，因此它会往上去它的基类中查找（在上面的例子中只有A这个类，当然Python是支持多重继承（multiple inheritance）的）。换句话说，C没有它自己独立于A的属性x。因此对C.x的引用实际上是对A.x的引用。（B.x不是对A.x的引用是因为在第二步里B.x=2将B.x引用到了2这个对象上，倘若没有如此，B.x仍然是引用到A.x上的。——译者注）
+
+45.浮点数在运算过程中会产生误差，因为计算机无法精确表示无限循环小数，要比较两个浮点数是否相等，只能计算它们之差的绝对值，看是否小于某个阈值：
+    Math.bs(1/3 - (1-2/3)) < 0.0000001;(js),true
+
+
+46。注意类变量和对象变量的区别。类变量存在类中，所有类对象拥有对类变量的引用，就像类里的常量一样，如果类改变变量的值，对象也都会改变该值，因为对象一开始拥有类变量的引用，但就像类常量一样，如果对象改变类变量，那么对象中的变量就不是引用，而是重新为对象中的那个类变量赋予新值，此时，对象中类变量的id和类变量中的id是不同的，但如果对象没有更改过类变量，则对象的类变量id和类本身的变量的id相同。
+类也是对象，所以在对象方法中也可以增添类变量或方法，只不过对象不能使self，直接引用类的名字：
+    class A(object):
+        def test(self):
+            A.address = "earch"
+这样，这个类本身就被改变了，address这个属性存在于类A的__dict__属性中。
+
+47.open不指明选项，默认是只读。
+
+47.函数里的return如果返回多于一个值，他们是组装成一个tupple的，是不可变的。
+
+48.函数如果没有返回值类型，没有返回值时，会默认返回None。
+
+49.迭代器比列表消费更少内存，但是在当迭代一个迭代器时不允许修改字典。然而，迭代列表返回项目，键或值不会传递这种限制。
+
+50.Lists are mutable and can't be used as dict keys,数组是可变的，所有数组不能作为字典的key。
+unhashable type: 'dict'
+unhashable type: 'list'
+
+51.Python中对可变变量和不可变变量封装的很好，如，函数返回多个结果，他就封装成了tupple，list不能做字典的key，所以，在需要不可变对象时，肯定不能会是list，dict等可变对象，需要可变对象时，也肯定不能使不可变对象，如tupple。
+
+52.
+    工厂函数如list()，dict()等函数的拷贝其实是一种浅拷贝。 
+
+53.列表的+= 和 = a + b
+ 1. a = [1,2,3]
+    id(a)   //139918095676872
+    b = ['end']
+    a = a + b  //相当于将a+b，然后将新产生的列表付给另外一个变量，这个a的id和上面那个a的id不同。
+    id(a)   //139918095677384
+
+ 2. a = [1,2,3]
+    id(a)     //139918095676872
+    b = ['end']
+    a += b
+    id(a)     //139918095676872
+
+所以+= 表示左边的变量还是原来的变量，改变它的值。
+  = a + b 表示算出一个新的值，然后赋予一个新的变量，左边的变量的id也变了
+
+  测试字符串可以，而数字变量不行，可能是每个数字都是引用，新的数字有产生一个新的存储空间。所以是变量时可变的非数字变量。
+
+54.字符串可以用下表访问字符，但是不能赋值。
+eg  
+    name = 'snow storm'
+    name[0] = 's'
+    name[0] = 'h'  //error ，字符串是不可变对象。不可以按下标赋值。
+
+54.python中不要用++和--，i++会报错，++i不会报错但是不会改变i的值。
+
+55.装饰器中接受被装饰的函数的参数时，可以截取函数定义时的参数，及装饰器中接受到的函数参数可以和函数原来接受到的不一样，只不过这样，不能再装饰器中直接调用被装饰的函数，需要自己构造合适的参数来调用被装饰的函数。
+    装饰器主要分三层：
+        装饰器自己有参数的，先调用自己，然后用返回的函数是真正的装饰被装饰函数的函数，这个函数一函数为参数（注意，这个的函数是函数指针），这里面可以写需要额外增添的功能，(如果没有wrap包装的话，被装饰函数变量指向的函数已经变了，同时它的上下文和__name__属性也变成装饰器中实际装饰那个函数的了)。接着会返回第三层函数，这层函数的参数是被装饰函数的参数，这里的参数个数可以和原函数个数不同，这样装饰器只接受原函数的一部分参数，这样的话，是不能直接运行原函数的，需要自己构造合适的参数来调用原函数。
+        eg1.用装饰器实现了偏函数
+        def a(w='hello'):
+            def _de(func):
+                def __de(args):
+                    func(args, 2)
+                return __de
+            return _de
+
+        @a(w='world')
+        def b(a, b):
+            print(a, b)
+
+        b()   wrong  :missing 1 required positional argument: 'args'
+        b(2) -> 2 2 
+        b(1, 2) wrong : takes 1 positional argument  but 2 given
+
+        b指向__de函数，而且b的__name__ 等于'__de',
+        所以原来函数的参数个数都改变了，调用的时候要注意。
