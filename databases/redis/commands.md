@@ -1,36 +1,36 @@
 
 <!-- vim-markdown-toc GFM -->
 
-* [key 28]
-* [string 44]
-	* [set 45]
-	* [get 57]
-	* [incr/decr 66]
-	* [str 73]
-* [list 77]
-* [Hash 86]
-* [set 93]
-	* [set 94]
-	* [curd 99]
-	* [container 102]
-* [zset 108]
-	* [提示 109]
-	* [命令详解: 117]
-	* [curd 174]
-	* [get 182]
-	* [container 192]
-	* [集合 195]
-* [连接 199]
-* [事务 202]
-* [发布订阅: 205]
-* [服务器命令]
-	* [server]
-	* [log]
-	* [主备]
-	* [cluster]
+* [key 33]
+* [string 49]
+	* [set 50]
+	* [get 62]
+	* [incr/decr 71]
+	* [str 78]
+* [list 82]
+* [Hash 91]
+* [set 98]
+	* [set 99]
+	* [curd 104]
+	* [container 107]
+* [zset 113]
+	* [提示 114]
+	* [命令详解: 122]
+	* [curd 179]
+	* [get 187]
+	* [container 197]
+	* [集合 200]
+* [连接 204]
+* [事务 207]
+* [发布订阅: 210]
+* [服务器命令 218]
+	* [server 219]
+	* [log 244]
+	* [主备 249]
+	* [cluster 254]
 
 <!-- vim-markdown-toc -->
-## key 28
+## key 33
 1. type
 2. expire
 	- expire/expireat
@@ -46,8 +46,8 @@
 11. exists
 12. keys pattern
 
-## string 44
-### set 45
+## string 49
+### set 50
 1. set, setnx, mset, msetnx
 
 2. setex, psetex
@@ -59,7 +59,7 @@
 4. setrange
 	- setrange key offset value(str)
 
-### get 57
+### get 62
 1. get, getset, gitbit, getrange, mget
 
 2. getbit
@@ -68,18 +68,18 @@
 3. getrange
 	- getrange key start end
 
-### incr/decr 66
+### incr/decr 71
 1. incr/ decr
 	- command key
 
 2. incrby/incrbyfloat/decrby
 	- command key value
 
-### str 73
+### str 78
 1. strlen
 2. append
 
-## list 77
+## list 82
 1. Lindex, Lrange, Linsert, Lset, Lrem, Llen, Ltrim
 
 2. Lpush, Rpush/ Lpop, Rpop/ Lpushx, Rpushx
@@ -88,30 +88,30 @@
 
 4. RpopLpush
 
-## Hash 86
+## Hash 91
 1. Hset, Hget/ Hmset, Hmget/ Hgetall, Hsetnx
 
 2. Hincrby, Hincrbyfloat
 
 3. Hexists, Hlen, Hdel, Hvals, Hkeys
 
-## set 93
-### set 94
+## set 98
+### set 99
 1. sunion, sdiff, sinter / sunionstore, sdiffstore, sinterstore
 
 2. smove, sscan
 
-### curd 99
+### curd 104
 1. sadd, spop, srem
 
-### container 102
+### container 107
 1. scard
 2. srandmember
 3. smembers
 4. sismember
 
-## zset 108
-### 提示 109
+## zset 113
+### 提示 114
 1. rank -> 秩序,索引
 2. range ->区间
 3. byscore ->以分数
@@ -119,7 +119,7 @@
 5. lex ->字典区间
 6. 默认排序是以索引:
 
-### 命令详解: 117
+### 命令详解: 122
 
 1. zadd key score member[{score member}...]
 	创建或设置指定key对应的有序集合，根据每个值对应的score来排名，升序。
@@ -176,7 +176,7 @@
 	A和D不是key1与key2共有的，但是并集中只要存在就会记录进去，然后B与C是共有的，即并集的
 	结果就是 key3{10:A,B:60,D:60,C:80}
 
-### curd 174
+### curd 179
 1. zadd key score member
 2. zrem key member
 3. zincrby key increnment member
@@ -184,7 +184,7 @@
 5. zremrangebyscore key min max (byscore, 以分数为准)
 6. zremrangebylex (以字典)
 
-### get 182
+### get 187
 1. zrank
 2. zrevrank
 3. zrange (默认以索引排序)
@@ -194,20 +194,20 @@
 7. zrevrange: 反:区间:(索引)
 8. zrevrangebyscore
 
-### container 192
+### container 197
 1. zlexcount, zcard, zrem, zscan, zcount
 
-### 集合 195
+### 集合 200
 1. zunionstore
 2. zinterstore
 
-## 连接 199
+## 连接 204
 1. echo, select, ping, auth
 
-## 事务 202
+## 事务 207
 1. multi, watch, unwatch, discard, exec
 
-## 发布订阅: 205
+## 发布订阅: 210
 1. subscribe, unsubscribe
 3. 正则表达式
 	- Psubscribe: 订阅所有指定模式的频道
@@ -215,8 +215,8 @@
 
 3. publish, pubsub
 
-## 服务器命令
-### server
+## 服务器命令 218
+### server 219
 1. client pause
 2. debug object
 3. flushdb
@@ -241,15 +241,15 @@
 18. config rewrite
 19. bgsave: 在后台异步保存**当前数据库的数据**到磁盘.
 
-### log
+### log 244
 1. slowlog: 慢日志
 2. bgrewriteaof: 异步执行一个AOF文件重写操作.
 
 
-### 主备
+### 主备 249
 1. slaveof: 将当期那服务器转变为指定服务器的从属服务器
 2. sync
 3. role
 
-### cluster
+### cluster 254
 1. cluster slots: 获取集群节点的映射数组
