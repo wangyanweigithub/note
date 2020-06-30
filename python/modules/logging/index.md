@@ -14,3 +14,6 @@
 3. 模块 "logging.handlers": 日志记录模块附带的有用处理程序。
 	/home/wang/python_document/python-3.8.0-docs-text/library/logging.handlers.md
 
+## 笔记
+1. note.md
+
