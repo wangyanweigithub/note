@@ -31,6 +31,9 @@
 1. modules/scrapy.md
 2. modules/xpath.md
 
+#### 日志
+1. modules/logging/index.md
+
 ### 收集的资料
 1. url: url.md
 

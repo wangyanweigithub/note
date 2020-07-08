@@ -9,6 +9,7 @@
 4. 如果logger没有配置,会传递给父类,使用父类的配置.
 
 5. logging中的root和logger,不仅是单例,还是继承关系,而且会向父类传递.
+**如果一个logger某些配置或者handler没有配置,会使用父类的配置**
 
 ### basicConfig
 1. **使用标准库提提供的 logging API 最主要的好处是，所有的 Python 模块都可
@@ -21,3 +22,29 @@
 3. basiConfig只能配置一次,第二次会忽略.因为root是单例模式.
 
 ### handler
+
+### 在记录消息上添加额外信息
+1. 使用LoggerAdapter, 重定义process方法.
+```
+   class CustomAdapter(logging.LoggerAdapter):
+       """
+       This example adapter expects the passed in dict-like object to have a
+       'connid' key, whose value in brackets is prepended to the log message.
+       """
+       def process(self, msg, kwargs):
+           return '[%s] %s' % (self.extra['connid'], msg), kwargs
+```
+
+2. 使用Filter,修改继承的类的filter方法,在record对象中添加额外信息作为成员.
+```
+class ContextFilter(logging.Filter):
+
+   USERS = ['jim', 'fred', 'sheila']
+   IPS = ['123.231.231.123', '127.0.0.1', '192.168.0.1']
+
+   def filter(self, record):
+
+	   record.ip = choice(ContextFilter.IPS)
+	   record.user = choice(ContextFilter.USERS)
+	   return True
+```
