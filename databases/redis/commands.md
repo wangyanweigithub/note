@@ -120,7 +120,6 @@
 6. 默认排序是以索引:
 
 ### 命令详解: 122
-
 1. zadd key score member[{score member}...]
 	创建或设置指定key对应的有序集合，根据每个值对应的score来排名，升序。
 	例如有命令 zadd key1 10 A 20 B 30 D 40 C;那么真实排名是 A B D C
