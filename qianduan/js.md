@@ -1,16 +1,17 @@
 
 <!-- vim-markdown-toc GFM -->
 
-* [js](#js)
-	* [JavaScript 的组成](#javascript-的组成)
-	* [js面向对象编程](#js面向对象编程)
-		* [构造函数](#构造函数)
-		* [原型/prototype](#原型prototype)
-	* [函数进阶:](#函数进阶)
-		* [高级函数](#高级函数)
-			* [call](#call)
-			* [apply](#apply)
-			* [bind](#bind)
+* [js]
+	* [JavaScript 的组成]
+	* [js面向对象编程]
+		* [构造函数]
+		* [原型/prototype]
+	* [函数进阶:]
+		* [高级函数]
+			* [call]
+			* [apply]
+			* [bind]
+			* [for]
 
 <!-- vim-markdown-toc -->
 # js
@@ -307,3 +308,10 @@ newTest(); // 返回 6, 在这种情况下，"this"指向全局作用域
 var bindgetNum = newTest.bind(test);
 bindgetNum(); // 返回 66
 ```
+
+#### for
+1. for (i in a) console.log(i)
+	- 如果a是数组,i是数组的下标
+	- 如果a是对象,i是对象的key.
+
+	代码可以根据i的值取出a所保存的对象.而不是直接取出a中的对象.
