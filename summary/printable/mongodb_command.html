@@ -1,0 +1,694 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
+<title>mongodb_command</title><link href='https://fonts.loli.net/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext' rel='stylesheet' type='text/css' /><style type='text/css'>html {overflow-x: initial !important;}:root { --bg-color:#ffffff; --text-color:#333333; --select-text-bg-color:#B5D6FC; --select-text-font-color:auto; --monospace:"Lucida Console",Consolas,"Courier",monospace; }
+html { font-size: 14px; background-color: var(--bg-color); color: var(--text-color); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+body { margin: 0px; padding: 0px; height: auto; bottom: 0px; top: 0px; left: 0px; right: 0px; font-size: 1rem; line-height: 1.42857; overflow-x: hidden; background: inherit; tab-size: 4; }
+iframe { margin: auto; }
+a.url { word-break: break-all; }
+a:active, a:hover { outline: 0px; }
+.in-text-selection, ::selection { text-shadow: none; background: var(--select-text-bg-color); color: var(--select-text-font-color); }
+#write { margin: 0px auto; height: auto; width: inherit; word-break: normal; overflow-wrap: break-word; position: relative; white-space: normal; overflow-x: visible; padding-top: 40px; }
+#write.first-line-indent p { text-indent: 2em; }
+#write.first-line-indent li p, #write.first-line-indent p * { text-indent: 0px; }
+#write.first-line-indent li { margin-left: 2em; }
+.for-image #write { padding-left: 8px; padding-right: 8px; }
+body.typora-export { padding-left: 30px; padding-right: 30px; }
+.typora-export .footnote-line, .typora-export li, .typora-export p { white-space: pre-wrap; }
+@media screen and (max-width: 500px) {
+  body.typora-export { padding-left: 0px; padding-right: 0px; }
+  #write { padding-left: 20px; padding-right: 20px; }
+  .CodeMirror-sizer { margin-left: 0px !important; }
+  .CodeMirror-gutters { display: none !important; }
+}
+#write li > figure:last-child { margin-bottom: 0.5rem; }
+#write ol, #write ul { position: relative; }
+img { max-width: 100%; vertical-align: middle; }
+button, input, select, textarea { color: inherit; font: inherit; }
+input[type="checkbox"], input[type="radio"] { line-height: normal; padding: 0px; }
+*, ::after, ::before { box-sizing: border-box; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p, #write pre { width: inherit; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p { position: relative; }
+p { line-height: inherit; }
+h1, h2, h3, h4, h5, h6 { break-after: avoid-page; break-inside: avoid; orphans: 2; }
+p { orphans: 4; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.8rem; }
+h3 { font-size: 1.6rem; }
+h4 { font-size: 1.4rem; }
+h5 { font-size: 1.2rem; }
+h6 { font-size: 1rem; }
+.md-math-block, .md-rawblock, h1, h2, h3, h4, h5, h6, p { margin-top: 1rem; margin-bottom: 1rem; }
+.hidden { display: none; }
+.md-blockmeta { color: rgb(204, 204, 204); font-weight: 700; font-style: italic; }
+a { cursor: pointer; }
+sup.md-footnote { padding: 2px 4px; background-color: rgba(238, 238, 238, 0.7); color: rgb(85, 85, 85); border-radius: 4px; cursor: pointer; }
+sup.md-footnote a, sup.md-footnote a:hover { color: inherit; text-transform: inherit; text-decoration: inherit; }
+#write input[type="checkbox"] { cursor: pointer; width: inherit; height: inherit; }
+figure { overflow-x: auto; margin: 1.2em 0px; max-width: calc(100% + 16px); padding: 0px; }
+figure > table { margin: 0px !important; }
+tr { break-inside: avoid; break-after: auto; }
+thead { display: table-header-group; }
+table { border-collapse: collapse; border-spacing: 0px; width: 100%; overflow: auto; break-inside: auto; text-align: left; }
+table.md-table td { min-width: 32px; }
+.CodeMirror-gutters { border-right: 0px; background-color: inherit; }
+.CodeMirror-linenumber { user-select: none; }
+.CodeMirror { text-align: left; }
+.CodeMirror-placeholder { opacity: 0.3; }
+.CodeMirror pre { padding: 0px 4px; }
+.CodeMirror-lines { padding: 0px; }
+div.hr:focus { cursor: none; }
+#write pre { white-space: pre-wrap; }
+#write.fences-no-line-wrapping pre { white-space: pre; }
+#write pre.ty-contain-cm { white-space: normal; }
+.CodeMirror-gutters { margin-right: 4px; }
+.md-fences { font-size: 0.9rem; display: block; break-inside: avoid; text-align: left; overflow: visible; white-space: pre; background: inherit; position: relative !important; }
+.md-diagram-panel { width: 100%; margin-top: 10px; text-align: center; padding-top: 0px; padding-bottom: 8px; overflow-x: auto; }
+#write .md-fences.mock-cm { white-space: pre-wrap; }
+.md-fences.md-fences-with-lineno { padding-left: 0px; }
+#write.fences-no-line-wrapping .md-fences.mock-cm { white-space: pre; overflow-x: auto; }
+.md-fences.mock-cm.md-fences-with-lineno { padding-left: 8px; }
+.CodeMirror-line, twitterwidget { break-inside: avoid; }
+.footnotes { opacity: 0.8; font-size: 0.9rem; margin-top: 1em; margin-bottom: 1em; }
+.footnotes + .footnotes { margin-top: 0px; }
+.md-reset { margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: top; background: 0px 0px; text-decoration: none; text-shadow: none; float: none; position: static; width: auto; height: auto; white-space: nowrap; cursor: inherit; -webkit-tap-highlight-color: transparent; line-height: normal; font-weight: 400; text-align: left; box-sizing: content-box; direction: ltr; }
+li div { padding-top: 0px; }
+blockquote { margin: 1rem 0px; }
+li .mathjax-block, li p { margin: 0.5rem 0px; }
+li { margin: 0px; position: relative; }
+blockquote > :last-child { margin-bottom: 0px; }
+blockquote > :first-child, li > :first-child { margin-top: 0px; }
+.footnotes-area { color: rgb(136, 136, 136); margin-top: 0.714rem; padding-bottom: 0.143rem; white-space: normal; }
+#write .footnote-line { white-space: pre-wrap; }
+@media print {
+  body, html { border: 1px solid transparent; height: 99%; break-after: avoid; break-before: avoid; }
+  #write { margin-top: 0px; padding-top: 0px; border-color: transparent !important; }
+  .typora-export * { -webkit-print-color-adjust: exact; }
+  html.blink-to-pdf { font-size: 13px; }
+  .typora-export #write { padding-left: 32px; padding-right: 32px; padding-bottom: 0px; break-after: avoid; }
+  .typora-export #write::after { height: 0px; }
+}
+.footnote-line { margin-top: 0.714em; font-size: 0.7em; }
+a img, img a { cursor: pointer; }
+pre.md-meta-block { font-size: 0.8rem; min-height: 0.8rem; white-space: pre-wrap; background: rgb(204, 204, 204); display: block; overflow-x: hidden; }
+p > .md-image:only-child:not(.md-img-error) img, p > img:only-child { display: block; margin: auto; }
+p > .md-image:only-child { display: inline-block; width: 100%; }
+#write .MathJax_Display { margin: 0.8em 0px 0px; }
+.md-math-block { width: 100%; }
+.md-math-block:not(:empty)::after { display: none; }
+[contenteditable="true"]:active, [contenteditable="true"]:focus { outline: 0px; box-shadow: none; }
+.md-task-list-item { position: relative; list-style-type: none; }
+.task-list-item.md-task-list-item { padding-left: 0px; }
+.md-task-list-item > input { position: absolute; top: 0px; left: 0px; margin-left: -1.2em; margin-top: calc(1em - 10px); border: none; }
+.math { font-size: 1rem; }
+.md-toc { min-height: 3.58rem; position: relative; font-size: 0.9rem; border-radius: 10px; }
+.md-toc-content { position: relative; margin-left: 0px; }
+.md-toc-content::after, .md-toc::after { display: none; }
+.md-toc-item { display: block; color: rgb(65, 131, 196); }
+.md-toc-item a { text-decoration: none; }
+.md-toc-inner:hover { text-decoration: underline; }
+.md-toc-inner { display: inline-block; cursor: pointer; }
+.md-toc-h1 .md-toc-inner { margin-left: 0px; font-weight: 700; }
+.md-toc-h2 .md-toc-inner { margin-left: 2em; }
+.md-toc-h3 .md-toc-inner { margin-left: 4em; }
+.md-toc-h4 .md-toc-inner { margin-left: 6em; }
+.md-toc-h5 .md-toc-inner { margin-left: 8em; }
+.md-toc-h6 .md-toc-inner { margin-left: 10em; }
+@media screen and (max-width: 48em) {
+  .md-toc-h3 .md-toc-inner { margin-left: 3.5em; }
+  .md-toc-h4 .md-toc-inner { margin-left: 5em; }
+  .md-toc-h5 .md-toc-inner { margin-left: 6.5em; }
+  .md-toc-h6 .md-toc-inner { margin-left: 8em; }
+}
+a.md-toc-inner { font-size: inherit; font-style: inherit; font-weight: inherit; line-height: inherit; }
+.footnote-line a:not(.reversefootnote) { color: inherit; }
+.md-attr { display: none; }
+.md-fn-count::after { content: "."; }
+code, pre, samp, tt { font-family: var(--monospace); }
+kbd { margin: 0px 0.1em; padding: 0.1em 0.6em; font-size: 0.8em; color: rgb(36, 39, 41); background: rgb(255, 255, 255); border: 1px solid rgb(173, 179, 185); border-radius: 3px; box-shadow: rgba(12, 13, 14, 0.2) 0px 1px 0px, rgb(255, 255, 255) 0px 0px 0px 2px inset; white-space: nowrap; vertical-align: middle; }
+.md-comment { color: rgb(162, 127, 3); opacity: 0.8; font-family: var(--monospace); }
+code { text-align: left; vertical-align: initial; }
+a.md-print-anchor { white-space: pre !important; border-width: initial !important; border-style: none !important; border-color: initial !important; display: inline-block !important; position: absolute !important; width: 1px !important; right: 0px !important; outline: 0px !important; background: 0px 0px !important; text-decoration: initial !important; text-shadow: initial !important; }
+.md-inline-math .MathJax_SVG .noError { display: none !important; }
+.html-for-mac .inline-math-svg .MathJax_SVG { vertical-align: 0.2px; }
+.md-math-block .MathJax_SVG_Display { text-align: center; margin: 0px; position: relative; text-indent: 0px; max-width: none; max-height: none; min-height: 0px; min-width: 100%; width: auto; overflow-y: hidden; display: block !important; }
+.MathJax_SVG_Display, .md-inline-math .MathJax_SVG_Display { width: auto; margin: inherit; display: inline-block !important; }
+.MathJax_SVG .MJX-monospace { font-family: var(--monospace); }
+.MathJax_SVG .MJX-sans-serif { font-family: sans-serif; }
+.MathJax_SVG { display: inline; font-style: normal; font-weight: 400; line-height: normal; zoom: 90%; text-indent: 0px; text-align: left; text-transform: none; letter-spacing: normal; word-spacing: normal; overflow-wrap: normal; white-space: nowrap; float: none; direction: ltr; max-width: none; max-height: none; min-width: 0px; min-height: 0px; border: 0px; padding: 0px; margin: 0px; }
+.MathJax_SVG * { transition: none 0s ease 0s; }
+.MathJax_SVG_Display svg { vertical-align: middle !important; margin-bottom: 0px !important; margin-top: 0px !important; }
+.os-windows.monocolor-emoji .md-emoji { font-family: "Segoe UI Symbol", sans-serif; }
+.md-diagram-panel > svg { max-width: 100%; }
+[lang="mermaid"] svg, [lang="flow"] svg { max-width: 100%; height: auto; }
+[lang="mermaid"] .node text { font-size: 1rem; }
+table tr th { border-bottom: 0px; }
+video { max-width: 100%; display: block; margin: 0px auto; }
+iframe { max-width: 100%; width: 100%; border: none; }
+.highlight td, .highlight tr { border: 0px; }
+svg[id^="mermaidChart"] { line-height: 1em; }
+mark { background: rgb(255, 255, 0); color: rgb(0, 0, 0); }
+.md-html-inline .md-plain, .md-html-inline strong, mark .md-inline-math, mark strong { color: inherit; }
+mark .md-meta { color: rgb(0, 0, 0); opacity: 0.3 !important; }
+
+
+:root {
+    --side-bar-bg-color: #fafafa;
+    --control-text-color: #777;
+}
+
+@include-when-export url(https://fonts.loli.net/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext);
+
+html {
+    font-size: 16px;
+}
+
+body {
+    font-family: "Open Sans","Clear Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+    color: rgb(51, 51, 51);
+    line-height: 1.6;
+}
+
+#write {
+    max-width: 860px;
+  	margin: 0 auto;
+  	padding: 30px;
+    padding-bottom: 100px;
+}
+#write > ul:first-child,
+#write > ol:first-child{
+    margin-top: 30px;
+}
+
+a {
+    color: #4183C4;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    position: relative;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    line-height: 1.4;
+    cursor: text;
+}
+h1:hover a.anchor,
+h2:hover a.anchor,
+h3:hover a.anchor,
+h4:hover a.anchor,
+h5:hover a.anchor,
+h6:hover a.anchor {
+    text-decoration: none;
+}
+h1 tt,
+h1 code {
+    font-size: inherit;
+}
+h2 tt,
+h2 code {
+    font-size: inherit;
+}
+h3 tt,
+h3 code {
+    font-size: inherit;
+}
+h4 tt,
+h4 code {
+    font-size: inherit;
+}
+h5 tt,
+h5 code {
+    font-size: inherit;
+}
+h6 tt,
+h6 code {
+    font-size: inherit;
+}
+h1 {
+    padding-bottom: .3em;
+    font-size: 2.25em;
+    line-height: 1.2;
+    border-bottom: 1px solid #eee;
+}
+h2 {
+   padding-bottom: .3em;
+    font-size: 1.75em;
+    line-height: 1.225;
+    border-bottom: 1px solid #eee;
+}
+h3 {
+    font-size: 1.5em;
+    line-height: 1.43;
+}
+h4 {
+    font-size: 1.25em;
+}
+h5 {
+    font-size: 1em;
+}
+h6 {
+   font-size: 1em;
+    color: #777;
+}
+p,
+blockquote,
+ul,
+ol,
+dl,
+table{
+    margin: 0.8em 0;
+}
+li>ol,
+li>ul {
+    margin: 0 0;
+}
+hr {
+    height: 2px;
+    padding: 0;
+    margin: 16px 0;
+    background-color: #e7e7e7;
+    border: 0 none;
+    overflow: hidden;
+    box-sizing: content-box;
+}
+
+li p.first {
+    display: inline-block;
+}
+ul,
+ol {
+    padding-left: 30px;
+}
+ul:first-child,
+ol:first-child {
+    margin-top: 0;
+}
+ul:last-child,
+ol:last-child {
+    margin-bottom: 0;
+}
+blockquote {
+    border-left: 4px solid #dfe2e5;
+    padding: 0 15px;
+    color: #777777;
+}
+blockquote blockquote {
+    padding-right: 0;
+}
+table {
+    padding: 0;
+    word-break: initial;
+}
+table tr {
+    border-top: 1px solid #dfe2e5;
+    margin: 0;
+    padding: 0;
+}
+table tr:nth-child(2n),
+thead {
+    background-color: #f8f8f8;
+}
+table tr th {
+    font-weight: bold;
+    border: 1px solid #dfe2e5;
+    border-bottom: 0;
+    margin: 0;
+    padding: 6px 13px;
+}
+table tr td {
+    border: 1px solid #dfe2e5;
+    margin: 0;
+    padding: 6px 13px;
+}
+table tr th:first-child,
+table tr td:first-child {
+    margin-top: 0;
+}
+table tr th:last-child,
+table tr td:last-child {
+    margin-bottom: 0;
+}
+
+.CodeMirror-lines {
+    padding-left: 4px;
+}
+
+.code-tooltip {
+    box-shadow: 0 1px 1px 0 rgba(0,28,36,.3);
+    border-top: 1px solid #eef2f2;
+}
+
+.md-fences,
+code,
+tt {
+    border: 1px solid #e7eaed;
+    background-color: #f8f8f8;
+    border-radius: 3px;
+    padding: 0;
+    padding: 2px 4px 0px 4px;
+    font-size: 0.9em;
+}
+
+code {
+    background-color: #f3f4f4;
+    padding: 0 2px 0 2px;
+}
+
+.md-fences {
+    margin-bottom: 15px;
+    margin-top: 15px;
+    padding-top: 8px;
+    padding-bottom: 6px;
+}
+
+
+.md-task-list-item > input {
+  margin-left: -1.3em;
+}
+
+@media print {
+    html {
+        font-size: 13px;
+    }
+    table,
+    pre {
+        page-break-inside: avoid;
+    }
+    pre {
+        word-wrap: break-word;
+    }
+}
+
+.md-fences {
+	background-color: #f8f8f8;
+}
+#write pre.md-meta-block {
+	padding: 1rem;
+    font-size: 85%;
+    line-height: 1.45;
+    background-color: #f7f7f7;
+    border: 0;
+    border-radius: 3px;
+    color: #777777;
+    margin-top: 0 !important;
+}
+
+.mathjax-block>.code-tooltip {
+	bottom: .375rem;
+}
+
+.md-mathjax-midline {
+    background: #fafafa;
+}
+
+#write>h3.md-focus:before{
+	left: -1.5625rem;
+	top: .375rem;
+}
+#write>h4.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+#write>h5.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+#write>h6.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+.md-image>.md-meta {
+    /*border: 1px solid #ddd;*/
+    border-radius: 3px;
+    padding: 2px 0px 0px 4px;
+    font-size: 0.9em;
+    color: inherit;
+}
+
+.md-tag {
+    color: #a7a7a7;
+    opacity: 1;
+}
+
+.md-toc { 
+    margin-top:20px;
+    padding-bottom:20px;
+}
+
+.sidebar-tabs {
+    border-bottom: none;
+}
+
+#typora-quick-open {
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+}
+
+#typora-quick-open-item {
+    background-color: #FAFAFA;
+    border-color: #FEFEFE #e5e5e5 #e5e5e5 #eee;
+    border-style: solid;
+    border-width: 1px;
+}
+
+/** focus mode */
+.on-focus-mode blockquote {
+    border-left-color: rgba(85, 85, 85, 0.12);
+}
+
+header, .context-menu, .megamenu-content, footer{
+    font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+.file-node-content:hover .file-node-icon,
+.file-node-content:hover .file-node-open-state{
+    visibility: visible;
+}
+
+.mac-seamless-mode #typora-sidebar {
+    background-color: #fafafa;
+    background-color: var(--side-bar-bg-color);
+}
+
+.md-lang {
+    color: #b4654d;
+}
+
+.html-for-mac .context-menu {
+    --item-hover-bg-color: #E6F0FE;
+}
+
+#md-notification .btn {
+    border: 0;
+}
+
+.dropdown-menu .divider {
+    border-color: #e5e5e5;
+}
+
+.ty-preferences .window-content {
+    background-color: #fafafa;
+}
+
+.ty-preferences .nav-group-item.active {
+    color: white;
+    background: #999;
+}
+
+
+</style>
+</head>
+<body class='typora-export' >
+<div  id='write'  class = 'is-node'><h2><a name="全局-32" class="md-header-anchor"></a><span>全局 32</span></h2><ol start='' ><li><p><span>Help查看命令提示</span></p><ul><li><span>help</span></li><li><span>db.help();</span></li><li><span>db.yourColl.help();</span></li></ul></li><li><p><span>查询之前的错误信息和清除</span>
+<span>db.getPrevError();</span>
+<span>db.resetError();</span></p></li><li><p><span>创建index,document 有附加结构,index是集合来定义的.</span></p></li><li><p><span>子集合可以用.来实现,语言驱动有这个语法糖,可以直接通过.来查找字集合</span></p></li><li><p><span>保留的数据库名:</span></p><ul><li><span>admin</span></li><li><span>local: 这个数据库永远不会复制,用于存储限于本地单台服务器使用的任意集合.</span></li><li><span>config: monogdb 分片时的配置库.</span></li></ul></li><li><p><span>save:</span></p></li></ol><blockquote><p><span>save 是一个shell函数,可以在文档不存在时插入,存在时更新.它只有一个参数,文档.</span></p><ol start='' ><li><span>如果这个文档含有&quot;_id&quot;, save会调用upsert,否则会调用插入.</span></li></ol></blockquote><ol start='7' ><li><p><span>update第四个参数表明是单独更新一个,还是将匹配的文档全部更新.</span></p></li><li><p><span>想要知道多文档更新到底更新了多少个文档,可以运行getLastError命令. 键&quot;n&quot;的值就是要的数字.</span></p></li><li><p><span>安全操作:</span></p><ul><li><span>插入,删除,更新都是瞬间完成.因为不管服务器是否完成. 离弦之箭</span></li><li><span>安全版本: 执行完操作之后立即运行getLastError命令,检查是否执行成功.</span></li></ul></li><li><p><span>捕获常规错误</span>
+<span>mongo最新版本和pymongo都是安全版本,会返回执行结果.</span></p></li></ol><h2><a name="数据库操作-87" class="md-header-anchor"></a><span>数据库操作 87</span></h2><ol start='' ><li><p><span>查看mongo帮助文档: mongo -h</span></p></li><li><p><span>登陆</span>
+<span>mongo -umiaobt -p --authenticationDatabase</span>
+<span>mongo -umiaobt -p331sharp --authenticationDatabase</span></p></li><li><p><span>删除数据库: db.dropDatabase();</span></p></li><li><p><span>获取数据库名称: db.getName();</span></p></li><li><p><span>获取数据库状态: db.stats();</span></p></li><li><p><span>当前db版本: db.version();  </span></p></li><li><p><span>查看当前db的链接机器地址: db.getMongo();</span></p></li><li><p><span>从指定主机上克隆数据库: db.cloneDatabase(&quot;127.0.0.1&quot;);</span></p></li><li><p><span>从指定的机器上复制指定数据库数据到某个数据库: </span>
+<span>db.copyDatabase(“mydb”, “temp”, “127.0.0.1”);</span>
+<span>将本机的mydb的数据复制到temp数据库中</span></p></li><li><p><span>修复数据库: db.repairDatabase();  </span></p></li><li><p><span>在MongoDB中频繁的进行数据增删改时，如果记录变了，例如数据大小发生了变化，这时候容易产生一些数据碎片，</span></p><ol start='' ><li><p><span>出现碎片引发的结果</span></p><ul><li><span>一个是索引会出现性能问题</span></li><li><span>另外一个就是在一定的时间后，所占空间会莫明其妙地增大，</span></li></ul></li><li><p><span>所以要定期把数据库做修复，定期重新做索引，这样会提升MongoDB的稳定性和效率</span></p></li></ol></li></ol><h4><a name="固定集合-123" class="md-header-anchor"></a><span>固定集合 123</span></h4><p><span>1.特点</span>
+<span>	</span><span>- 类似环形队列,空间满了以后,删除最早的文档</span>
+<span>	</span><span>- 不能删除文档</span>
+<span>	</span><span>- 更新不得导致文档移动(通常更新意味着尺寸变大)</span>
+<span>	</span><span>- 默认情况下固定集合没有索引,即便是&quot;_id&quot;也没有索引</span></p><ol start='2' ><li><p><span>属性方法</span></p><ol start='' ><li><p><span>不像普通集合,固定集合必须在使用前显示创建.</span>
+<span>db.createCollection(&quot;my_col&quot;, {capped: true, size: 10000, max: 100})</span></p></li><li><p><span>size是字节,max是文档数量上限.当指定max时必须制定size.</span></p></li><li><p><span>将普通集合转变成为固定集合: convertToCapped</span>
+<span>db.runCommand({convertToCapped: &quot;test&quot;, size:10000})</span></p></li><li><p><span>自然排序: 文档按照插入顺序存储.</span></p><ul><li><span>反向查找: db.may_col.find().sort({&quot;$natural&quot;: -1})</span></li></ul></li><li><p><span>尾部游标: 只能用于固定集合</span>
+<span>mongodb shell 没有,只能在语言驱动里查找.</span></p></li></ol></li></ol><h4><a name="gridfs-存储文件-144" class="md-header-anchor"></a><span>GridFS: 存储文件 144</span></h4><ol start='' ><li><p><span>mongofiles:</span></p><ul><li><span>mongofiles put foo.txt</span></li><li><span>mongofiles list</span></li><li><span>mongofiles get foo.txt</span></li><li><span>mongofiles search foo.txt</span></li><li><span>mongofiles delete foo.txt</span></li></ul></li></ol><h4><a name="数据库引用-152" class="md-header-anchor"></a><span>数据库引用 152</span></h4><blockquote><p><span>数据库引用,也叫作DBRef,就像是URL,唯一确定到一个文档的引用.它自动加载文档的方式正如网站</span>
+<span>URL通过链接自动加载web页面一样.</span></p></blockquote><ol start='' ><li><span>DBRef必选键:</span>
+<span>{&quot;$ref&quot;: collection, &quot;$id&quot;: id_value} // 唯一确定同一个数据库中某一集合某一文档.</span></li><li><span>如果想要引用其他数据库的文档,还需要添加一个可选键&quot;$db&quot;</span>
+<span>{&quot;$ref&quot;: collection, &quot;$id&quot;: id_value, &quot;$db&quot;: database}</span></li><li><font color=green><span>DBRef键的顺序不能改变,第一个必须是&quot;$ref&quot;, 接着必须是&quot;$id&quot;, 最后是&quot;$db&quot;</span><font></li><li><span>引用是以references为key,一个数组为value的对象.value中的key是3中所标记的key.</span>
+<span>note = {&quot;_id&quot;: 20, &quot;author&quot;: &quot;wang&quot;, &quot;references&quot;: [{&quot;$ref&quot;: collection, &quot;$$id&quot;: id}, {xxxx}]}</span></li></ol><h3><a name="操作-114-168" class="md-header-anchor"></a><span>操作 114 168</span></h3><ol start='' ><li><span>创建一个聚集集合,固定大小集合（table）</span>
+<span>//指定数据库大小size，最大存放100个文档，满了，就会mongodb 会删除旧文档。</span>
+<span>db.createCollection(&quot;human&quot;,{&quot;size&quot;:1024,capped:true,max:100});</span>
+<span>db.createCollection(&quot;people&quot;);</span>
+<span>//判断集合是否为定容量db.collName.isCapped();</span></li><li><span>得到指定名称的聚集集合（table）</span>
+<span>db.getCollection(“account”);</span></li><li><span>得到当前db的所有聚集集合</span>
+<span>db.getCollectionNames();</span></li><li><span>显示当前db所有聚集索引的状态</span>
+<span>db.printCollectionStats();</span></li><li><span>查询当前集合的数据条数</span>
+<span>db.yourColl.count();</span></li><li><span>查看当前集合数据空间大小</span>
+<span>db.yourColl.dataSize();</span></li><li><span>得到当前聚集集合所在的db</span>
+<span>db.yourColl.getDB();</span></li><li><span>得到当前聚集的状态</span>
+<span>db.coll.stats();</span></li><li><span>得到聚集集合总大小</span>
+<span>db.coll.totalSize();</span></li><li><span>聚集集合储存空间大小</span>
+<span>db.coll.storageSize();</span></li><li><span>聚集集合重命名</span>
+<span>db.coll.renameCollection(“ray”); 将coll重命名为ray</span></li><li><span>删除当前聚集集合: db.coll.drop();</span></li></ol><h2><a name="用户操作-209" class="md-header-anchor"></a><span>用户操作 209</span></h2><ol start='' ><li><span>添加一个用户:</span>
+<span>db.createUser({user: &#39;username&#39;, pwd: &#39;xxxx&#39;, roles: [{role: &#39;readWrite&#39;, db: &#39;dbname&#39;}]}); 添加用户. 设置密码. 是否只读</span></li><li><span>数据库认证. 安全模式: db.auth(“zs”, “111”);</span></li><li><span>显示当前所有用户，角色</span>
+<span>show users;</span>
+<span>show roles;</span></li><li><span>删除用户: db.removeUser(&quot;zs&quot;);  </span></li></ol><h2><a name="索引-224" class="md-header-anchor"></a><span>索引 224</span></h2><ol start='' ><li><p><span>创建索引</span>
+<span>db.people.ensureIndex({name: 1});</span><br/><span>db.people.ensureIndex({name: 1, ts: -1});  //联合索引</span>
+<span>db.people.ensureIndex({&quot;name&quot;:1},{&quot;unique&quot;:true}); //唯一索引</span></p></li><li><p><span>查询当前聚集集合所有索引</span>
+<span>db.people.getIndexes();  </span></p></li><li><p><span>查看总索引记录大小</span>
+<span>db.people.totalIndexSize();  </span></p></li><li><p><span>读取当前集合的所有index信息</span>
+<span>db.people.reIndex();  </span></p></li><li><p><span>删除指定索引</span>
+<span>db.people.dropIndex(&quot;name_1&quot;);</span></p></li><li><p><span>删除所有索引索引</span>
+<span>db.people.dropIndexes();  </span></p></li><li><p><span>实践证明,一定要创建查询中用到的所有键的索引.</span></p></li><li><p><span>单个键的索引方向无所谓,但是多个键需要考虑方向的问题.</span></p></li><li><p><span>如果包含N个键,则对于前几个键的查询都会有帮助.比如有个索引{&quot;a&quot;: 1, &quot;b&quot;: 1, &quot;c&quot;: 1},实际上有了{&quot;a&quot;: 1}, {&quot;a&quot;: 1, &quot;b&quot;: 1}, {&quot;a&quot;: 1, &quot;b&quot;: 1, &quot;c&quot;: 1}等索引.</span>
+<span>但是使用{&quot;b&quot;: 1},{&quot;a&quot;: 1, &quot;c&quot;: 1}等索引不会被优化.最大开头字符串类似.</span>
+<span>  只有使用索引前部的查询才能使用该索引.</span>
+<span>  添加索引的坏处在于每次插入,更新,删除都要额外操作索引,所有索引尽可能少.每个集合默认最大索引树为64个.</span>
+<span>  一定不要每个键都做索引.</span></p></li><li><p><span>内嵌文档建立索引:</span>
+<span>db.blog.ensureIndex({&quot;comments.date&quot;: 1})</span></p></li><li><p><span>对内嵌文档的键索引与普通键索引并无差异,两者也可以联合组成复合索引.</span></p></li><li><p><span>索引的名字:</span>
+<span>db.foo.ensureIndex({&quot;a&quot;: 1, &quot;b&quot;: 1}, {&quot;name&quot;: &quot;alphabet&quot;})</span>
+<span>索引名称字符有个数限制,所以特别复杂的索引在创建时一定要使用自定义的名字.</span></p></li><li><p><span>unique 唯一索引.如果插入文档没有唯一索引,会保存为null,第二个没有唯一索引的文档会因为重复的null而报错.</span></p></li><li><p><span>删除重复: dropDups 可以保留第一个发现的稳定,而删除接下来的重复值的文档.</span>
+<span>db.people.ensureIndex({&quot;username&quot;: 1}, {&quot;unique&quot;: true, &quot;dropDups&quot;: true})</span></p></li><li><p><span>索引信保存在每个数据库的system.indexs集合中.这是一个保留集合,不能对它进行插入或者删除文档.</span>
+<span>操作只能通过ensureIndex和dropIndex进行.</span></p></li><li><p><span>建立索引是阻塞操作,指定background执行是是在后台线程执行,不会阻塞:</span>
+<span>db.people.ensuerIndex({&quot;name:&quot; 1}, {&quot;background&quot;: true})</span></p></li><li><p><span>地理空间索引同样有ensureIndex来创建,只不过不是1和-1,而是2d</span>
+<span>db.map.ensureIndex({&quot;gps&quot;: 2d})</span></p><ul><li><span>gps 键的值必须是某种形式的一对值:一个包含两个元素的数组或是包含两个键的内嵌文档.</span>
+<span>{&quot;gps&quot;: [0, 100]}</span>
+<span>{&quot;gps:&quot;: {&quot;x&quot;: -30, &quot;y&quot;: 30}}</span>
+<span>{&quot;gps:&quot;: {&quot;latitude&quot;: -180, &quot;longitude&quot;: 180}}</span></li><li><span>键名可以随意,如{&quot;gps&quot;: {&quot;foo&quot;: 0, &quot;bar&quot;: 1}}</span></li><li><span>默认情况下,地理空间索引值的范围是-180~180,</span></li><li><span>如果要使用其他的值,使用ensureIndex的选项来指定最大最小值:</span>
+<span>db.star.trek.ensureIndex({&quot;linght-yeras&quot;: &quot;2d&quot;}, {&quot;min&quot;: -1000, &quot;max&quot;: 1000})</span></li></ul></li><li><p><span>地理空间查询以两种形式进行</span></p><ul><li><p><span>普通查询(find): 使用了$near</span></p><ol start='' ><li><span>db.map.find({&quot;gps&quot;: {&quot;$near&quot;: [40, -73]}}).limit(10)</span>
+<span>find, $near不会返回距离,但是如果结果大于4MB,这是唯一的选择.</span></li></ol></li><li><p><span>使用数据库命令</span></p><ol start='' ><li><span>db.runCommand({&quot;geoNear&quot;: &quot;map&quot;, near: [40, -73], num: 10})</span>
+<span>geoNear 会返回每个文档到查询点的距离</span></li></ol></li></ul></li><li><p><span>查找指定形状内的文档: 将$near换成$within</span></p><ul><li><span>矩形: $box</span>
+<span>db.map.find({&quot;gps&quot;: {&quot;$within&quot;: {&quot;$box&quot;: [[10, 30], [15, 30]]}}}) //左下角和右上角</span></li><li><span>圆形: $center</span>
+<span>db.map.find({&quot;gps&quot;: {&quot;$within&quot;: {&quot;$center&quot;: [[10, 30], 5]}}}) </span></li></ul></li><li><p><span>复合索引:</span>
+<span>db.ensureIndez({&quot;location&quot;: &quot;2d&quot;, &quot;desc&quot;: 1})</span></p></li></ol><h3><a name="添加--353" class="md-header-anchor"></a><span>添加  353</span></h3><ol start='' ><li><span>insert:</span>
+<span>post = {&quot;a&quot;: 1};</span>
+<span>db.blog.insert(post);</span></li><li><span>save:</span>
+<span>db.people.save({name: &#39;zhangsan&#39;, age: 18, sex: true});</span><br/><span>添加的数据的数据列，没有固定，根据添加的数据为准</span></li></ol><h3><a name="更改-update-366" class="md-header-anchor"></a><span>更改: update 366</span></h3><ol start='' ><li><p><span>update 更改整个文档:</span></p><ol start='' ><li><p><span>update接受至少两个参数: </span></p><ul><li><span>查询文档,找出修改的文档</span></li><li><span>修改器文档,描述对文档做哪些修改</span></li></ul></li><li><p><span>两种修改方式:</span></p><ol start='' ><li><p><span>整体覆盖</span></p></li><li><p><span>给文档添加新建:</span>
+<span>post.comments = []</span></p></li><li><p><span>update替换文档</span>
+<span>db.blog.update({title: &quot;my Blog post&quot;}, post)</span></p></li><li><p><span>修改器</span></p><ul><li><span>db.people.update({age: 18}, {$set: {name: &#39;changeName&#39;}}, false, true); </span>
+<span>相当于：update people set name = &#39;changeName&#39; where age = 18;  </span></li><li><span>db.people.update({name: &#39;zhangs&#39;}, {$inc: {age: 12}}, false, true);</span><br/><span>相当于：update people set age = age + 12 where name = &#39;zhangs&#39;;  </span></li><li><span>db.people.update({name: &#39;zhangs&#39;}, {$inc: {age: 12}, $set: {name: &#39;hoho&#39;}}, false, true);</span>
+<span>相当于：update people set age = age + 12, name = &#39;hoho&#39; where name = &#39;zhangs&#39;;  </span></li></ul></li></ol></li><li><p><span>更新操作是原子性的</span></p></li></ol></li></ol><h4><a name="修改器-395" class="md-header-anchor"></a><span>修改器 395</span></h4><ol start='' ><li><p><span>$set: 用来指定一个值,如果键不存在,则创建它.</span></p></li><li><p><span>$unset: 和$set相反.删除某一个字段</span>
+<span>db.a.update({name: &quot;wang&quot;}, {$unset: {&quot;comment&quot;: 1}})</span></p></li><li><p><span>$inc 增加和$dec减少</span></p></li><li><p><span>$upsert</span></p><ul><li><p><span>要是没有文档符合更新条件,就会以这个条件和更新文档作为基础创建爱你一个新的文档.</span></p></li><li><p><span>如果找到匹配的文档,则正常更新.</span></p></li><li><p><span>总结: upsert非常方便,不必预置集合,同一套代码既可以创建又可以更新.</span></p><ul><li><span>更加高效,且是原子性的.</span></li></ul></li><li><p><span>update第三个参数表示表示这个是否是upsert</span>
+<span>db.analytics.update({&quot;url&quot;: &quot;/blog&quot;}, {&quot;$inc&quot;: {&quot;visits&quot;: 1}}, true)</span></p></li></ul></li><li><p><span>findAndModify</span></p></li></ol><blockquote><p><span>有点慢,因为它要扥带数据库的响应.</span></p><ul><li><p><span>对于操作查询以及执行其他需要取值和赋值风格的原子性操作来说十分方便.将一个查询和一个修改原子的完成.</span></p></li><li><p><span>对于那些查询,修改有竞态条件的操作,这个原子操作可以避免这个问题.</span></p></li><li><p><span>如果不用这个方法,而先用find,然后update,需要update之后,调用getLastError,查看上条命令是否生效,生效表示update成功.</span></p></li><li><p><span>findAndModify既可以update,也可以remove删除文档.</span></p></li><li><p><span>update和remove只能有一个,且必须有一个.匹配不到文档,会返回一个错误.</span></p></li><li><p><span>它一次只能处理一个文档,也不能执行upsert操作.只能更新已有文档.</span></p></li><li><p><span>参数:</span></p><ul><li><span>findAndModify: 集合名</span></li><li><span>query: 查询文档</span></li><li><span>sort</span></li><li><span>update</span></li><li><span>remove</span></li><li><span>new</span></li></ul></li></ul></blockquote><ol start='6' ><li><span>插入,删除,更新都是瞬间完成.因为不管服务器是否完成.</span></li></ol><h5><a name="数组修改器-433" class="md-header-anchor"></a><span>数组修改器: 433</span></h5><ol start='' ><li><p><span>$push: 数组已存在,会在末尾添加一个,否则会创建一个新的数组.</span>
+<span>注意,push后面跟一个值就可以,不需要是一个数组,在db中,会自动添加一个中括号.</span></p></li><li><p><span>经常会有种情况,如果一个值不在数组里面就把他加进去.可以在查询文档中用&quot;$ne&quot;来实现.</span>
+<span>eg:</span>
+<span>db.papers.update({&quot;authors cited&quot;: {&quot;$ne&quot;: &quot;Richid&quot;}}, {$push: {&quot;authors cited&quot;: &quot;Richie&quot;}})</span>
+<span>注: 实际使用时,当没有authors cited这个字段时,会添加成功.但重复运行,会再添加一遍.$ne不能识别出数组里面的值和Richid</span>
+<span>一个数组和一个字符串相比,永远不相等.只有当没有这个字段时,还比较合适.</span></p></li><li><p><span>$addToSet: 可以避免重复添加.像一个集合一样.</span></p></li><li><p><span>$addToSet和$each的组合,可以添加多个不同的值.</span>
+<span>db.users.update({}, {$addToSet: {&quot;email&quot;: {$each: [&quot;</span><a href='mailto:joe@php.net' target='_blank' class='url'>joe@php.net</a><span>&quot;, &quot;</span><a href='mailto:joe@example.com' target='_blank' class='url'>joe@example.com</a><span>&quot;]}})</span></p><ul><li><span>$each: 后面跟数组,对数组中的每个元素执行一遍外面的命令.</span></li></ul></li><li><p><span>$pop</span></p><ol start='' ><li><span>{$pop: {key: 1}}  从数组末尾删除一个元素</span></li><li><span>{$pop: {key: -1}}  从数组头部删除一个元素</span></li></ol></li><li><p><span>基于特定的条件来删除元素,而不仅仅是位置,使用 $pull</span></p><ul><li><span>$pull 会将所有匹配的部分删除掉,对数组[1, 1, 3, 1],执行pull 1,得到的结果只有一个元素的数组[2]</span></li></ul></li><li><p><span>有两种方法操作和数组中的值:</span></p><ol start='' ><li><p><span>通过位置: 数组都是以0开头的,可以讲下标直接作为 键 来选择元素</span>
+<span>db.blog.update({&quot;post&quot;: post_id}, {&quot;$inc&quot;: {&quot;comments.0.votes&quot;: 1}})</span></p></li><li><p><span>通过定位操作符: 很多情况下不能提前知道下标的值:</span></p><ul><li><span>Mongo提供了定位次操作符&quot;$&quot;,用来定位查询文档已经匹配的元素,并进行更新.</span>
+<span>db.blog.update({&quot;comments.autuor&quot;: &quot;John&quot;}, {&quot;$set&quot;: {&quot;coments.$.author&quot;: &quot;Jim&quot;}})</span></li><li><span>定位符只更新第一个匹配的元素.</span></li></ul></li></ol></li></ol><h3><a name="删除-471" class="md-header-anchor"></a><span>删除 471</span></h3><ol start='' ><li><span>remove</span></li><li><span>查询修改删除</span>
+<span>db.users.findAndModify({</span>
+<span>query: {age: {$gte: 25}},</span>
+<span>sort: {age: -1},</span>
+<span>update: {$set: {name: ‘a2′}, $inc: {age: 2}},</span>
+<span>remove: true</span>
+<span>});</span></li></ol><h3><a name="find-484" class="md-header-anchor"></a><span>find 484</span></h3><ol start='' ><li><p><span>查询返回一个数据库游标,游标只有在你需要的时候才会</span><strong><span>惰性</span></strong><span>的批量返回文档.</span></p></li><li><p><span>查询文档的值必须是常量,意味着不能引用文档中其他键的值.</span></p></li><li><p><span>or: 有两种方式进行or查询</span></p><ol start='' ><li><span>$in/$nin: 可以用来查询一个键的多个值.</span></li><li><span>$or: 更通用一些,用来完成多个键的任意给定值.</span></li></ol></li><li><p><span>$not: 原条件句,即可以用在任何其他条件之上.</span></p></li><li><p><span>$mod: 会将查询的值除以第一个给定值,若余数等于第二个给定值,则返回该结果:</span>
+<span>&quot;&quot;&quot;</span>
+<span>db.users.find({&quot;id_num&quot;: {&quot;$mod&quot;: [5, 1]}})</span>
+<span>db.users.find({&quot;id_num&quot;: {&quot;$not&quot;: {&quot;$mod&quot;: [5, 1]}}})</span>
+<span>&quot;&quot;&quot;</span></p></li><li><p><span>null: 及匹配null字符,同事匹配没有这个字段的文档.</span></p><ul><li><span>单独匹配null字符:</span>
+<span>&quot;&quot;&quot;db.c.find({&quot;z&quot;: {&quot;$in&quot;: [null], &quot;$exists&quot;: true}})&quot;&quot;&quot;</span></li></ul></li><li><p><span>正则:</span></p><ul><li><span>//:包裹正则</span></li><li><span>//i: i忽略大小写</span></li></ul></li><li><p><span>查询数组:</span></p><ul><li><p><span>每一个元素都是整个键的值</span></p></li><li><p><span>$all: 通过多个元素来匹配数组,这个数组中包含所有$all给定的值,</span></p></li><li><p><span>精确匹配: 要完全一样才匹配,冗余元素和缺少元素都不行,排序不一样都不行.</span></p></li><li><p><span>查询数组指定位置的元素: 使用 key.index语法下标</span></p></li><li><p><span>$size: 查询指定长度的数组:</span></p></li><li><p><span>$slice: 返回一个数组的子集合.find的第二个参数,指明返回那些键.可以指明返回数组的那些值.</span></p><ul><li><span>find指明$slice,别的键默认全部返回,而其他指明某个键后,都是默认不返回其他键.</span></li></ul></li></ul></li><li><p><span>查询内嵌文档</span></p><ul><li><span>查询整个文档: 查询顺序相关,如果顺序不对也查不出来.</span>
+<span>{</span>
+<span>&quot;name&quot;: {</span>
+<span>	</span><span>&quot;first&quot;: &quot;Joe&quot;,</span>
+<span>	</span><span>&quot;last&quot;: &quot;Schemoe&quot;</span>
+<span>},</span>
+<span>&quot;age&quot;: 46</span>
+<span>}</span>
+<span>db.people.find({&quot;name&quot;: {&quot;first&quot;: &quot;Joe&quot;, &quot;last&quot;: &quot;Schmoe&quot;}})</span></li><li><span>只针对其键/值对进行查询: 使用.号查询.</span>
+<span>db.people.find({&quot;name.first&quot;: &quot;Joe&quot;, &quot;name.last&quot;: &quot;Schmoe&quot;})</span></li></ul></li><li><p><span>内嵌文档的数组,数组的两种查询都不可以,需要使用$elemMatch.用来部分指定匹配数组中单个内嵌文档的限定条件.</span></p><ul><li><span>$elemMatch 将限定条件进行分组,仅当需要对一个内嵌文档的多个键操作时才会用到.</span>
+<span>db.blog.find({&quot;commets&quot;: {&quot;$elemMatch&quot;: {&quot;author&quot;: &quot;jod&quot;, &quot;score&quot;: {&quot;$gte&quot;: 5}}}})</span></li></ul></li><li><p><span>$where:</span>
+<span>db.foo.find({&quot;$where&quot;: function() {</span>
+<span>for (var current in this) {</span>
+<span>	</span><span>for (var other in this){</span>
+<span>		</span><span>if (current != other &amp;&amp; this[current] == this[other]) {</span>
+<span>			</span><span>return true;</span>
+<span>		</span><span>}</span>
+<span>	</span><span>}</span>
+<span>}</span>
+<span>}})</span>
+<span>如果函数返回true,文档就作为结果的一部分被返回,如果为false,则不然.</span></p></li><li><p><span>也可以使用字符串来指定$where查询</span>
+<span>db.foo.find({&quot;$where:&quot; &quot;this.x + this.y == 10&quot;})</span>
+<span>db.foo.find({&quot;$where:&quot; &quot;function() {return this.x + this.y == 10;}&quot;})</span></p></li></ol><h4><a name="高级查询选项-580" class="md-header-anchor"></a><span>高级查询选项 580</span></h4><ol start='' ><li><span>$maxscan: integer / 查询最多扫描的文档数量</span></li><li><span>$min: document    / 查询的开始条件</span></li><li><span>$max: document    / 查询的结束条件</span></li><li><span>$hint: document   / 指定服务器使用那个索引进行查询</span></li><li><span>$explain: boolean / 获取查询执行的细节</span></li><li><span>$snapshot: boolean / 确保查询的结果实在查询执行的那一刻的一致快照.</span></li></ol><h4><a name="获取一致结果-588" class="md-header-anchor"></a><span>获取一致结果 588</span></h4><ol start='' ><li><span>因为查询文档时,可能因为文档大小改变而导致文档移动或者文档的更改,使得文档顺序内容错乱.</span>
+<strong><span>对查询使用快照可以解决这个问题</span></strong></li><li><span>所有返回一组结果的查询实际上都进行了快照.</span></li><li><span>不一致只在游标等待结果时集合内容被改变的情况下发生.</span></li></ol><h4><a name="聚合操作-596" class="md-header-anchor"></a><span>聚合操作 596</span></h4><ol start='' ><li><span>count</span>
+<span>db.people.count()</span></li><li><span>distinct: 必须指定集合和键</span>
+<span>db.runCommand({&quot;distinct&quot;: &quot;people&quot;, &quot;key&quot;: &quot;age&quot;})</span></li></ol><h5><a name="group--603" class="md-header-anchor"></a><span>group  603</span></h5><ol start='' ><li><p><span>先选定分组所依据的键,而后Mongodb就会将集合依据选定键值的不同分成若干组.</span>
+<span>而后可以通过聚合每一组内的文档,产生一个结果文档.</span>
+<span>db.runCommand({&quot;group&quot;: {</span>
+<span> &quot;ns&quot;: &quot;集合名&quot;,</span>
+<span> &quot;key&quot;: &quot;分组依据的key&quot;,</span>
+<span> &quot;initial&quot;: {&quot;time&quot;: 0} // 返回文档的初始化</span>
+<span> &quot;$reduce&quot;: function(doc, perv) { // doc是每个查找的文档,prev是上面返回文档.</span>
+<span>     if(doc.time &gt; prev.time){</span>
+<span>         prev.price = doc.price;</span>
+<span>         prev.time = doc.time;</span>
+<span>     }</span>
+<span> },</span>
+<span>&quot;condition&quot;: {&quot;day&quot;: {&quot;$gt&quot;: &quot;2010/08/3&quot;}}</span>
+<span>}})</span></p><ul><li><span>initial 是返回文档的初始化</span></li><li><span>$reduce是一个函数,类似于python的reduce,只不过有两个参数,第二个参数就是上面初始化的文档</span>
+<span>reduce是对数组中所有的文档执行一遍函数,依次来将多个文档输出一个文档.和group无关.</span></li><li><span>执行完,返回initial后面的文档.</span></li><li><span>$reduce 必须有.</span></li><li><span>condition: 选择文档的条件.</span></li></ul></li><li><p><span>完成器:</span></p></li></ol><blockquote><p><span>完成器用以精简从数据库传到用户的数据.</span></p><ul><li><span>finalize 附带一个函数,在每组结果传递给客户端之前被调用一次. 可以用其修剪结果中的&quot;残枝败叶&quot;.</span>
+<span>-eg</span>
+<span>db.runCommand({&quot;group&quot;: {</span>
+<span>&quot;ns&quot;: &quot;coll&quot;,</span>
+<span>&quot;key&quot;: {&quot;tags&quot;: true},</span>
+<span>&quot;initial&quot;: {&quot;tags&quot;: {}},</span>
+<span>&quot;$reduce&quot;: function(doc, prev) {</span>
+<span>	</span><span>for (i in doc.tags) {</span>
+<span>		</span><span>if (doc.tags[i] in prev.tags) {</span>
+<span>			</span><span>prev.tags[doc[tags[i]]]++;</span>
+<span>		</span><span>} esle {</span>
+<span>			</span><span>prev.tags[doc.tags[i]] = 1;  </span><br/><span>		</span><span>}</span>
+<span>	</span><span>}</span>
+<span>},</span>
+<span>&quot;finalize&quot;: function(prev) {</span>
+<span>	</span><span>var mostPopular = 0;</span>
+<span>	</span><span>for (i in prev.tags) {</span>
+<span>		</span><span>if (prev.tags[i]&gt; mostPopular){</span>
+<span>			</span><span>prev.tag = i;</span>
+<span>			</span><span>mostPopular = prev.tags[i];</span>
+<span>		</span><span>}</span>
+<span>	</span><span>}</span>
+<span>	</span><span>delete prev.tags;</span>
+<span>}</span>
+<span>}})</span></li></ul></blockquote><ol start='3' ><li><span>将函数作为分组的键</span>
+<span>db.posts.group({&quot;ns&quot;: &quot;posts&quot;, &quot;$keyf&quot;: function(x) {return x.category.toLowerCase();}, &quot;initializer&quot;: ...})</span></li></ol><h5><a name="mapreduce-667" class="md-header-anchor"></a><span>mapreduce 667</span></h5><ol start='' ><li><p><span>步骤</span></p><ol start='' ><li><p><span>映射(map),将从操作映射到集合中的每个文档. </span></p><ul><li><span>这个操作要么&quot;无作为&quot;</span></li><li><span>要么&quot;产生一些键和X个值&quot;</span></li></ul></li><li><p><span>中间环节(洗牌,shuffle): 按照键分组,并将产生的键值组成列表放到对应的键中.</span></p></li><li><p><span>化简(reduce): 把列表中的值化简成为一个单值.这个值被返回.</span></p></li><li><p><span>然后接着洗牌,直到每个键的列表只有一个值位置.这个值就是最后结果.</span></p></li></ol></li><li><p><span>找出集合所有的键</span></p><ol start='' ><li><p><span>注意:</span></p><ul><li><span>map使用emit返回要处理的值. </span></li><li><span>emit会给MapReduce一个键(类似与前面group所使用的键)和一个值.</span></li><li><span>this 就是当前映射的文档的引用</span></li><li><span>我们想为每个键单独计数,所以为文档的每一个键调用一次emit.</span></li></ul></li><li><p><span>步骤</span></p><ol start='' ><li><p><span>map</span>
+<span>map = function(){</span>
+<span>for (var key in this) {</span>
+<span>	</span><span>emit(key, {count: 1});</span>
+<span>}</span>
+<span>}</span></p></li><li><p><span>由1产生了许许多多的{count: 1}的文档,每一个都与集合中的一个键相关.</span>
+<span>这种由一个或多个{count: 1}文档组成的数组,会传递给reduce函数.</span></p></li><li><p><span>reduce有两个参数:</span></p><ul><li><span>key, 也就是emit返回的第一个值</span></li><li><span>数组,有一个后者多个对应于键的{count: 1} 文档组成</span></li></ul><p><span>reduce = function(key, emits) {</span>
+<span>	</span><span>toral = 0;</span>
+<span>	</span><span>for (var i in emits) {</span>
+<span>		</span><span>total += emits[i].count;</span>
+<span>	</span><span>}</span>
+<span>	</span><span>return {&quot;count&quot;: total};</span>
+<span>}</span></p></li><li><p><span>reduce 一定要能被反复调用,不论是映射环节还是前一个简化环节.</span></p><ul><li><span>所以reduce 返回的文档必须能作为reduce的第二个参数的一个元素.</span></li><li><span>因为调用时,reduce第二个参数不一定就是初始的列表,可能有其他的组合方式</span></li><li><font color=green><span>reduce应该能处理emit文档和其他reduce结果的各种组合.</span></font></li></ul></li><li><p><span>最终:</span>
+<span>mr = db.a.mapReduce(map, reduce, {&#39;out&#39;: result_of_a})</span><span>	</span></p></li></ol></li></ol></li></ol><h4><a name="eg--730" class="md-header-anchor"></a><span>eg  730</span></h4><ol start='' ><li><p><span>db.people.find();</span><br/><span>相当于：select* from people;</span></p><ul><li><span>默认每页显示20条记录，当显示不下的情况下，可以用it迭代命令查询下一页数据。</span></li><li><span>注意：键入it命令不能带“;”</span></li><li><span>但是你可以设置每页显示数据的大小，用DBQuery.shellBatchSize= 50;这样每页就显示50条记录了。</span></li></ul></li><li><p><span>查询去掉后的当前聚集集合中的某列的重复数据</span>
+<span>db.people.distinct(&quot;name&quot;);</span><br/><span>相当于：select distict name from people;</span></p></li><li><p><span>查询age &gt;= 23 并且 age &lt;= 26</span>
+<span>db.people.find({age: {$gte: 23, $lte: 26}});  </span></p></li><li><p><span>查询name中包含 mongo的数据</span>
+<span>db.people.find({name: /mongo/});</span><br/><span>相当于：select * from people where name like &#39;%mongo%&#39;;</span></p></li><li><p><span>查询name中以mongo开头的</span>
+<span>db.people.find({name: /^mongo/});</span><br/><span>相当于：select * from people where name like ‘mongo%’;</span></p></li><li><p><span>查询指定列name. age数据</span>
+<span>db.people.find({}, {name: 1, age: 1});</span><br/><span>相当于：select name, age from people;</span>
+<span>当然name也可以用true或false,</span>
+<span>当用ture的情况下和name:1效果一样，如果用false就是排除name，显示name以外的列信息。</span></p></li><li><p><span>查询指定列name. age数据, age &gt; 18</span>
+<span>db.people.find({age: {$gt: 18}}, {name: 1, age: 1});</span><br/><span>相当于：select name, age from people where age &gt;18;</span></p></li><li><p><span>按照年龄排序</span></p><ul><li><span>升序：db.people.find().sort({age: 1});  </span></li><li><span>降序：db.people.find().sort({age: -1});  </span></li></ul></li><li><p><span>查询name = zhangsan, age = 18的数据</span>
+<span>db.people.find({name: &#39;zhangsan&#39;, age: 18});</span><br/><span>相当于：select * from people where name = &#39;zhangsan&#39; and age = &#39;18&#39;;</span></p></li><li><p><span>查询前5条数据</span>
+<span>db.people.find().limit(5);</span><br/><span>相当于：select * from people Limit 5;</span></p></li><li><p><span>查询10条以后的数据</span>
+<span>db.people.find().skip(10);</span><br/><span>相当于：select * from people where id not in (select id from people limit 10);</span></p></li><li><p><span>查询在5-10之间的数据</span>
+<span>db.people.find().limit(10).skip(5);</span><br/><span>可用于分页，limit是pageSize，skip是第几页*pageSize</span></p></li><li><p><span>or与查询</span>
+<span>db.people.find({$or: [{age: 18}, {age: 18}]});</span><br/><span>相当于：select * from people where age = 18 or age = 18;</span></p></li><li><p><span>查询第一条数据</span>
+<span>db.people.findOne();</span><br/><span>相当于：select * from people limit 1;</span>
+<span>db.people.find().limit(1);</span></p></li><li><p><span>查询某个结果集的记录条数</span>
+<span>db.people.find({age: {$gte: 18}}).count();</span><br/><span>相当于：select count(*) from people where age &gt;= 20;</span></p></li><li><p><span>求总数</span>
+<span>db.people.find({sex: {$exists: true}}).count();</span>
+<span>相当于：select count(sex) from people;</span></p></li></ol><h3><a name="函数-827" class="md-header-anchor"></a><span>函数 827</span></h3><ol start='' ><li><span>findAndModify</span></li><li><span>help</span></li><li><span>save</span></li></ol></div>
+</body>
+</html>
