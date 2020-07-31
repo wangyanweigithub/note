@@ -1,0 +1,280 @@
+<html>
+  <head>
+	  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>i5ting_ztree_toc:redis_command</title>
+		<link href="toc/style/github-bf51422f4bb36427d391e4b75a1daa083c2d840e.css" media="all" rel="stylesheet" type="text/css"/>
+		<link href="toc/style/github2-d731afd4f624c99a4b19ad69f3083cd6d02b81d5.css" media="all" rel="stylesheet" type="text/css"/>
+		<link href="toc/css/zTreeStyle/zTreeStyle.css" media="all" rel="stylesheet" type="text/css"/>
+	  <style>
+		pre {
+		    counter-reset: line-numbering;
+		    border: solid 1px #d9d9d9;
+		    border-radius: 0;
+		    background: #fff;
+		    padding: 0;
+		    line-height: 23px;
+		    margin-bottom: 30px;
+		    white-space: pre;
+		    overflow-x: auto;
+		    word-break: inherit;
+		    word-wrap: inherit;
+		}
+
+		pre a::before {
+		  content: counter(line-numbering);
+		  counter-increment: line-numbering;
+		  padding-right: 1em; /* space after numbers */
+		  width: 25px;
+		  text-align: right;
+		  opacity: 0.7;
+		  display: inline-block;
+		  color: #aaa;
+		  background: #eee;
+		  margin-right: 16px;
+		  padding: 2px 10px;
+		  font-size: 13px;
+		  -webkit-touch-callout: none;
+		  -webkit-user-select: none;
+		  -khtml-user-select: none;
+		  -moz-user-select: none;
+		  -ms-user-select: none;
+		  user-select: none;
+		}
+
+		pre a:first-of-type::before {
+		  padding-top: 10px;
+		}
+
+		pre a:last-of-type::before {
+		  padding-bottom: 10px;
+		}
+
+		pre a:only-of-type::before {
+		  padding: 10px;
+		}
+
+		.highlight { background-color: #ffffcc } /* RIGHT */
+		</style>
+  </head>
+  <body>
+	  <div>
+				<div style='width:25%;'>
+						<ul id="tree" class="ztree" style='width:100%'>
+
+						</ul>
+				</div>
+        <div id='readme' style='width:70%;margin-left:20%;'>
+          	<article class='markdown-body'>
+            	<h2 id="key-33">key 33</h2>
+<ol>
+<li>type</li>
+<li>expire<ul>
+<li>expire/expireat</li>
+<li>pexpire/pexpireat</li>
+</ul>
+</li>
+<li>dump</li>
+<li>rename/renamenx</li>
+<li>persist</li>
+<li>move</li>
+<li>randomkey</li>
+<li>dump</li>
+<li>ttl/pttl</li>
+<li>del</li>
+<li>exists</li>
+<li>keys pattern<h2 id="string-49">string 49</h2>
+<h3 id="set-50">set 50</h3>
+</li>
+<li>set, setnx, mset, msetnx</li>
+<li>setex, psetex<ul>
+<li>command key time value</li>
+</ul>
+</li>
+<li>setbit<ul>
+<li>setbit key offset value(0/1)</li>
+</ul>
+</li>
+<li>setrange<ul>
+<li>setrange key offset value(str)<h3 id="get-62">get 62</h3>
+</li>
+</ul>
+</li>
+<li>get, getset, gitbit, getrange, mget</li>
+<li>getbit<ul>
+<li>getbit key offset</li>
+</ul>
+</li>
+<li>getrange<ul>
+<li>getrange key start end<h3 id="incr-decr-71">incr/decr 71</h3>
+</li>
+</ul>
+</li>
+<li>incr/ decr<ul>
+<li>command key</li>
+</ul>
+</li>
+<li>incrby/incrbyfloat/decrby<ul>
+<li>command key value<h3 id="str-78">str 78</h3>
+</li>
+</ul>
+</li>
+<li>strlen</li>
+<li>append<h2 id="list-82">list 82</h2>
+</li>
+<li>Lindex, Lrange, Linsert, Lset, Lrem, Llen, Ltrim</li>
+<li>Lpush, Rpush/ Lpop, Rpop/ Lpushx, Rpushx</li>
+<li>BLpop, BRpop, BRpopLpush</li>
+<li>RpopLpush<h2 id="hash-91">Hash 91</h2>
+</li>
+<li>Hset, Hget/ Hmset, Hmget/ Hgetall, Hsetnx</li>
+<li>Hincrby, Hincrbyfloat</li>
+<li>Hexists, Hlen, Hdel, Hvals, Hkeys<h2 id="set-98">set 98</h2>
+<h3 id="set-99">set 99</h3>
+</li>
+<li>sunion, sdiff, sinter / sunionstore, sdiffstore, sinterstore</li>
+<li>smove, sscan<h3 id="curd-104">curd 104</h3>
+</li>
+<li>sadd, spop, srem<h3 id="container-107">container 107</h3>
+</li>
+<li>scard</li>
+<li>srandmember</li>
+<li>smembers</li>
+<li>sismember<h2 id="zset-113">zset 113</h2>
+<h3 id="-114">提示 114</h3>
+</li>
+<li>rank -&gt; 秩序,索引</li>
+<li>range -&gt;区间</li>
+<li>byscore -&gt;以分数</li>
+<li>rev -&gt; 反序,降序</li>
+<li>lex -&gt;字典区间</li>
+<li>默认排序是以索引:<h3 id="-122">命令详解: 122</h3>
+</li>
+<li>zadd key score member[{score member}...]
+ 创建或设置指定key对应的有序集合，根据每个值对应的score来排名，升序。
+ 例如有命令 zadd key1 10 A 20 B 30 D 40 C;那么真实排名是 A B D C</li>
+<li>zrem key member
+ 删除指定key对应的集合中的member元素</li>
+<li>zcard key
+ 返回指定key对应的有序集合的元素数量</li>
+<li>zincrby key increment member
+ 将指定key对应的集合中的member元素对应的分值递增加 increment</li>
+<li>zcount key min max
+ 返回指定key对应的有序集合中，分值在min~max之间的元素个数</li>
+<li>zrank key member
+ 返回指定key对应的有序集合中，指定元素member在集合中排名，从0开始切分值是从小到大升序</li>
+<li>zscore key member
+ 返回指定key中的集合中指定member元素对应的分值</li>
+<li>zrange key min max [withscores]
+ 返回指定key对应的有序集合中，索引在min~max之间的元素信息，如果带上 withscores 属性的话，可以将分值也带出来</li>
+<li>zrevrank key member
+ 返回指定key对应的集合中，指定member在其中的排名，注意排名从0开始且按照分值从大到小降序</li>
+<li>zrevrange key start end [withscores]
+指定key对应的集合中，分值在 start~end之间的降序，加上 withscores 的话可以将分值以及value都显示出来</li>
+<li>zrangebyscore key start end [withscores]
+同 zrange命令不同的是，zrange命令是索引在start[end范围的查询，而zrangebyscore命令是根据分值在start]end之间的查询且升序展示</li>
+<li>zrevrangebyscore key max min [withscores]
+同zrangebyscore命令不同的是，zrangebyscores是根据分值从小到大升序展示，而zrevrangebyscore命令是从max到min降序展示</li>
+<li>zremrangebyrank key start end
+移除指定key对应集合中索引在start~end之间(包括start和end本身)的元素</li>
+<li>zremrangebyscore by min max
+同zremrangebyrank命令类似，不同的该命令是删除分值在min~max之间的元素</li>
+<li>zinterstore desk-key key-count key...
+获取指定数量的key的交集。
+例如有 key1:{10:A,20:B,30:C},key2{40:B,50:C,60:D},那么命令 zinterstore key3 2 key1 key2 
+意思就是将key1 key2这两个集合的交集赋给key3，如何获
+取key1与key2的交集呢。 key1中存在 A B C,key2中存在 B C D,那么交集就是 B 和 C，
+且 B与C对应的score也会叠加，即 key3{B:20+40=60,C:30+50=80}</li>
+<li>zunionstore desk-key key-count key...
+获取指定数量key的并集，例如有 key1{10:A,20:B,30:C},key2{40:B,50:C,60:D},可以看出
+A和D不是key1与key2共有的，但是并集中只要存在就会记录进去，然后B与C是共有的，即并集的
+结果就是 key3{10:A,B:60,D:60,C:80}<h3 id="curd-179">curd 179</h3>
+</li>
+<li>zadd key score member</li>
+<li>zrem key member</li>
+<li>zincrby key increnment member</li>
+<li>zremrangebyrank key start end (byrank, 以索引为准)</li>
+<li>zremrangebyscore key min max (byscore, 以分数为准)</li>
+<li>zremrangebylex (以字典)<h3 id="get-187">get 187</h3>
+</li>
+<li>zrank</li>
+<li>zrevrank</li>
+<li>zrange (默认以索引排序)</li>
+<li>zrangebyscore</li>
+<li>zrangebylex</li>
+<li>zscore</li>
+<li>zrevrange: 反:区间:(索引)</li>
+<li>zrevrangebyscore<h3 id="container-197">container 197</h3>
+</li>
+<li>zlexcount, zcard, zrem, zscan, zcount<h3 id="-200">集合 200</h3>
+</li>
+<li>zunionstore</li>
+<li>zinterstore<h2 id="-204">连接 204</h2>
+</li>
+<li>echo, select, ping, auth<h2 id="-207">事务 207</h2>
+</li>
+<li>multi, watch, unwatch, discard, exec<h2 id="-210">发布订阅: 210</h2>
+</li>
+<li>subscribe, unsubscribe</li>
+<li>正则表达式<ul>
+<li>Psubscribe: 订阅所有指定模式的频道</li>
+<li>Punsubscribe: 退订所有指定模式的频道</li>
+</ul>
+</li>
+<li>publish, pubsub<h2 id="-218">服务器命令 218</h2>
+<h3 id="server-219">server 219</h3>
+</li>
+<li>client pause</li>
+<li>debug object</li>
+<li>flushdb</li>
+<li>flushall</li>
+<li>save: 异步保存到数据硬盘</li>
+<li>lastsave: 返回最近一次成功将数据保存到硬盘上的时间</li>
+<li>config get/ config set /config resetstat</li>
+<li>command</li>
+<li>command info</li>
+<li>debug segfault: 让redis崩溃</li>
+<li>dbsize: key的数量</li>
+<li>shutdown: 异步保存数据到硬盘,并关闭服务器</li>
+<li>client kill</li>
+<li>client getname</li>
+<li>client setname</li>
+<li>client list</li>
+<li>monitor</li>
+<li>command getkeys</li>
+<li>command count</li>
+<li>time</li>
+<li>info</li>
+<li>config rewrite</li>
+<li>bgsave: 在后台异步保存<strong>当前数据库的数据</strong>到磁盘.<h3 id="log-244">log 244</h3>
+</li>
+<li>slowlog: 慢日志</li>
+<li>bgrewriteaof: 异步执行一个AOF文件重写操作.<h3 id="-249">主备 249</h3>
+</li>
+<li>slaveof: 将当期那服务器转变为指定服务器的从属服务器</li>
+<li>sync</li>
+<li>role<h3 id="cluster-254">cluster 254</h3>
+</li>
+<li>cluster slots: 获取集群节点的映射数组</li>
+</ol>
+
+          	</article>
+        </div>
+		</div>
+  </body>
+</html>
+<script type="text/javascript" src="toc/js/jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="toc/js/jquery.ztree.all-3.5.min.js"></script>
+<script type="text/javascript" src="toc/js/ztree_toc.js"></script>
+<script type="text/javascript" src="toc_conf.js"></script>
+
+<SCRIPT type="text/javascript" >
+<!--
+$(document).ready(function(){
+    var css_conf = eval(markdown_panel_style);
+    $('#readme').css(css_conf)
+    
+    var conf = eval(jquery_ztree_toc_opts);
+		$('#tree').ztree_toc(conf);
+});
+//-->
+</SCRIPT>
