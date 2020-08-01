@@ -1,26 +1,23 @@
 
 <!-- vim-markdown-toc GFM -->
 
-* [问题 22]
-* [基本类型 37]
-* [基本语法 207]
-* [字符串 417]
-* [字面量]
-* [动态内存 428]
-* [容器 732]
-	* [顺序容器 733]
-	* [关联容器 955]
-* [类设计 1074]
-	* [类 1075]
-	* [拷贝控制 1088]
-	* [操作重载与类型转换 1174]
-	* [面向对象 1176]
-* [feature 1264]
-	* [内存总结 1265]
-	* [类内存空间 1266]
+* [问题 23]
+* [基本类型 38]
+* [基本语法 208]
+* [字符串 418]
+* [字面量 433]
+* [动态内存 485]
+* [类设计 1131]
+	* [类 1132]
+	* [拷贝控制 1146]
+	* [操作重载与类型转换 1232]
+	* [面向对象 1234]
+* [feature 1385]
+	* [内存总结 1386]
+	* [类内存空间 1387]
 
 <!-- vim-markdown-toc -->
-## 问题 22
+## 问题 23
 1. 有了auto为什么还需要decltype
     1. auto只能让编译器确定变量的类型，而decltype可以确定一种类型来定义变量。
 
@@ -35,7 +32,7 @@
 9. 申请对象一定要用new吗
 10. 为什么重载运算符时，要用复合赋值运算符来定义算符运算符，为什不不能反过来。
 
-## 基本类型 37
+## 基本类型 38
 1. 类型转换
     1. <font color=red>当我们赋给无符号数类型一个超出它表示范围的值时，如果是初始值对无符号数类型表示的数值总数取模后的余数。</font>
     2. 可能会出现无意对无符号数赋一个负值：
@@ -205,7 +202,7 @@
 
                 1. 切记：decltype((variable)) (双层括号) 的结果永远是引用，而decltype(variable) 结果只有当variable本身就是一个引用时才是引用。
 
-## 基本语法 207
+## 基本语法 208
 1. 强制类型转换
     1. 形式：  cast-name<type>(expression);
     2. cast-name:
@@ -415,7 +412,7 @@
 
     6. 如果明确知道返回的函数是哪一个，可以使用decltype来简化返回函数指针的函数定义。
 
-## 字符串 417
+## 字符串 418
 1. 初始化
     1. 拷贝初始化
         1. 使用等号(=)初始化一个变量，实际上执行的是拷贝初始化，编译器把等号右侧的初
@@ -430,7 +427,7 @@
 		string s2(s1);
 		```
 
-## 字面量
+## 字面量 433
 > 原始字符串字面量
 
 1. 传统 C++ 里面要编写一个充满特殊字符的字符串其实是非常痛苦的一件事情，
@@ -482,7 +479,7 @@ int main() {
 
     - 字符字面量：参数只能是 char, wchar_t, char16_t, char32_t 这几种类型。
 
-## 动态内存 428
+## 动态内存 485
 1. 动态内存和智能指针
     0. 动态内存是通过一对运算符来完成的：
         1. new ：在动态内存中为对象分配空间并返回该对象的指针，可以选择为它进行出世哈
@@ -786,350 +783,8 @@ int main() {
 
 3. 使用标准库
 
-## 容器 732
-### 顺序容器 733
-1. 概述
-    1. 容器类型：
-        1. vector: 可变大小数组
-        2. deque: 双端队列
-        3. list: 双向链表
-        4. forward_list: 单向链表
-        5. array: 固定大小数组，支持快速访问，不能添加或删除元素
-        6. string: 插入/删除速度快
-
-2. 容器库概览: 所有容器都适用的操作
-    0. 操作
-        1. iterator
-        2. const_iterator
-        3. size_type
-        
-        4. difference_type
-        5. value_type
-        6. reference
-        7. const_reference
-        
-        8. 构造函数
-            1. C c;       默认构造函数
-            2. C c1(c2);  拷贝赋值
-            3. C c(b, e); 迭代器范围拷贝：array 不支持
-            4. C c{a, b, c...}; 列表初始化
-
-        9. 赋值与swap
-            1. c1 = c2
-            2. c1 = {a, b, c...}
-            3. a.swap(b)    交换a和b的元素
-            4. swap(a, b)
-
-        10. 大小
-            1. c.size() : 元素数目，不支持forward_list
-            2. c.max_size() ：可保存的最大元素数目
-            3. c.empty()
-
-        11. 添加/删除元素：不适用于array
-            1. c.insert(args)
-            2. c.emplace(inits)
-            3. c.erase(args)
-            4. c.clear()
-
-        12. 关系运算符
-            1. ==, !=
-            2. <, <=, >, >=
-
-        13. 获取迭代器
-            1. c.begin(), c.end()
-            2. c.cbegin(), c.cend()
-
-        14. 反向容器的额外成员(不支持forward_list)
-            1. reverse_iterator
-            2. const_reverse_iterator
-            3. c.rbegin(), c.rend()
-            4. c.crbegin(), c.crend()
-
-    1. 迭代器
-        1. 插入迭代器
-            1. back_iterator
-            2. front_iterator
-            3. iterator iterator：注意，iterator在声明时就绑定了iterator的位置，这个位置只初始化一次，以后每次插入时，新元素还是插入到初始化时指定元素的前面。
-
-                    *it = val;
-                    相当于
-                    it = c.insert(it, val);
-                    it++
-
-                    一定要注意，it的位置移动了，它还是指向声明时指定的位置。这个位置不停变换。
-
-        2. 流迭代器
-            > iostream 类型不是容器，但是标准库定义了可以使用这些IO类型对象的迭代器
-
-            1. istream_iterator
-            2. ostream_iteraor
-        3. 反向迭代器
-        4. 移动迭代器
-
-    2. 容器类型成员
-    3. begin 和 end 成员
-    4. 容器定义和初始化
-        1. 除了拥有的4个初始化方法以外还有：
-            1. C c1 = c2
-            2. C c = {a, b, c...}
-            3. 只有顺序容器(不包括array)的构造函数才能接受大小参数
-                1. C seq(n)  String不适用。
-                2. C seq(n, t)
-        2. 标准库array具有固定大小
-        
-    5. 赋值和swap
-        1. 赋值运算
-            1. c1 = c2
-            2. c = {a, b, c...}
-            3. swap(c1, c2)
-            4. c1.swap(c2)
-            5. assign 不使用与关联容器和array
-                1. seq.assign(b, e)
-                2. seq.assign(il)
-                3. seq.assign(n, t)
-
-        2. 赋值运算会导致指向左边容器内部的迭代器、引用和指针失效，而swap操作将容器内容交换不会导致指向容器的迭代器、引用和指针失效，array和string除外。
-
-    6. 容器大小操作
-    7. 关系运算符
-
-3. 顺序容器操作
-    1. 向顺序容器添加元素
-        1. 顺序容器(非array)添加元素的操作
-            1. 这些操作会改变容器大小，所以array不支持这些操作
-            2. forward_list 有自己版本的insert和emplace，forward_list不支持push_back和emplace_back，vector和string不支持push_front和emplace_front
-            3. c.push_back(t)， c.emplace_back(args), 返回void
-            4. c.push_font(t),  c.emplace_front(args)
-            5. c.insert(p, t),  c.emplace(p, args)  返回指向新添加的元素的迭代器
-            6. c.insert(p, n, t)   返回指向新添加的第一个元素的迭代器，若n为0，则返回p
-            7. c.insert(p, b, e)
-            9. c.insert(p, il)
-
-    2. 访问元素
-        1. at 和下标操作只适用于string、vector、deque和array。因为这些是固定空间的容器，根据下标可以很容易计算得到实际的内存地址，而链表不可以计算得到，只能遍历。back不适用于forward_list，因为单向链表如果想要访问最后一个元素是O(n)，他需要遍历整个单向列表。forward_list不支持所有的访问最后一个元素的操作。
-        2. c.back()
-        4. c.font()
-        5. c[n]
-        6. c.at[n]  ：这几个函数返回的都是引用
-
-    3. 删除元素
-        1. 这些操作会改变容器的大小，所以不适用于array
-        2. forward_list有特殊版本的erase，不支持pop_back; vector和string不支持pop_front。
-        3. c.pop_back()
-        4. c.pop_front()
-        5. c.earse(p)
-        6. c.earse(b, e)
-        7. c.clear()
-
-    4. 特殊的forward_list 操作
-        1. 单向列表，只有前一个元素才可以知道现在这个元素的指针，更改某个元素，需要改变它的前端元素的指针。
-        2. lst.before_begin(), 这个迭代器不能解引用
-        3. lst.cbefore_begin()
-        4. 插入：
-            1. lst.insert_after(p, t)
-            2. lst.insert_after(p, n, t)
-            3. ls.insert_after(p, b, e)
-            4. ls.insert_after(p, il)   il是一个花括号列表，返回一个指向最后一个插入元素的迭代器
-            5. emplace_after(p, args)
-        5. 删除
-            1. lst.erase_after(p)
-            2. lst.erase_after(b, e)
-
-    5. 改变容器大小
-        1. resize可以用来增大或缩小容器，array不支持
-        2. 如果当前大小大于所要求的的大小，容器后面的元素会被删除
-        3. 如果当前大小小于新大小，会将新元素添加到容器后部
-        4. c.resize(n) :没有提供第二个参数，进行值初始化，如果是类，必须有构造函数。
-        5. c.resize(n, t)
-
-    6. 容器操作可能使迭代器失效
-        1. 不要保存end返回的迭代器
-
-    7. 总结：
-        1. array是固定长度，所有改变长度的方法都不能使用。pop、push_back、insert
-        2. vector、string是块内存空间的，如果改变最开始的元素，需要移动所有后面的元素，所以不支持操作front元素：不支持  push_front、emplace_front、pop_font、
-        3. forw_list是单向列表，如果访问最后的元素需要遍历整个链表，所以应该不支持末尾的操作：push_back、emplace_back、back。
-
-4. vector对象是如何增长的
-    1. vector和string通常会分配比新的空间需求更大的内存空间，容器预留这些空间作为备用，可用来保存更多的新元素。
-    2. 函数
-        1. c.shrink_to_fit() :只能用于vector、string、deque。请将capacity()减少为与size()相同大小。
-        2. c.capacity() ：不重新分配内存空间的话，c可以保存多少元素
-        3. c.reserve(n): 分配至少能容纳n个元素的内存空间
-    3. capacity和size
-        1. capacity是最多能容纳多少个元素，size是已经保存的元素的数目。
-
-5. 额外的string 操作
-    1. 构造string的其他方法
-        1. string s(cp, n) :s是cp指向的数组的前n个字符的拷贝，次数组至少应该包含n个字符
-        2. string s(s2, pos2): 
-        3. string s(s2, pos2, len2):s是string s2 从下标pos2开始的len2个字符的拷贝。若pos2>s2.size(),构造函数未定义。
-        4. substr：返回一个string，它是原始string的一部分或全部的拷贝。
-            1. string s("Hello world"); string s2 = s.substr(0, 5); string s3 = s.substr(6);
-
-    2. 改变string的其他方法
-    3. string 搜索操作
-    4. compare函数
-    5. 数值转换
-
-6. 适配器
-    > 容器、迭代器和函数都有适配器。适配器是一种机制，能使某种事物的行为看起来像是另外意纵横事物一样。
-    > 一个容器适配器接受一种已有的容器类型，使其行为看起来像是一种不同的类型。
-
-    1. 顺序容器适配器
-        1. stack
-            1. 定义在 stack头文件
-            2. stack基于deque实现，也可以在list或vector上实现
-            3. 操作
-                1. s.pop()
-                2. s.push()
-                3. s.emplace(args)
-                4. s.top()
-
-        2. queue, priority_queue
-            1. 定义在queue头文件
-            2. queue默认基于deque实现，priority_queue默认基于vector是吸纳
-            3. 操作
-                1. q.pop()  ：返回首元素或最高优先级的元素
-                2. q.front()：返回首或尾但不删除
-                3. q.back() :只适用于queue
-                4. q.top() :
-                5. q.push(item)
-                6. q.emplace(args)
-
-    2. 所有容器适配器都支持的操作和类型
-        1. size_type
-        2. value_type
-        3. container_type
-        4. A a;
-        5. A a(c)
-        6. 关系运算符
-        7. a.empty()
-        8. a.size()
-        9. swap(a, b)
-        10. a.swap(b)
-
-### 关联容器 955
-1. 类型
-    1. map
-    2. set
-    3. multimap
-    4. multiset
-    5. unorderd_map
-    6. unorderd_set
-    7. unorderd_multimap
-    8. unorderd_multiset
-
-2. 概述
-    1. 关键字类型
-        1. 有序容器的关键字类型
-            1. 我们可以提供自定义的的操作来代替关键字上的 < 运算符
-            2. 所提供的关键字类型上定义一个严格弱序。
-            3. 如果一个类型定义了“行为正常”的 < 运算符，则它可以用作关键字类型。
-
-        2. 使用关键字类型的比较函数
-
-    2. pair类型
-        > 头文件 utility
-        > pair的默认构造函数对数据成员进行值初始化
-
-        1. 操作
-            1. pair<T1, T2> p;
-            2. pair<T1, T2> p(v1, v2)
-            3. pair<T1, T2> p = {v1, v2};
-            4. make_pair(v1, v2);
-            5. p.first
-            6. p.second
-            7. p1 relop p2
-            8. p1 == p2
-            9. p1 != p2
-3. 操作
-    1. 关联容器额外的类型别名
-        1. key_type
-        2. mapped_type
-        3. value_type
-
-    2. 关联容器迭代器
-        1. 当解引用一个关联容器时，我们会得到一个类型为容器的value_type的值的引用
-        2. 对map而言，value_type是一个pair类型，其first成员保存const的关键字，second成员保存值
-        3. set的迭代器是const的
-        4. 遍历关联容器
-            
-    3. 添加元素
-        1. map的insert，元素类型必须是pair
-            1. word_count.insert({word, 1});
-            2. word_count.insert(make_pair(word, 1));
-            3. word_count.insert(pair<string, size_t>(word, 1));
-            4. word_count.insert(map<string, size_t>::value_type(word, 1));
-
-        2. 关联容器insert操作
-            1. c.insert(v)
-            2. c.emplace(args)
-            3. c.insert(b, e)
-            4. c.insert(il)
-            5. c.insert(p, v)
-            6. c.emplace(p, args)
-
-        3. 总结
-            1. 对于map和set，只有当元素的关键字不在c中时才插入(或构造)元素，返回一个pair，包含一个迭代器，指向关键字元素，以及一个指示插入是否成功的bool的值。
-
-        4. 检测insert的返回值
-            1. map、set返回一个pair
-            2. multimap、multiset返回一个迭代器
-
-    4. 删除元素
-        1. 操作
-            1. c.erase(k)  返回size_type值
-            2. c.erase(p)  返回p之后的迭代器
-            3. c.erase(b, e)  返回e
-
-    5. map下标操作：只有map和unorder_map两种容器有
-        1. 如果关键字不在map中，会为他创建一个元素并插入到map中，关联值将进行值初始化。
-        2. 因为下标运算可能插入一个新元素，我们只可以对非const的map使用下标操作。
-        3. c[k]     返回关键字为k的元素
-        4. c.at[k]  带参数检查，如果k不在c中，抛出out_of_range异常
-
-        5. 下标操作的返回值
-            1. 通常，解引用一个迭代器所返回的类型与下标运算符返回的类型是一样的，但对map则不然
-            2. 对map进行下标操作时，会获得一个mapped_type对象，但当解引用一个map迭代器时，会返回一个value_type对象。
-            3. **与其他下标运算符相同的是，map的下标操作返回一个左值，所以既可以读，也可以写。返回的应该是对象的空间地址，像引用的类型一样应该**
-   
-    6. 访问元素
-        1. 下标和at操作只适用于非const的map和unordered_map
-        2. lower_bound和upper_bound 不适用于无序容器。
-        3. 操作
-            1. c.find(k)
-            2. c.count(k)
-            3. c.lower_bound(k)
-            4. c.upper_bound(k)
-            5. c.equal_range(k)  : 返回一个pair，表示关键字等于k的元素范围，若k不存在，pair的两个成员均等于c.end()
-
-4. 无序容器
-    1. 哈希函数映射到不同的存储空间
-    2. 操作
-        1. 桶接口
-            1. c.bucket_count()
-            2. c.max_bucket_count()
-            3. c.bucket_size(n)
-            4. c.bucket(k)
-        2. 桶迭代
-            1. local_iterator
-            2. const_local_iterator
-            3. c.begin(n), c.end(n)
-            4. c.cbegin(n), c.cend(n)
-        3. 哈希策略
-            1. c.load_factor()
-            2. c.max_load_factor()
-            3. c.rehash(n)
-            4. c.reserve(n)
-
-    3. 无序容器对关键字类型的要求
-        1. 默认无序容器使用关键字类型的 == 运算符来比较元素，它们还是用一个hash<key_type> 类型的对象来生成每个元素的哈希值
-        2. 内置类型(包括指针)标准库提供了hash模板，string和智能指针定义了hash，一次可以直接定义关键字是内置类型(包括指针类型)、string、智能指针的无序容器
-        3. 不能直接定义关键字为自定义类型的无序容器，不能直接使用hash模板，必须提供我们自己的hash模板版本。
-
-## 类设计 1074
-### 类 1075
+## 类设计 1131
+### 类 1132
 1. 定义抽象数据类
     1. 函数定义在类内默认转化为inline函数。
     2. 函数一般在类外定义。如果是很简单的方法，可以在类内定义。
@@ -1143,7 +798,7 @@ int main() {
 5. 构造函数
 6. 静态成员
 
-### 拷贝控制 1088
+### 拷贝控制 1146
 0. 拷贝控制操作
 	1. 五种成员函数
 	2. 威慑么编译器自动为类定义缺失的拷贝控制函数,我们还是要自己定义.
@@ -1229,9 +884,9 @@ int main() {
 
 7. 总结
 
-### 操作重载与类型转换 1174
+### 操作重载与类型转换 1232
 
-### 面向对象 1176
+### 面向对象 1234
 1. 面向对象设计基于三个基本概念：
     1. 数据抽象：可以将类的接口与实现分离
     2. 继承:  可以定义相似的类型并对其相似关系建模
@@ -1382,9 +1037,9 @@ int main() {
 
             4. 友元和类方法是一致的。
 
-## feature 1264
-### 内存总结 1265
-### 类内存空间 1266
+## feature 1385
+### 内存总结 1386
+### 类内存空间 1387
 1. 派生类的内存空间
     1. 类的非虚函数其实不占用类对象的内存（函数编译后形成二进制文件放在内存中的代码段区）
     2. 如果类含有虚函数，则编译结果 在类开始位置插入了一个虚函数指针。
