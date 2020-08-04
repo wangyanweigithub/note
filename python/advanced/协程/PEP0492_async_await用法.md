@@ -1,4 +1,29 @@
-﻿# Python PEP 492 中文翻译——协程与async/await语法
+﻿
+<!-- vim-markdown-toc GFM -->
+
+* [Python PEP 492 中文翻译——协程与async/await语法 26]
+	* [PEP 492：协程与async/await语法 40]
+		* [摘要 41]
+		* [API设计和实现的备注 51]
+		* [理论和目标 58]
+		* [4. 详细内容 71]
+		* [5 await表达式 116]
+		* [6. 新的操作符优先级列表 163]
+		* [异步上下文管理器和“async with” 191]
+		* [8. 异步迭代器和“async for” 261]
+		* [9. 为什么是StopAsyncIteration？ 390]
+		* [协程对象 426]
+		* [协程对象的方法 445]
+		* [调试特性 451]
+		* [新的标准库函数 471]
+		* [新的抽象基类 482]
+	* [词汇表 503]
+		* [向后兼容性 551]
+		* [asyncio 555]
+		* [asyncio迁移策略 563]
+
+<!-- vim-markdown-toc -->
+# Python PEP 492 中文翻译——协程与async/await语法 26
 原文标题：PEP 0492 -- Coroutines with async and await syntax
 原文链接：https://www.python.org/dev/peps/pep-0492/
 生效于：Python 3.5
@@ -12,8 +37,8 @@
 	3. 增加了异步迭代器（async for），异步迭代器的__aiter__、__anext__函数是协程，可以将程序挂起。
 	4. 增加了异步上下文管理器（async with），异步上下文管理器的__aenter__、__aexit__函数是协程，可以将程序挂起。
 
-## PEP 492：协程与async/await语法
-### 摘要
+## PEP 492：协程与async/await语法 40
+### 摘要 41
 1. 不断增多的Internet连接程序刺激了对响应性、伸缩性代码的需求。这个PEP的目标在于：制订显式的异步/并发语法，比传统的Python方法更易用、更丰富。
 我们准备把协程（协同程序）的概念独立出来，并为其使用新的语法。最终目标是建立一个通用、易学的异步编程的构思模型，并尽量与同步编程的风格相似。
 
@@ -23,14 +48,14 @@
 
 3. 在这个异步编程不断增长的时期，我们相信这些改变将会使Python保持一定的竞争性，就像许多其它编程语言已经、将要进行的改变那样。
 
-### API设计和实现的备注
+### API设计和实现的备注 51
 1. 根据Python 3.5 Beta期间的反馈，进行了重新设计，明确地把协程从生成器里独立出来了。
 	协程现在是原生的，有明确的独立类型，而不是作为生成器的一种特殊形式。
 
 2. 这个改变，主要是为了解决在Tornado里使用协程出现的一些问题。
 【译注：在Tornado 4.3已经可以使用新的async/await语句，详见此链接】
 
-### 理论和目标
+### 理论和目标 58
 1. 在以前，我们可以用生成器实现协程（PEP 342），后来又对其进行了改进，引入了yield from语法（PEP 380）。但仍有一些缺点：
 
 	- 协程和普通生成器使用相同的语法，所以很容易把它们搞混，初学者更是如此。
@@ -43,7 +68,7 @@
 	使用原生协程和相应的新语法，我们可以在异步编程时使用上下文管理器（context manager）和迭代器。如下文所示，
 新的async with语句可以在进入、离开运行上下文（runtime context）时进行异步调用，而async for语句可以在迭代时进行异步调用。
 
-### 4. 详细内容
+### 4. 详细内容 71
 > 请理解Python现有的协程（见PEP 342和PEP 380），这次改变的动机来自于asyncio框架（PEP 3156）和Confunctions提案（PEP 3152，此PEP已经被废弃）。
 由此，在本文中，我们使用“原生协程”指用新语法声明的协程。“生成器实现的协程”指用传统方法实现的协程。“协程”则用在两个都可以使用的地方。
 
@@ -88,7 +113,7 @@
 	【译注： @types.coroutine装饰器仅给生成器函数设置一个CO_ITERABLE_COROUTINE标识，除此之外什么也不做。
 		但是如果生成器函数没有这个标识，await语句不会接受它的对象作为参数。】
 
-###  5 await表达式
+###  5 await表达式 116
 
 1. 新的await表达式用于获得协程执行的结果：
 
@@ -135,7 +160,7 @@ async def read_data(db):
 	2. 如果await右边不是一个awaitable对象，会引发TypeError异常。
 	3. 如果`__await__`返回的不是一个迭代器，则引发TypeError异常。
 
-### 6. 新的操作符优先级列表
+### 6. 新的操作符优先级列表 163
 1. await语句和yield、yield from的一个区别是：await语句多数情况下不需要被圆括号包围。
 
 2. await表达式使用示例
@@ -163,7 +188,7 @@ async def read_data(db):
 	await -coro()      await (-coro())
 	```
 
-### 异步上下文管理器和“async with”
+### 异步上下文管理器和“async with” 191
 > 异步上下文管理器（asynchronous context manager），可以在它的enter和exit方法里挂起、调用异步代码。
 为此，我们设计了一套方案，添加了两个新的魔术方法：`__aenter__`和`__aexit__`，它们必须返回一个awaitable。
 
@@ -233,7 +258,7 @@ class AsyncContextManager:
 		...
 	```
 
-### 8. 异步迭代器和“async for”
+### 8. 异步迭代器和“async for” 261
 > 异步迭代器可以在它的iter实现里挂起、调用异步代码，也可以在它的`__next__`方法里挂起、调用异步代码。要支持异步迭代，需要：
 
 1. 对象必须实现一个`__aiter__`方法（或者，如果使用CPython C API，需要定义`tp_as_async.am_aiter`），
@@ -362,7 +387,7 @@ class AsyncIterable:
 
 	```
 
-### 9. 为什么是StopAsyncIteration？
+### 9. 为什么是StopAsyncIteration？ 390
 > 在CPython内部，协程的实现仍然是基于生成器的。所以，在PEP 479生效之前【译注：将在Python 3.7正式生效，
 > 在3.5、3.6需要from __future__ import `generator_stop`】，以下两个代码是完全一样的，
 > 最终都是给外部代码抛出一个StopIteration('spam')异常：
@@ -398,7 +423,7 @@ async def a1():
 在以后，如果想主动结束一个函数生成器的迭代，用return语句即可（这时函数生成器仍然会给外部代码抛出一个StopIteration异常），
 	而不是以前的使用raise StopIteration语句（这样的话，StopIteration会被包装成一个RuntimeError）。】
 
-### 协程对象
+### 协程对象 426
 > 和生成器的不同之处这一小节只对原生协程有效（用async def语法定义的、有CO_COROUTINE标识的）。对于asyncio模块里现有的“基于生成器的协程”，仍然保持不变。
 
 1. 为了在概念上把协程和生成器区分开来，做了以下规定：
@@ -417,13 +442,13 @@ async def a1():
 
 	6. 在Python 3.5中， @asyncio.coroutine也会有 @types.coroutine的效果——使函数的对象可以被await语句接受。】
 
-### 协程对象的方法
+### 协程对象的方法 445
 1. 在CPython内部，协程是基于生成器实现的，因此它们有共同的代码。像生成器对象那样，协程也有throw()，send()和close()方法。
 	对于协程，StopIteration和GeneratorExit起着同样的作用（虽然PEP 479已经应用于协程）。详见PEP 342、PEP 380，以及Python文档。
 
 2. 对于协程，send()，throw()方法用于往Future-like对象发送内容、抛出异常。
 
-### 调试特性
+### 调试特性 451
 1. 新手在使用协程时可能忘记使用yield from语句，比如：
 ```
 @asyncio.coroutine
@@ -443,7 +468,7 @@ def useful():
 	一个从未await的协程会抛出一个RuntimeWarning，除此之外，给sys模块增加了两个新函数`set_coroutine_wrapper`和`get_coroutine_wrapper`，
 	它们会为asyncio和其它框架启用高级调试工具，比如显示协程在何处被创建、协程在何处被垃圾回收的详细stack trace。
 
-### 新的标准库函数
+### 新的标准库函数 471
 	- types.coroutine(gen) 详见types.coroutine()一节。
 	- inspect.iscoroutine(obj) 如果obj是原生协程对象，返回True。
 	- inspect.iscoroutinefunction(obj) 如果obj是原生协程函数，返回True。
@@ -454,7 +479,7 @@ def useful():
 	wrapper。如果再次调用，新的wrapper会取代旧的。这个函数是线程专有的（thread-specific）。详见“调度特性”一节。
 	- sys.`get_coroutine_wrapper`() 返回当前的包装对象(wrapper object)。如果没有则返回None。这个函数是线程专有的（thread-specific）。详见“调度特性”一节。
 
-### 新的抽象基类
+### 新的抽象基类 482
 为了能更好的与现有框架（如Tornado）和其它编译器（如Cython）相整合，增加了两个新的抽象基类（Abstract Base Classes）：
 
 1. collections.abc.Awaitable，Future-like类的抽象基类，实现__await__方法。
@@ -475,7 +500,7 @@ def useful():
 	1. collections.abc.AsyncIterable --用于测试`__aiter__`方法。
 	2. collections.abc.AsyncIterator --用于测试`__aiter__`和`__anext__`方法。
 
-## 词汇表
+## 词汇表 503
 1. 原生协程函数 Native coroutine function
 
     由async def定义的协程函数，可以使用await和return value语句。见“新的协程声明语法”一节。
@@ -523,11 +548,11 @@ Future-like对象可以在协程里被一条await语句消费（consume）。
 
     有`__anext__`方法的对象。见“异步迭代器和‘async for’”一节。
 
-### 向后兼容性
+### 向后兼容性 551
 
 本PEP保持100%向后兼容。
 
-### asyncio
+### asyncio 555
 1. asyncio模块已经可以使用新语法，并经过测试，100%与async/await兼容。现有的使用asyncio的代码在使用新语法时可以保持不变。
 为此，对asyncio模块主要做了如下修改：
 
@@ -535,7 +560,7 @@ Future-like对象可以在协程里被一条await语句消费（consume）。
 	2. 给asyncio.Future类添加一行代码： `__await__` = `__iter__`。
 	3. 把async()函数改名为`ensure_future`()，以防该函数名和新关键字冲突。
 
-### asyncio迁移策略
+### asyncio迁移策略 563
 1. 由于未经装饰的生成器不能yield from原生协程对象（详见“和生成器的不同之处”一节），因此在使用新语法前，
 请确保所有“基于生成器的协程”都被 @asyncio.coroutine装饰器装饰。
 
