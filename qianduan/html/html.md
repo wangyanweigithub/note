@@ -34,6 +34,8 @@
 	* [输入类型 1222]
 	* [web Storage 1252]
 	* [文件上传 1378]
+* [总结]
+	* [div 和 span:]
 
 <!-- vim-markdown-toc -->
 ## 网站的文件处理 39
@@ -1463,3 +1465,14 @@
 			- FileReader.readAsDataURL()	开始读取指定的 Blob 中的内容。一旦完成，result 属性中将包含一个 data: URL 格式的字符串以表示所读取文件的内容。
 			- FileReader.readAsText()		开始读取指定的 Blob 中的内容。一旦完成，result 属性中将包含一个字符串以表示所读取的文件内容。
 
+
+## 总结
+### div 和 span:
+> 现在 HTML 和 XHTML 有两个只用来标出范围的标签:<div>和<span>。
+
+1. 它们用来将内容划分成语义性(semantic)的块,也就是具有相似含义(meaning)的块。
+	一个表格单元格或段落中的内容可 能具有共同点,也可能没有,但是每个<div>和<span>中的内容应该具有相似的含义。
+	
+2. 那么,<div>和<span>有什么区别呢?
+	- <div>是一个块级(block-level)元素,也就是说,它与前后 元素之间有物理换行。
+	- 但<span>不是块级的,它是行内的(inline),所以可以将它应用于句子中的一 3 个短语。

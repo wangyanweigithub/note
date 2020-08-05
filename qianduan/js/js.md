@@ -3,7 +3,12 @@
 
 * [js]
 	* [JavaScript 的组成]
+	* [基本语法]
+		* [字符串]
+		* [数组]
 	* [js面向对象编程]
+		* [语句]
+		* [map和set]
 		* [构造函数]
 		* [原型/prototype]
 	* [函数进阶:]
@@ -17,13 +22,94 @@
 # js
 > JavaScript，通常缩写为 JS，是一种高级的，解释执行的编程语言。
 > JavaScript 是一门基于原型、函数先行的语言，是一门多范式的语言，它支持面向对象编程，命令式编程，以及函数式编程。
-> 它提供语法来操控文本、数组、日期以及正则表达式等，<font color=red>不支持 I/O</font>，比如网络、存储和图形等，但这些都可以由它的宿主环境提供支持
+> 它提供语法来操控文本、数组、日期以及正则表达式等，<font color=red>不支持 I/O</font>，
+比如网络、存储和图形等，但这些都可以由它的宿主环境提供支持
 
 ## JavaScript 的组成
 	- ECMAScript：JavaScript 的语法标准。
 	- DOM：JavaScript 操作网页上的元素的 API。
 	- BOM：JavaScript 操作浏览器的部分功能的 API。
 
+## 基本语法
+1. javascript 中原始类型：还有引用类型
+	- undefined:表示未定义，即声明了变量却没有赋值，此类型只有一个值。
+	- null:此类型同样只有一个值，表示尚未存在的对象，如果函数／方法要返回对象，当找不到该对象，通常返回的是null。
+	- number:数字，包括整数和小数
+	- string:单引号或双引号
+	- boolean:true和falses ，但值为false,0,null,undefined,NaN或者空字符串时表示假，其他值则表示真。
+	- array
+	- object
+
+### 字符串
+1. 多行字符串:反引号包围(``)
+
+2. 模板字符串
+	1. ${name},表示是使用前面name变量的值替换.
+
+3. <font color=red>字符串是不可变的,如果对字符串某个索引赋值,不会有任何错误,但是,也没有任何效果.</font>
+
+4. 函数:骆驼命名法
+	- toUperCase
+	- toLowerCase: a.toLowerCase();
+	- indexOf(string): 返回指定字符串出现的位置
+	- substring(start, end): 返回指定索引区间的子串.
+
+### 数组
+1. 可以直接改变array.length,来改变length的长度(多出来是undefine, 少的剪切掉)
+
+2. 函数:
+	- indexOf类似于string: 找到返回index,没找到返回-1
+		array.indexOf('a')
+
+	- slice: 对应于string的substring,截取Array部分元素,返回一个新的Array
+		- array.slice(0, 2)
+		- array.slice(0)//0 - end
+		- array.slice()// copy a new array
+
+	- push, pop
+		- push 末尾添加一个新的元素
+		- pop 删除末尾的一个元素
+
+	- unshift, shift
+		- shift 把Array第一个元素删除
+		- unshift 往Array头部添加元素
+
+	- sort
+	
+	- reverse
+
+	- splice: 从指定的索引开始删除若干元素,然后在从该位置添加若干元素.
+	```
+	var arr = ['one', 'two', 'three'];
+	arr.splice(1, 2, '2', '3') //返回删除的元素
+
+	只删除,不添加
+	arr.splice(1, 2)
+
+	只添加不删除
+	arr.splice(1, 0, '2', '3')
+	```
+
+	- concat: 把当前的Array和另一个Array连接起来,并返回一个新的Array
+		- var new_arr = arr.concat([1, 2, 3]);
+
+		- concat没有改变原array,而是返回一个新的Array
+
+		- concat可以接受任意个元素和Array,并且把array拆开,然后全部添加到新的Array里.
+		```
+		arr.concant(1, 2, [1, 2])
+		```
+
+	- join: 把当前Array的每个元素都用指定的字符串连接起来,然后返回连接后的字符串:
+	```
+	var arr = ['a', 'b', 'c']
+	arr.join('-');
+	```
+
+3. 多维数组: 
+	var arr = [[1, 2, 3],[100, 200, 300]]
+
+4. 由于Array也是对象,它的每个元素的索引被视为对象的属性,因此,for ... in 循环可以直接循环出Array的索引.
 ## js面向对象编程
 1. 例子:
 ```
@@ -51,6 +137,30 @@ test.setCss.setStyle(divs);
 ```
 
 2. js中的对象像是python中的字典,只不过key可以不加引号. json和python中的字典一样,都要加引号.
+
+3. 如果key不是标准变量名,可以使用中括号访问: a["midd-name"]
+
+4. js的对象是动态类型,可以随时添加新的属性
+
+5. 访问不存在的属性不报错,返回undefined
+
+6. 检测对象是否包含某个属性使用 in:
+	'name' in object
+
+7. 要判断一个属性是否是自己包含的而不是继承到的:
+	object.hasOwnProperty("namej")
+
+### 语句
+1. if else 和c完全一样
+
+2. for 和c完全一样
+
+3. for ... in ...
+	for (var i in list) { ... } //和python的不同在于需要括号
+
+4. while 和do .. while 和c一样.
+
+### map和set
 
 ### 构造函数
 1. 通过字面量创建对象:
@@ -315,3 +425,4 @@ bindgetNum(); // 返回 66
 	- 如果a是对象,i是对象的key.
 
 	代码可以根据i的值取出a所保存的对象.而不是直接取出a中的对象.
+
