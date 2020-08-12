@@ -9,13 +9,9 @@
 	* [js面向对象编程]
 		* [语句]
 		* [map和set]
-		* [构造函数]
-		* [原型/prototype]
-	* [函数进阶:]
-		* [高级函数]
-			* [call]
-			* [apply]
-			* [bind]
+	* [面向对象编程]
+		* [property]
+		* [js创建对象的方法]
 			* [for]
 
 <!-- vim-markdown-toc -->
@@ -162,6 +158,33 @@ test.setCss.setStyle(divs);
 
 ### map和set
 
+## 面向对象编程
+### property
+1. 一个对象根据另外一个对象创建,并且继承这个对象的所有属性,这个对象继承另一个对象,就是说这个对象的原型是另一个对象.
+
+2. propery继承,是因为js中只有对象,没有类,所以一个对象直接根据另一个对象创建,并继承它的所有属性.
+
+3. xiaoming.__proto__ = Student: xiaoming对象就继承了Student的所有属性.
+
+4. 原型继承并不是一个对象根据另一个对象来创建,而是将一个对象的原型指定另一个对象,这样这个对象调用一个属性,在自己的属性中找不到,就会到原型对象中查找.
+
+5. 一个对象可以随时将自己的原型指定到别的对象,只是属性查找的区别.
+
+6. 一般不要使用obj.__proto__去改变一个原型, 而是使用Obejct.create()方法传入一个原型对象.
+
+7. js对每个创建的对象都会设置一个原型,指向它的原型对象.
+
+### js创建对象的方法
+1. Object.create()
+```
+var Student = {
+	name: 'Robot',
+	height: 1.2
+}
+
+xiaoming = Object.create(Student)
+xiaoming.name = 'xiaoming'
+
 ### 构造函数
 1. 通过字面量创建对象:
 ```
@@ -175,15 +198,7 @@ var student={
 }
 ```
 
-2. 通过new Object()创建对象
-```
-var student = new Object();
-student.name='zhangsan',
-studnet.age = 18
-...
-```
-
-3. 构造函数:
+2. 构造函数:
 	1. eg
 	```
 	function Student(name, age, gender){
@@ -202,6 +217,9 @@ studnet.age = 18
 		- 构造函数内没有 return 语句，this 属性默认下是构造函数的返回值。
 		- 函数名使用的是大写的 Student。
 		- 用 new 运算符和类名 Student 创建对象
+		- 注意: 如果调用构造函数没有使用new,那它只是一个普通方法,并且this绑定window,将里面的属性全部设置成了全局变量.一定不要普通方法调用构造函数.
+
+		- 函数不在对象里面,函数里有this,函数没有返回值就是一个构造函数.
 
 	3. 构造函数的问题:
 		1. 创建多个对象,每个对象都会创建一次sayHi这个函数,每个对象都是独立的. 解决办法使用原型
