@@ -12,7 +12,6 @@
 	* [面向对象编程]
 		* [property]
 		* [js创建对象的方法]
-			* [for]
 
 <!-- vim-markdown-toc -->
 # js
@@ -185,7 +184,85 @@ var Student = {
 xiaoming = Object.create(Student)
 xiaoming.name = 'xiaoming'
 
+2. Object.create: 
+	1. 创建空的对象,并将对象的的__proto__设置为参数
+	2. 拿到这返回的对象,然后在这个对象上设置新的属性
+
 ### 构造函数
+0. 构造函数的结构:
+	1. 构造函数首字母一般大写
+	2. 函数体内有this,这个this指向的是新创建的对象.
+	3. 构造函数必须使用new 创建,否则this会绑定到window,这样会创建很多全局变量.
+	4. 构造函数默认返回this,所以不需要return this
+
+2. 解析:
+	1. 构造函数中对this的操作可以抽象出一个dataModel/class 成为prototype,构造函数的prototype指向这个对象.
+
+	2. 构造函数抽象出的prototype是一个数据模型/类,有一个constructor,指向的就是这个构造函数.
+
+	3. 每个构造函数都可以抽象出一个数据模型/类,对象的prototype就是这个数据模型.
+
+	4. 构造函数有prototype,创建出的对象没有,prototype指向的是那个数据模型,__proto__指向的是构造方法.
+
+	5. 可以说使用instanceof来查看某个对象的实例书否属于某一个构造函数.
+		```
+		xiaoming isinstanceof Student
+		```
+
+	6. 使用new 就是创建新对象,所以构造函数而new会创建一个新对象.
+
+	7. 注意 Obejct.create和构造函数的区别.
+		1. Object.create创建一个新空对象,将__proto__设置一下
+		2. 构造函数类似与python的init函数,
+
+	8. js所有东西都是对象,所以构造函数创建的对象里面所有函数没有公用.将它设置到prototype上最好.类似于类方法.
+
+	```
+	function Student(name) {
+		this.name = name;
+	}
+
+	Student.prototype.hello = function() {
+		alert("Hello, " + this.name + "!");
+	}
+	```
+	9. 默认参数: 使用 ||,赋值时
+
+	10. 避免忘记new,封装一下new方法:
+	```
+	function Studnet(props) {
+		this.name = props.name || "niming";
+		this.grade = props.grade || 1;
+	}
+	
+	Student.prototype.hello = function() {
+		alert("Hello, " + this.name + " !");
+	}
+
+	function createStudent(props) {
+		return new Student(props);
+	}
+	```
+
+### 原型链的继承
+> 只有new 创建的新对象,才会设置将新对象的原型指向构造函数的原型.
+
+> 对象的__proto__指向继承的父原型,prototype是这个构造函数本身的原型.
+
+1. funtion 创建的函数对象是object创建的一个对象.所以函数的原型指向object的原型.
+
+2. 构造函数创建的对象指向构造函数的原型,但对象本身没有原型,只有__proto__,只是创建它的原型的constructor.
+
+3. 所以如果需要实现像是类的继承
+	1. 初始化属性的继承:类似与__init__继承父的__init__
+	调用父原型的构造函数,使用call,传入this对象
+
+	2. 使得新构造函数的原型指向父构造函数的原型
+		1. 因为只有new 对象才会指向自己的父原型(__proto__)
+		2. 所以如果要在本身的原型链中加入一个原型,就需要某一个构造函数的原型是要插入原型创建的对象.
+		3. 然后将那个new创建的原型的构造函数指向正确位置.
+		4. 注意要将new创建的原型的prototype设置为前一个原型链接的原型.
+
 1. 通过字面量创建对象:
 ```
 var student={
@@ -436,11 +513,3 @@ newTest(); // 返回 6, 在这种情况下，"this"指向全局作用域
 var bindgetNum = newTest.bind(test);
 bindgetNum(); // 返回 66
 ```
-
-#### for
-1. for (i in a) console.log(i)
-	- 如果a是数组,i是数组的下标
-	- 如果a是对象,i是对象的key.
-
-	代码可以根据i的值取出a所保存的对象.而不是直接取出a中的对象.
-
