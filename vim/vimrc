@@ -3,7 +3,7 @@ filetype plugin indent on
 map <C-n> :NERDTree<CR>
 
 " pathongen
-"execute pathogen#infect()
+execute pathogen#infect()
 
 " taglist
 map <C-t> :Tlist<CR>
@@ -27,7 +27,7 @@ set wildmode=longest,list " Ex命令自动补全采用bash方式"
 
 "会用markdown的toc插件时,vim不能实现跳转,所以在目录项后面加入行数,方便跳转.
 map <F8> :g/^#/s/$/\=' ' . line(".")<CR>
-map <F9>  :%s/\(^#.* .*\) \d\+/\1/g<CR>
+map <F9> :%s/\(^#.* .*\) \d\+/\1/g<CR>
 
 " omnicppcomplete
 imap <F3> <C-X><C-O>
@@ -102,7 +102,7 @@ func! CompileRunGcc()
 	exec '!g++ % -std=c++11 -o %<'
 	exec '!time ./%<'
     elseif &filetype == 'python'
-	exec '!time python3 %'
+	exec '!time python %'
 	elseif &filetype == 'html'
 	exec '!firefox %'
     elseif &filetype == 'sh'
@@ -127,11 +127,15 @@ nmap    w=  :resize +3<CR>
 nmap    w-  :resize -3<CR>
 nmap    w,  :vertical resize -3<CR>
 nmap    w.  :vertical resize +3<CR>
+nmap    f  <C-f><CR>
+nmap    b  <C-b><CR>
 
 imap <C-c> <font color=red></font><Left><Left><Left><Left><Left><Left><Left>
 imap <C-g> <font color=green></font><Left><Left><Left><Left><Left><Left><Left>
+
 iab xtime <C-r>=strftime("%H-%M")<cr>
 iab xdate <C-r>=strftime("%Y-%m-%d")<cr>
+
 map <F4> :call Dot()<CR>
 func! Dot()
 	exec "w"
