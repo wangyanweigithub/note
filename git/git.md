@@ -1,15 +1,10 @@
 
 <!-- vim-markdown-toc GFM -->
 
-* [config]
 * [命令]
-* [本地搭建git仓库]
-* [git 错误指南]
+* [利用git,使U盘作为仓库]
 
 <!-- vim-markdown-toc -->
-## config
-
-
 ## 命令
 1. 初始化一个Git仓库，使用 git init命令
 
@@ -81,7 +76,7 @@ git push -u origin master
     $git branch
     *master
 
-17.Git鼓励大量使用分支：
+17. Git鼓励大量使用分支：
 
 	- 查看分支：git branch
 
@@ -95,8 +90,38 @@ git push -u origin master
 
 	- 删除分支：git branch -d <name>
 
-11.合并分支冲突，需要手动更改文件，然后提交。
+11. 合并分支冲突，需要手动更改文件，然后提交。
 
-## 本地搭建git仓库
+## 利用git,使U盘作为仓库
+> [本文链接](https://blog.csdn.net/u010928583/article/details/86496734)
 
-## git 错误指南
+1. U盘作为仓库操作步骤
+
+	- 首先U盘上创建一个repository 名称： fill_backup_repos
+
+		git init –bare  fill_backup_repos  //裸库，没有work目录
+
+	- 电脑文件夹创建一个源项目名称：git_myfill
+
+		git init git_myfill
+
+	- 放入需要同步管理的文件
+		git add .    //添加文件、如果有不需要管理的文件，加入 .gitignore文件；
+
+		git commit -m "initialized."   //提交到本地仓库
+
+		git remote add usb F:/fill_backup_repos    //把u盘上的裸库fill_backup添加为远程仓库
+
+		git push usb master
+
+	- 在U盘上的fill_backup 裸仓库里头建立一个本地仓库
+
+		git init  myfill //建一个本地仓库
+
+		git remote add usb F:/fill_backup_repos     //把u盘上的裸库fill_backup_repos添加为远程仓库
+
+		git pull myusb master   //完成代码同步
+
+2. 备注remote相关命令：
+	1. 查看remote： git remote
+	2. 删除remote: git remote remove
