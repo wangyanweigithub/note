@@ -10,8 +10,8 @@ Plugin 'VundleVim/Vundle.vim'
 
 Plugin 'mattn/emmet-vim' 
 
-Plugin 'godlygeek/tabular'
-Plugin 'plasticboy/vim-markdown'
+"Plugin 'godlygeek/tabular'
+"Plugin 'plasticboy/vim-markdown'
  
 "Plugin 'vim-airline/vim-airline'
 

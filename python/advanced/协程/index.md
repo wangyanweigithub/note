@@ -9,25 +9,3 @@ linux系统内核有两种AIO，一种是通过多线程和进程来模拟实现
 		        
 	2. 通过epoll/select/kqueue 和非阻塞socket来实现socket的异步。
 	asyncio、tornado、zeromq中的事件循环就是通过这样来实现异步网络IO的异步的。
-
-### 3.8
-1. 有yield是生成器:
-	- 生成器函数:
-	```
-	def test():
-		yeild 1
-	```
-
-	- 异步生成器函数: 注意,python3.7以后可以同时用async和yield.
-	```
-	async def test():
-		yield 1
-	```
-
-2. 有async,await 是协程函数
-	- 协程函数:
-	```
-	await def test():
-		await asyncio.sleep(1)
-	```
-

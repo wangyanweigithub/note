@@ -13,8 +13,9 @@
 
     至此，这个问题得到了完美的解决和解答，而我想后者才是更重要的。
 
-2. http post 提交时，如果是key－value格式，即字典格式，tornado接收在self.request.arguments中，若是string格式，即json格式，没有key的话，
-	tornado接收在body中，需要自己去body中转化json格式。如果传过来的是key－value的话，body中时用&拼接的key－value。
+2. http post 提交时，如果是key－value格式，即字典格式，tornado接收在self.request.arguments中，若是string格式，
+即json格式，没有key的话，tornado接收在body中，需要自己去body中转化json格式。如果传过来的是key－value的话，
+body中时用&拼接的key－value。
 
 3. http post 请求有四种方式。对应不同的数据格式。
 
