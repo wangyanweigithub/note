@@ -1,19 +1,19 @@
 
 <!-- vim-markdown-toc GFM -->
 
-* [`concurrent.futures` --- 启动并行任务 19]
-	* [`concurrent.futures` 模块提供异步执行回调高层接口。 23]
-	* [执行器对象 27]
-		* [submit 33]
-		* [map 46]
-		* [shutdown 72]
-	* [ThreadPoolExecutor 96]
-	* [ProcessPoolExecutor 193]
-	* [期程对象 267]
-		* [class concurrent.futures.Future 272]
-		* [future 测试方法  331]
-	* [模块函数 369]
-	* [Exception类 419]
+* [`concurrent.futures` --- 启动并行任务 19](#concurrentfutures-----启动并行任务-19)
+	* [`concurrent.futures` 模块提供异步执行回调高层接口。 23](#concurrentfutures-模块提供异步执行回调高层接口-23)
+	* [执行器对象 27](#执行器对象-27)
+		* [submit 33](#submit-33)
+		* [map 46](#map-46)
+		* [shutdown 72](#shutdown-72)
+	* [ThreadPoolExecutor 96](#threadpoolexecutor-96)
+	* [ProcessPoolExecutor 193](#processpoolexecutor-193)
+	* [期程对象 267](#期程对象-267)
+		* [class concurrent.futures.Future 272](#class-concurrentfuturesfuture-272)
+		* [future 测试方法  331](#future-测试方法--331)
+	* [模块函数 369](#模块函数-369)
+	* [Exception类 419](#exception类-419)
 
 <!-- vim-markdown-toc -->
 ## `concurrent.futures` --- 启动并行任务 19
@@ -267,7 +267,6 @@ if __name__ == '__main__':
 ### 期程对象 267
 1. Future 类将可调用对象封装为异步执行。**Future 实例由Executor.submit() 创建**。
 map返回一个迭代器对象,不是future,而是在迭代器中的next方法中对future执行result.
-
 
 #### class concurrent.futures.Future 272
 > 将可调用对象封装为异步执行。`Future` 实例由 `Executor.submit()` 
