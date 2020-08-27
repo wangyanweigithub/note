@@ -1,27 +1,27 @@
 ﻿
 <!-- vim-markdown-toc GFM -->
 
-* [`Waiter` 22](#waiter-22)
-	* [`_FirstCompletedWaiter` 38](#_firstcompletedwaiter-38)
-	* [`_AsCompletedWaiter`  52](#_ascompletedwaiter--52)
-	* [`_AllCompletedWaiter` 67](#_allcompletedwaiter-67)
-* [waiter辅助函数](#waiter辅助函数)
-	* [`AcquireFutures` 95](#acquirefutures-95)
-	* [waiter 安装器 115](#waiter-安装器-115)
-	* [`_yield_finished_futures` 118](#_yield_finished_futures-118)
-* [对外暴露的api](#对外暴露的api)
-	* [`as_completed` 123](#as_completed-123)
-* [Future 136](#future-136)
-* [Executor 172](#executor-172)
-* [process 194](#process-194)
-	* [`_CallItem` 195](#_callitem-195)
-	* [`_ExceptionWithTraceback` 和 `_RemoteTrackeback` 204](#_exceptionwithtraceback-和-_remotetrackeback-204)
-	* [`_ResultItem` 207](#_resultitem-207)
-	* [`_WorkItem` 158 214](#_workitem-158-214)
-	* [ProcessPoolExecutor 221](#processpoolexecutor-221)
+* [`Waiter` 24](#waiter-24)
+	* [`_FirstCompletedWaiter` 40](#_firstcompletedwaiter-40)
+	* [`_AsCompletedWaiter`  54](#_ascompletedwaiter--54)
+	* [`_AllCompletedWaiter` 69](#_allcompletedwaiter-69)
+* [waiter辅助函数 97](#waiter辅助函数-97)
+	* [`AcquireFutures` 98](#acquirefutures-98)
+	* [waiter 安装器 118](#waiter-安装器-118)
+	* [`_yield_finished_futures` 121](#_yield_finished_futures-121)
+* [对外暴露的api 126](#对外暴露的api-126)
+	* [`as_completed` 129](#as_completed-129)
+* [Future 142](#future-142)
+* [Executor 178](#executor-178)
+* [process 200](#process-200)
+	* [`_CallItem` 201](#_callitem-201)
+	* [`_ExceptionWithTraceback` 和 `_RemoteTrackeback` 210](#_exceptionwithtraceback-和-_remotetrackeback-210)
+	* [`_ResultItem` 213](#_resultitem-213)
+	* [`_WorkItem` 220](#_workitem-220)
+	* [ProcessPoolExecutor 227](#processpoolexecutor-227)
 
 <!-- vim-markdown-toc -->
-### `Waiter` 22
+### `Waiter` 24
 > Provides the event that wait() and as_completed() block on.
 
 1. attribute: 
@@ -37,7 +37,7 @@
 	3. `_AllCompletedWaiter`
 		- stop_on_exection: 如果设置这个选项,如果有错误,waiter体停止.否则继续等待所有future的结果.
 
-#### `_FirstCompletedWaiter` 38
+#### `_FirstCompletedWaiter` 40
 > Used by wait(return_when=FIRST_COMPLETED).
 
 1. `_Waiter`的子类，没有添加新的方法，但是`add_result`、`add_exception`和`add_cancelled`都多加了一句话：
@@ -51,7 +51,7 @@
 
 3. event 的wait阻塞，直到event被设置为true或者wait设置了超时。
 
-#### `_AsCompletedWaiter`  52
+#### `_AsCompletedWaiter`  54
 > Used by as_completed().
 
 1. attributor:
@@ -66,7 +66,7 @@ def add_result(self, future):
 		...
 ```
 
-#### `_AllCompletedWaiter` 67
+#### `_AllCompletedWaiter` 69
 > Used by wait(return_when=FIRST_EXCEPTION and ALL_COMPLETED).
 
 1. 先加锁,如果设置了stop_on_exection 是true, 如果出错,这只waiter的event,
@@ -94,8 +94,8 @@ class _AllCompletedWaiter(_Waiter):
 				self.event.set()
 ```
 
-### waiter辅助函数
-#### `AcquireFutures` 95
+### waiter辅助函数 97
+#### `AcquireFutures` 98
 > """A context manager that does an ordered acquire of Future conditions."""
 
 1. 代码:
@@ -115,18 +115,18 @@ class _AcquireFutures(object):
 			future._condition.release()
 ```
 
-#### waiter 安装器 115
+#### waiter 安装器 118
 > 根据传递的return_when参数,选择对应的waiter.给传递进函数的future数组,依次设置waiter: future._waiters.append(waiter)
 
-#### `_yield_finished_futures` 118
+#### `_yield_finished_futures` 121
 1. 删除完成future和future的waiter,防止遗留future强引用.
 2. yield fs.pop();
 3. 传递给这个函数的fs应该是已经完成的future.
 
-### 对外暴露的api
+### 对外暴露的api 126
 > 上面的waiter,基本都是用于wait和as_completed两个方法的.
 
-#### `as_completed` 123
+#### `as_completed` 129
 1. 根据传递的return_when,获取waiter,finished futures
 
 2. 将已经完成的future,执行yield from _yield_from_finished_futures(finished, waiter, ref_collect=(fs,));
@@ -139,7 +139,7 @@ class _AcquireFutures(object):
 执行yield from _yield_finished_futures(finished, waiter, ref_collect=(fs, pending));
 
 
-### Future 136
+### Future 142
 > Represents the result of an asynchronous computation.
 
 1. 概述：
@@ -175,7 +175,7 @@ class _AcquireFutures(object):
 	12. `_invoke_callbacks`
 	13. `__get_result`
 
-### Executor 172
+### Executor 178
 > This is an abstract base class for concrete asynchronous executors.
 
 1. 没有属性
@@ -197,8 +197,8 @@ class _AcquireFutures(object):
 		1. 可以多次调用
 		2. 调用后不可以调用其他函数
 		3. 如果wait 是True，shutdown will not return until all running futures have finished executing and the resources used by the executor have benn reclaimed.
-### process 194
-#### `_CallItem` 195
+### process 200
+#### `_CallItem` 201
 1. attributor
 	- `work_id`
 	- fn
@@ -207,24 +207,24 @@ class _AcquireFutures(object):
 
 只有这几个属性，没有方法。
 
-#### `_ExceptionWithTraceback` 和 `_RemoteTrackeback` 204
+#### `_ExceptionWithTraceback` 和 `_RemoteTrackeback` 210
 > 简单定义了error时的情况，用到了`__reduce__`
 
-#### `_ResultItem` 207
+#### `_ResultItem` 213
 1. attributor:
 	- `work_id`
 	- fn
 	- args
 	- kwargs
 
-####	`_WorkItem` 158 214
+#### `_WorkItem` 220
 1. attributor:
 	- future
 	- fn
 	- args
 	- kwargs
 
-#### ProcessPoolExecutor 221
+#### ProcessPoolExecutor 227
 1. attributor:
 	- `_max_workers`
 	- `_call_queue: multiprocessing.Queue`
