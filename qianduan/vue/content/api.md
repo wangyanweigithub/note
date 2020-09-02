@@ -1,124 +1,123 @@
 
 <!-- vim-markdown-toc GFM -->
 
-* [API [2.x ] 122]
-	* [全局配置 123]
-		* [silent 126]
-		* [optionMergeStrategies 136]
-		* [devtools 161]
-		* [errorHandler 174]
-		* [warnHandler 200]
-		* [ignoredElements 215]
-		* [keyCodes 234]
-		* [performance 257]
-		* [productionTip 269]
-	* [全局 API 281]
-		* [Vue.extend( options ) 282]
-		* [Vue.nextTick( [callback, context] ) 316]
-		* [Vue.set( target, propertyName/index, value ) 343]
-		* [Vue.delete( target, propertyName/index ) 359]
-		* [Vue.directive( id, [definition] ) 376]
-		* [Vue.filter( id, [definition] ) 405]
-		* [Vue.component( id, [definition] ) 424]
-		* [Vue.use( plugin ) 445]
-		* [Vue.mixin( mixin ) 459]
-		* [Vue.compile( template ) 468]
-		* [Vue.observable( object ) 489]
-		* [Vue.version 521]
-	* [选项 / 数据 537]
-		* [data 538]
-		* [props 589]
-		* [propsData 639]
-		* [computed 662]
-		* [methods 706]
-		* [watch 732]
-	* [选项 / DOM 791]
-		* [el 792]
-		* [template 814]
-		* [render 831]
-		* [renderError 843]
-	* [选项 / 生命周期钩子 868]
-		* [beforeCreate 873]
-		* [created 882]
-		* [beforeMount 892]
-		* [mounted 903]
-		* [beforeUpdate 924]
-		* [updated 935]
-		* [activated 959]
-		* [deactivated 971]
-		* [beforeDestroy 985]
-		* [destroyed 996]
-		* [errorCaptured 1007]
-	* [选项 / 资源 1028]
-		* [directives 1029]
-		* [filters 1038]
-		* [components 1046]
-	* [选项 / 组合 1054]
-		* [parent 1055]
-		* [mixins 1064]
-		* [extends 1088]
-		* [provide / inject 1107]
-	* [选项 / 其它 1238]
-		* [name 1239]
-		* [delimiters 1251]
-		* [functional 1269]
-		* [model 1277]
-		* [inheritAttrs 1318]
-		* [comments 1335]
-	* [实例 property 1348]
-		* [vm.$data 1349]
-		* [vm.$props 1359]
-		* [vm.$el 1368]
-		* [vm.$options 1377]
-		* [vm.$parent 1394]
-		* [vm.$root 1402]
-		* [vm.$children 1410]
-		* [vm.$slots 1420]
-		* [vm.$scopedSlots 1468]
-		* [vm.$refs 1495]
-		* [vm.$isServer 1510]
-		* [vm.$attrs 1521]
-		* [vm.$listeners 1534]
-	* [实例方法 / 数据 1544]
-		* [vm.$watch( expOrFn, callback, [options] ) 1545]
-		* [vm.$set( target, propertyName/index, value ) 1633]
-		* [vm.$delete( target, propertyName/index ) 1648]
-		* [vm.$on( event, callback ) 1662]
-		* [vm.$once( event, callback ) 1680]
-		* [vm.$off( [event, callback] ) 1690]
-		* [vm.$emit( eventName, […args] ) 1706]
-		* [vm.$mount( [elementOrSelector] ) 1776]
-		* [vm.$forceUpdate() 1813]
-		* [vm.$nextTick( [callback] ) 1819]
-		* [vm.$destroy() 1855]
-		* [v-text 1869]
-		* [v-html 1885]
-		* [v-show 1904]
-		* [v-if 1916]
-		* [v-else 1930]
-		* [v-else-if 1949]
-		* [v-for 1976]
-		* [v-on 2011]
-		* [v-bind 2098]
-		* [v-model 2174]
-		* [v-slot 2198]
-		* [v-pre 2250]
-		* [v-cloak 2262]
-		* [v-once 2282]
-		* [key 2311]
-		* [ref 2339]
-		* [is 2359]
-		* [slot ^废弃 2383]
-		* [slot-scope ^废弃 2393]
-		* [scope ^移除 2408]
-		* [component 2420]
-		* [transition 2438]
-		* [transition-group 2504]
-		* [keep-alive 2531]
-		* [slot 2606]
+* [API [2.x ] 122](#api-2x--122)
+	* [全局配置 123](#全局配置-123)
+		* [silent 126](#silent-126)
+		* [optionMergeStrategies 136](#optionmergestrategies-136)
+		* [devtools 161](#devtools-161)
+		* [errorHandler 174](#errorhandler-174)
+		* [warnHandler 200](#warnhandler-200)
+		* [ignoredElements 215](#ignoredelements-215)
+		* [keyCodes 234](#keycodes-234)
+		* [performance 257](#performance-257)
+		* [productionTip 269](#productiontip-269)
+	* [全局 API 281](#全局-api-281)
+		* [Vue.extend( options ) 282](#vueextend-options--282)
+		* [Vue.nextTick( [callback, context] ) 316](#vuenexttick-callback-context--316)
+		* [Vue.set( target, propertyName/index, value ) 343](#vueset-target-propertynameindex-value--343)
+		* [Vue.delete( target, propertyName/index ) 359](#vuedelete-target-propertynameindex--359)
+		* [Vue.directive( id, [definition] ) 376](#vuedirective-id-definition--376)
+		* [Vue.filter( id, [definition] ) 405](#vuefilter-id-definition--405)
+		* [Vue.component( id, [definition] ) 424](#vuecomponent-id-definition--424)
+		* [Vue.use( plugin ) 445](#vueuse-plugin--445)
+		* [Vue.mixin( mixin ) 459](#vuemixin-mixin--459)
+		* [Vue.compile( template ) 468](#vuecompile-template--468)
+		* [Vue.observable( object ) 489](#vueobservable-object--489)
+		* [Vue.version 521](#vueversion-521)
+	* [选项 / 数据 537](#选项--数据-537)
+		* [data 538](#data-538)
+		* [props 589](#props-589)
+		* [propsData 639](#propsdata-639)
+		* [computed 662](#computed-662)
+		* [methods 706](#methods-706)
+		* [watch 732](#watch-732)
+	* [选项 / DOM 791](#选项--dom-791)
+		* [el 792](#el-792)
+		* [template 814](#template-814)
+		* [render 831](#render-831)
+		* [renderError 843](#rendererror-843)
+	* [选项 / 生命周期钩子 868](#选项--生命周期钩子-868)
+		* [beforeCreate 873](#beforecreate-873)
+		* [created 882](#created-882)
+		* [beforeMount 892](#beforemount-892)
+		* [mounted 903](#mounted-903)
+		* [beforeUpdate 924](#beforeupdate-924)
+		* [updated 935](#updated-935)
+		* [activated 959](#activated-959)
+		* [deactivated 971](#deactivated-971)
+		* [beforeDestroy 985](#beforedestroy-985)
+		* [destroyed 996](#destroyed-996)
+		* [errorCaptured 1007](#errorcaptured-1007)
+	* [选项 / 资源 1028](#选项--资源-1028)
+		* [directives 1029](#directives-1029)
+		* [filters 1038](#filters-1038)
+		* [components 1046](#components-1046)
+	* [选项 / 组合 1054](#选项--组合-1054)
+		* [parent 1055](#parent-1055)
+		* [mixins 1064](#mixins-1064)
+		* [extends 1088](#extends-1088)
+		* [provide / inject 1107](#provide--inject-1107)
+	* [选项 / 其它 1238](#选项--其它-1238)
+		* [name 1239](#name-1239)
+		* [delimiters 1251](#delimiters-1251)
+		* [functional 1269](#functional-1269)
+		* [model 1277](#model-1277)
+		* [inheritAttrs 1318](#inheritattrs-1318)
+		* [comments 1335](#comments-1335)
+	* [实例 property 1348](#实例-property-1348)
+		* [vm.$data 1349](#vmdata-1349)
+		* [vm.$props 1359](#vmprops-1359)
+		* [vm.$el 1368](#vmel-1368)
+		* [vm.$options 1377](#vmoptions-1377)
+		* [vm.$parent 1394](#vmparent-1394)
+		* [vm.$root 1402](#vmroot-1402)
+		* [vm.$children 1410](#vmchildren-1410)
+		* [vm.$slots 1420](#vmslots-1420)
+		* [vm.$scopedSlots 1468](#vmscopedslots-1468)
+		* [vm.$refs 1495](#vmrefs-1495)
+		* [vm.$isServer 1510](#vmisserver-1510)
+		* [vm.$attrs 1521](#vmattrs-1521)
+		* [vm.$listeners 1534](#vmlisteners-1534)
+	* [实例方法 / 数据 1544](#实例方法--数据-1544)
+		* [vm.$watch( expOrFn, callback, [options] ) 1545](#vmwatch-exporfn-callback-options--1545)
+		* [vm.$set( target, propertyName/index, value ) 1633](#vmset-target-propertynameindex-value--1633)
+		* [vm.$delete( target, propertyName/index ) 1648](#vmdelete-target-propertynameindex--1648)
+		* [vm.$on( event, callback ) 1662](#vmon-event-callback--1662)
+		* [vm.$once( event, callback ) 1680](#vmonce-event-callback--1680)
+		* [vm.$off( [event, callback] ) 1690](#vmoff-event-callback--1690)
+		* [vm.$emit( eventName, […args] ) 1706](#vmemit-eventname-args--1706)
+		* [vm.$mount( [elementOrSelector] ) 1776](#vmmount-elementorselector--1776)
+		* [vm.$forceUpdate() 1813](#vmforceupdate-1813)
+		* [vm.$nextTick( [callback] ) 1819](#vmnexttick-callback--1819)
+		* [vm.$destroy() 1855](#vmdestroy-1855)
+		* [v-text 1869](#v-text-1869)
+		* [v-html 1885](#v-html-1885)
+		* [v-show 1904](#v-show-1904)
+		* [v-if 1916](#v-if-1916)
+		* [v-else 1930](#v-else-1930)
+		* [v-else-if 1949](#v-else-if-1949)
+		* [v-for 1976](#v-for-1976)
+		* [v-on 2011](#v-on-2011)
+		* [v-bind 2098](#v-bind-2098)
+		* [v-model 2174](#v-model-2174)
+		* [v-slot 2198](#v-slot-2198)
+		* [v-pre 2250](#v-pre-2250)
+		* [v-cloak 2262](#v-cloak-2262)
+		* [v-once 2282](#v-once-2282)
+		* [key 2311](#key-2311)
+		* [ref 2339](#ref-2339)
+		* [is 2359](#is-2359)
+		* [slot ^废弃 2383](#slot-废弃-2383)
+		* [slot-scope ^废弃 2393](#slot-scope-废弃-2393)
+		* [scope ^移除 2408](#scope-移除-2408)
+		* [component 2420](#component-2420)
+		* [transition 2438](#transition-2438)
+		* [transition-group 2504](#transition-group-2504)
+		* [keep-alive 2531](#keep-alive-2531)
+		* [slot 2606](#slot-2606)
 
 <!-- vim-markdown-toc -->
-
 ## API [2.x ] 122
 ### 全局配置 123
 > Vue.config 是一个对象，包含 Vue 的全局配置。可以在启动应用之前修改下列 property：
