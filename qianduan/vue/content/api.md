@@ -116,6 +116,14 @@
 		* [transition-group 2504](#transition-group-2504)
 		* [keep-alive 2531](#keep-alive-2531)
 		* [slot 2606](#slot-2606)
+* [vue note](#vue-note)
+	* [绑定位置](#绑定位置)
+		* [写入标签中](#写入标签中)
+			* [将vue绑定到属性值:](#将vue绑定到属性值)
+			* [vue绑定到标签属性:](#vue绑定到标签属性)
+		* [vue绑定在语句中](#vue绑定在语句中)
+		* [写在标签包裹的内容中:](#写在标签包裹的内容中)
+	* [question](#question)
 
 <!-- vim-markdown-toc -->
 ## API [2.x ] 122
@@ -2037,7 +2045,7 @@ unwatch()
 
 	- 从 2.4.0 开始，v-on 同样支持不带参数绑定一个事件/监听器键值对的对象。注意当使用对象语法时，是不支持任何修饰器的。
 
-1. 示例：
+4. 示例：
 
 	- <!-- 方法处理器 -->
 	- <button v-on:click="doThis"></button>
@@ -2088,26 +2096,25 @@ unwatch()
 	- <!-- 组件中的原生事件 -->
 	- <my-component @click.native="onClick"></my-component>
 
-1. 参考：
+5. 参考：
 
 	- 事件处理器
 	- 组件 - 自定义事件
 
 #### v-bind 2098
 
-1. 缩写：:
+1. 缩写：:   //就是一个冒号
 
-1. 预期：any (with argument) | Object (without argument)
+2. 预期：any (with argument) | Object (without argument)
 
-1. 参数：attrOrProp (optional)
+3. 参数：attrOrProp (optional)
 
-1. 修饰符：
-
+4. 修饰符：
 	- .prop - 作为一个 DOM property 绑定而不是作为 attribute 绑定。(差别在哪里？)
 	- .camel - (2.1.0+) 将 kebab-case attribute 名转换为 camelCase。(从 2.1.0 开始支持)
 	- .sync (2.3.0+) 语法糖，会扩展成一个更新父组件绑定值的 v-on 侦听器。
-3. 用法：
 
+5. 用法：
 	- 动态地绑定一个或多个 attribute，或一个组件 prop 到表达式。
 
 	- 在绑定 class 或 style attribute 时，支持其它类型的值，如数组或对象。可以通过下面的教程链接查看详情。
@@ -2116,10 +2123,14 @@ unwatch()
 
 	- 没有参数时，可以绑定到一个包含键值对的对象。注意此时 class 和 style 绑定不支持数组和对象。
 
-1. 示例：
+6. 示例：
 
-	- <!-- 绑定一个 attribute -->
 	- <img v-bind:src="imageSrc">
+		1. <!-- 绑定一个 attribute -->
+
+		2. 这里imageSrc是vue对象中data定义的数据.因为模板是双引号括起来的.
+		为了和字符串属性值区分,所以加上了v-bind:,这样说明后面的属性的值绑定在
+		了vue中同名的变量.	
 
 	- <!-- 动态 attribute 名 (2.6.0+) -->
 	- <button v-bind:[key]="value"></button>
@@ -2163,7 +2174,7 @@ unwatch()
 
 	- 在使用字符串模板或通过 vue-loader/vueify 编译时，无需使用 .camel。
 
-1. 参考：
+7. 参考：
 
 	- Class 与 Style 绑定
 	- 组件 - Props
@@ -2614,3 +2625,39 @@ unwatch()
 	- 详细用法，请参考下面教程的链接。
 
 1. 参考：通过插槽分发内容
+
+## vue note
+1. 注意: html标签都是key="value"
+
+### 绑定位置
+1. html标签上的内容,属性名不加引号,属性值都是引号括住的字符串,因此vue绑定的几种情况:
+
+#### 写入标签中
+##### 将vue绑定到属性值:
+> 需要写入到html标签内的vue元素都绑定到了一个双引号括住的字符串.
+- v-if = "message"
+- v-bind:id="message"
+
+##### vue绑定到标签属性:
+> 写入html标签,但是添加了一个标签属性,而不是属性值:
+
+#### vue绑定在语句中
+1. v-for
+<div v-for="todo in todos">
+	
+
+#### 写在标签包裹的内容中:
+1. 写到html标签内容上的可以直接双的那括号包裹{{}}
+
+
+
+### question
+1. slot 中slot解构,父级作用域为slot bind的属性命名,是否会覆盖子组件的属性值.
+	- 不会: 父级作用域的赋值是将子组件的命名空间起一个别名,它指向的就是slot的所有属性,
+		- slot依然要bind需要传递到父作用域空间的值
+		- 父作用域依然可以使用slot的整个作用域属性,通过<a slot.default="slotprops">, 
+		- slotprops其实是slot属性空间的别名.
+
+2. () => import() 语法:
+3. promise 语法
+4. webpack 的require()语法.

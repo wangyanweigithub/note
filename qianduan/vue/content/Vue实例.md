@@ -1,3 +1,12 @@
+
+<!-- vim-markdown-toc GFM -->
+
+* [介绍](#介绍)
+	* [Vue.js 是什么](#vuejs-是什么)
+	* [起步](#起步)
+	* [声明式渲染](#声明式渲染)
+
+<!-- vim-markdown-toc -->
 ## 介绍
 ### Vue.js 是什么
 1. Vue (读音 /vjuː/，类似于 view) 是一套用于构建用户界面的渐进式框架。
@@ -65,14 +74,13 @@ var app2 = new Vue({
     message: '页面加载于 ' + new Date().toLocaleString()
   }
 })
-```
 
 	鼠标悬停几秒钟查看此处动态绑定的提示信息！
 
 	这里我们遇到了一点新东西。你看到的 v-bind attribute 被称为指令。指令带有前缀 v-，以表示它们是 
 Vue 提供的特殊 attribute。可能你已经猜到了，它们会在渲染的 DOM
-上应用特殊的响应式行为。在这里，该指令的意思是：“将这个元素节点的 title attribute 和 Vue
-实例的 message property 保持一致”。
+上应用特殊的响应式行为。在这里，<font color=green>该指令的意思是：“将这个元素节点的 title attribute 和 Vue
+实例的 message property 保持一致”。</font>
 
 如果你再次打开浏览器的 JavaScript 控制台，输入 app2.message = '新消息'，
 就会再一次看到这个绑定了 title attribute 的 HTML 已经进行了更新。
