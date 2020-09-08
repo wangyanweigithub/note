@@ -2627,9 +2627,10 @@ unwatch()
 1. 参考：通过插槽分发内容
 
 ## vue note
-1. 注意: html标签都是key="value"
 
 ### 绑定位置
+> 注意: html标签都是key="value"
+
 1. html标签上的内容,属性名不加引号,属性值都是引号括住的字符串,因此vue绑定的几种情况:
 
 #### 写入标签中
@@ -2642,13 +2643,11 @@ unwatch()
 > 写入html标签,但是添加了一个标签属性,而不是属性值:
 
 #### vue绑定在语句中
-1. v-for
-<div v-for="todo in todos">
+1. 类似语言的指令,都是绑定在标签中,属性值是vue的变量.
+	1. v-for: <div v-for="todo in todos">
 	
-
 #### 写在标签包裹的内容中:
 1. 写到html标签内容上的可以直接双的那括号包裹{{}}
-
 
 
 ### question
