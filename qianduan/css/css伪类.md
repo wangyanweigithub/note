@@ -1,4 +1,13 @@
-## CSS 伪类(Pseudo-classes)
+
+<!-- vim-markdown-toc GFM -->
+
+* [CSS 伪类(Pseudo-classes)](#css-伪类pseudo-classes)
+	* [语法](#语法)
+		* [伪类和CSS类](#伪类和css类)
+		* [所有CSS伪类/元素](#所有css伪类元素)
+
+<!-- vim-markdown-toc -->
+# CSS 伪类(Pseudo-classes)
 CSS伪类是用来添加一些选择器的特殊效果。
 
 ## 语法
