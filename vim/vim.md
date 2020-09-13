@@ -1,3 +1,4 @@
+## 替换
 1. 在vim中的123开头的行前面加上一行文字:
 	- %s/123/zheshiyiju\r123
 		1. -r是回车,-n是换行,这句话的意思是将123替换成为"zheshiyijuxinhua\r123",
@@ -6,8 +7,15 @@
 
 	- :g/123/normal Ozheshiyijuxinhang
 
-2. iab
+## 缩写
+1. iab
 	1. iab不起作用,后来证实是pathogen的问题,注释掉这一行.
 	2. 去掉pathogen后,minbuffer没法使用,需要minbuffer打开pathogen
 
-3. C-m自动跳转到了指定行,和C-r一样,不知道是否是因为vimrc有什么缓存导致的.
+## 折叠
+1. 小写一层层,大写递归所有
+	- zo/zO: (open)
+	- zc/zC: (close)
+	- za/zA: (triggle)
+	- zr/zm: 一层层
+	- zR/zM: 打开/关闭所有的折叠
