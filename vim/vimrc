@@ -245,7 +245,8 @@ nmap    w=  :resize +3<CR>
 nmap    w-  :resize -3<CR>
 nmap    w,  :vertical resize -3<CR>
 nmap    w.  :vertical resize +3<CR>
-nmap    f  <C-f><CR>
+nmap    f  <C-f>
+nmap    <Space>  <C-f>
 nmap    b  <C-b><CR>
 
 imap <C-c> <font color=red></font><Left><Left><Left><Left><Left><Left><Left>
@@ -264,3 +265,5 @@ endfunc
 
 " 修改Emmet默认快捷键 将默认的<C-y>修改成<C-e>方便操作
 let g:user_emmet_leader_key = '<C-e>'
+
+"cd /home/wang/allWork/private/dailyRead 
