@@ -1,11 +1,12 @@
-1、ng-controller 中的方法调用多次可能的原因
-		1>html页面声明ng-controller 了多次，每个声明都会运行ng-controller。
-		2>html页面只声明了一次ng-controller，但在controller中调用了多遍。
-		3>使用ng-route或者ui-route，使用路由时，如果在config中指定路由的同时指定了页面的controller，在html页面就不需要重复指定controller了。两个地方只需要声明一次。
+1. ng-controller 中的方法调用多次可能的原因
+		1. html页面声明ng-controller 了多次，每个声明都会运行ng-controller。
+		2. html页面只声明了一次ng-controller，但在controller中调用了多遍。
+		3. 使用ng-route或者ui-route，使用路由时，如果在config中指定路由的同时指定了页面的controller，
+		在html页面就不需要重复指定controller了。两个地方只需要声明一次。
 
-2.ng-select初始化时可以选中指定的默认值，需要使用特殊的数据结构。
-		
-	<select ng-model="selected" ng-options="x.id as x.name for x in users"></select>
+2. ng-select初始化时可以选中指定的默认值，需要使用特殊的数据结构。
+```
+<select ng-model="selected" ng-options="x.id as x.name for x in users". </select>
 
 	$scope.users = [
 			{name:'a',id:'1'},
@@ -14,6 +15,7 @@
 		];
 		$scope.selected='2';//id的值，区分类型
 		$scope.selected=$scope.users[0].id;//如果想要第一个值
+```
 		
-3.$http是异步方法，如果封装$http方法，data = $_http()的话，是得不到正确的结果，在绑定到scope中的字段时，$http方法还没有返回，所以如果要同步使用$http
-	需要使用$q服务。
+3. $http是异步方法，如果封装$http方法，data = $_http()的话，是得不到正确的结果，在绑定到scope中的字段时，
+$http方法还没有返回，所以如果要同步使用$http需要使用$q服务。

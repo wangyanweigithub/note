@@ -1,3 +1,4 @@
+
 <!-- vim-markdown-toc GFM -->
 
 * [相似](#相似)
@@ -12,6 +13,7 @@
 	* [9 默认实参](#9-默认实参)
 	* [10 可变形参](#10-可变形参)
 	* [map/for_each](#mapfor_each)
+	* [操作符重载](#操作符重载)
 * [不同](#不同)
 	* [1 lambda：闭包变量](#1-lambda闭包变量)
 
@@ -178,6 +180,9 @@ bind(1);
 2. c++
 
 	```for_each(coll.cbegin(), coll.cend(), functional)```
+
+### 操作符重载
+1. cpp对象的重载方法 = deleted表示删除这个默认方法,python中使用将特殊方法设置为None表示对应的操作不可用.
 
 ## 不同
 ### 1 lambda：闭包变量
