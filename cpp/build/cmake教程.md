@@ -1,34 +1,34 @@
 
 <!-- vim-markdown-toc GFM -->
 
-* [基本起点（步骤1）]
-	* [添加一个版本号和配置的头文件]
-	* [指定C ++标准]
-	* [构建和测试]
-* [添加一个库（步骤2）]
-* [添加库的使用要求（步骤3）]
-* [安装和测试（步骤4）]
-	* [安装规则]
-	* [测试支持]
-* [Adding System Introspection (Step 5)]
-	* [指定编译定义]
-* [添加自定义命令和生成的文件（步骤6）]
-* [构建安装程序（步骤7）]
-* [添加对仪表盘的支持（步骤8）]
-* [混合静态和共享（步骤9）]
-* [添加生成器表达式（步骤10）]
-* [添加导出配置（步骤11）]
-* [打包调试和发布（步骤12）]
+* [CMake教程 25](#cmake教程-25)
+	* [基本起点（步骤1） 31](#基本起点步骤1-31)
+		* [添加一个版本号和配置的头文件 49](#添加一个版本号和配置的头文件-49)
+		* [指定C ++标准 98](#指定c-标准-98)
+		* [构建和测试 122](#构建和测试-122)
+	* [添加一个库（步骤2） 139](#添加一个库步骤2-139)
+	* [添加库的使用要求（步骤3） 242](#添加库的使用要求步骤3-242)
+	* [安装和测试（步骤4） 283](#安装和测试步骤4-283)
+		* [安装规则 287](#安装规则-287)
+		* [测试支持 315](#测试支持-315)
+	* [Adding System Introspection (Step 5) 366](#adding-system-introspection-step-5-366)
+		* [指定编译定义 440](#指定编译定义-440)
+	* [添加自定义命令和生成的文件（步骤6） 476](#添加自定义命令和生成的文件步骤6-476)
+	* [构建安装程序（步骤7） 556](#构建安装程序步骤7-556)
+	* [添加对仪表盘的支持（步骤8） 593](#添加对仪表盘的支持步骤8-593)
+	* [混合静态和共享（步骤9） 642](#混合静态和共享步骤9-642)
+	* [添加生成器表达式（步骤10） 823](#添加生成器表达式步骤10-823)
+	* [添加导出配置（步骤11） 877](#添加导出配置步骤11-877)
+	* [打包调试和发布（步骤12） 971](#打包调试和发布步骤12-971)
 
 <!-- vim-markdown-toc -->
-
-CMake教程
+# CMake教程 25
 	CMake教程提供了分步指南，涵盖了CMake可以解决的常见构建系统问题。
 了解示例项目中各个主题如何协同工作将非常有帮助。教程文档和示例的源代码可
 以Help/guide/tutorial在CMake源代码树的目录中找到。每个步骤都有其自己的子目录，
 该目录包含可以用作起点的代码。教程示例是渐进式的，因此每个步骤都为上一步提供了完整的解决方案
 
-## 基本起点（步骤1）
+## 基本起点（步骤1） 31
 1. 最基本的项目是从源代码文件构建的可执行文件。对于简单的项目，
 只需三行CMakeLists.txt文件。这将是本教程的起点。
 CMakeLists.txt在Step1目录中创建一个文件，如下所示：
@@ -46,7 +46,7 @@ add_executable(Tutorial tutorial.cxx)
 2. 请注意，此示例在CMakeLists.txt文件中使用小写命令。CMake支持大写，小写和大小写混合命令。目录的源
 代码tutorial.cxx已提供，Step1可用于计算数字的平方根。
 
-### 添加一个版本号和配置的头文件
+### 添加一个版本号和配置的头文件 49
 
 我们将添加的第一个功能是为我们的可执行文件和项目提供版本号。虽然我们可以在源代码中专门执行此操
 作，但是使用 CMakeLists.txt可以提供更大的灵活性。
@@ -55,7 +55,7 @@ add_executable(Tutorial tutorial.cxx)
 ```
 cmake_minimum_required(VERSION 3.10)
 
-# set the project name and version
+# set the project name and version 58
 project(Tutorial VERSION 1.0)
 ```
 
@@ -77,8 +77,8 @@ target_include_directories(Tutorial PUBLIC
 使用您喜欢的编辑器，TutorialConfig.h.in在源目录中创建以下内容：
 ```
 // the configured options and settings for Tutorial
-#define Tutorial_VERSION_MAJOR @Tutorial_VERSION_MAJOR@
-#define Tutorial_VERSION_MINOR @Tutorial_VERSION_MINOR@
+#define Tutorial_VERSION_MAJOR @Tutorial_VERSION_MAJOR@ 80
+#define Tutorial_VERSION_MINOR @Tutorial_VERSION_MINOR@ 81
 
 当CMake配置此头文件时，@Tutorial_VERSION_MAJOR@和的值 @Tutorial_VERSION_MINOR@将被替换。
 
@@ -95,11 +95,11 @@ target_include_directories(Tutorial PUBLIC
   }
 ```
 
-### 指定C ++标准
+### 指定C ++标准 98
 
 接下来，我们通过更换添加一些C ++ 11功能，我们的项目atof与 std::stod在tutorial.cxx。同时，删除。
 ```
-#include <cstdlib>
+#include <cstdlib> 102
 
 	const double inputValue = std::stod(argv[1]);
 ```
@@ -111,15 +111,15 @@ target_include_directories(Tutorial PUBLIC
 ```
 cmake_minimum_required(VERSION 3.10)
 
-# set the project name and version
+# set the project name and version 114
 project(Tutorial VERSION 1.0)
 
-# specify the C++ standard
+# specify the C++ standard 117
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 ```
 
-### 构建和测试
+### 构建和测试 122
 
 跑过 cmake 可执行文件或 cmake-gui 配置项目，然后使用所选的构建工具进行构建。
 
@@ -136,7 +136,7 @@ Tutorial 4294967296
 Tutorial 10
 Tutorial
 
-## 添加一个库（步骤2）
+## 添加一个库（步骤2） 139
 
 现在，我们将向我们的项目添加一个库。该库将包含我们自己的实现，用于计算数字的平方根。然后可执行
 文件可以使用此库而不是编译器提供的标准平方根函数。
@@ -153,16 +153,16 @@ add_library(MathFunctions mysqrt.cxx)
 CMakeLists.txt文件的最后几行应如下所示：
 
 ```
-# add the MathFunctions library
+# add the MathFunctions library 156
 add_subdirectory(MathFunctions)
 
-# add the executable
+# add the executable 159
 add_executable(Tutorial tutorial.cxx)
 
 target_link_libraries(Tutorial PUBLIC MathFunctions)
 
-# add the binary tree to the search path for include files
-# so that we will find TutorialConfig.h
+# add the binary tree to the search path for include files 164
+# so that we will find TutorialConfig.h 165
 target_include_directories(Tutorial PUBLIC
                           "${PROJECT_BINARY_DIR}"
                           "${PROJECT_SOURCE_DIR}/MathFunctions"
@@ -175,8 +175,8 @@ target_include_directories(Tutorial PUBLIC
 ```
 option(USE_MYMATH "Use tutorial provided math implementation" ON)
 
-# configure a header file to pass some of the CMake settings
-# to the source code
+# configure a header file to pass some of the CMake settings 178
+# to the source code 179
 configure_file(TutorialConfig.h.in TutorialConfig.h)
 ```
 
@@ -193,13 +193,13 @@ if(USE_MYMATH)
   list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/MathFunctions")
 endif()
 
-# add the executable
+# add the executable 196
 add_executable(Tutorial tutorial.cxx)
 
 target_link_libraries(Tutorial PUBLIC ${EXTRA_LIBS})
 
-# add the binary tree to the search path for include files
-# so that we will find TutorialConfig.h
+# add the binary tree to the search path for include files 201
+# so that we will find TutorialConfig.h 202
 target_include_directories(Tutorial PUBLIC
                            "${PROJECT_BINARY_DIR}"
                            ${EXTRA_INCLUDES}
@@ -212,23 +212,23 @@ target_include_directories(Tutorial PUBLIC
 对源代码的相应更改非常简单。首先，如果需要，请在tutorial.cxx中包含MathFunctions.h标题：
 
 ```
-#ifdef USE_MYMATH
-#  include "MathFunctions.h"
-#endif
+#ifdef USE_MYMATH 215
+#  include "MathFunctions.h" 216
+#endif 217
 
 然后，在同一文件中，USE_MYMATH控制使用哪个平方根函数：
 
-#ifdef USE_MYMATH
+#ifdef USE_MYMATH 221
   const double outputValue = mysqrt(inputValue);
-#else
+#else 223
   const double outputValue = sqrt(inputValue);
-#endif
+#endif 225
 ```
 
 由于源代码现在需要，USE_MYMATH我们可以TutorialConfig.h.in使用以下行将其添加到：
 
 ```
-#cmakedefine USE_MYMATH
+#cmakedefine USE_MYMATH 231
 ```
 
 练习：为什么TutorialConfig.h.in 在选项之后进行配置很重要USE_MYMATH？如果我们将两者倒置会怎样？
@@ -239,7 +239,7 @@ Tutorial可执行文件。
 使用 ccmake 可执行文件或 cmake-gui 更新的值USE_MYMATH。重新生成并再次运行本教程。sqrt或mysqrt哪
 个函数可提供更好的结果？
 
-## 添加库的使用要求（步骤3）
+## 添加库的使用要求（步骤3） 242
 
 使用要求可以更好地控制库或可执行文件的链接并包含行，同时还可以更好地控制CMake内部目标的传递属性
 。利用使用需求的主要命令是：
@@ -280,11 +280,11 @@ target_include_directories(Tutorial PUBLIC
 完成此操作后，运行 cmake 可执行文件或 cmake-gui配置项目，然后使用您选择的构建工具或通过构建目录
 进行构建。cmake --build .
 
-## 安装和测试（步骤4）
+## 安装和测试（步骤4） 283
 
 现在，我们可以开始向我们的项目添加安装规则和测试支持。
 
-### 安装规则
+### 安装规则 287
 
 安装规则非常简单：对于MathFunctions，我们要安装库和头文件，对于应用程序，我们要安装可执行文件和
 配置的头文件。
@@ -312,7 +312,7 @@ CMake变量 CMAKE_INSTALL_PREFIX用于确定文件的安装根目录。如果使
 
 验证已安装的教程正在运行。
 
-### 测试支持
+### 测试支持 315
 
 接下来让我们测试我们的应用程序。在顶级CMakeLists.txt 文件的末尾，我们可以启用测试，然后添加一些
 基本测试以验证应用程序是否正常运行。
@@ -320,16 +320,16 @@ CMake变量 CMAKE_INSTALL_PREFIX用于确定文件的安装根目录。如果使
 ```
 enable_testing()
 
-# does the application run
+# does the application run 323
 add_test(NAME Runs COMMAND Tutorial 25)
 
-# does the usage message work?
+# does the usage message work? 326
 add_test(NAME Usage COMMAND Tutorial)
 set_tests_properties(Usage
   PROPERTIES PASS_REGULAR_EXPRESSION "Usage:.*number"
   )
 
-# define a function to simplify adding tests
+# define a function to simplify adding tests 332
 function(do_test target arg result)
   add_test(NAME Comp${arg} COMMAND ${target} ${arg})
   set_tests_properties(Comp${arg}
@@ -337,7 +337,7 @@ function(do_test target arg result)
     )
 endfunction(do_test)
 
-# do a bunch of result based tests
+# do a bunch of result based tests 340
 do_test(Tutorial 4 "4 is 2")
 do_test(Tutorial 9 "9 is 3")
 do_test(Tutorial 5 "5 is 2.236")
@@ -363,7 +363,7 @@ be specified. To run tests in Debug mode, for example, use ctest -C Debug -VV fr
 directory (not the Debug subdirectory!). Alternatively, build the RUN_TESTS target from the
 IDE.
 
-## Adding System Introspection (Step 5)
+## Adding System Introspection (Step 5) 366
 
 Let us consider adding some code to our project that depends on features the target platform
 may not have. For this example, we will add some code that depends on whether or not the target
@@ -395,26 +395,26 @@ endif()
 
 ```
 // does the platform provide exp and log functions?
-#cmakedefine HAVE_LOG
-#cmakedefine HAVE_EXP
+#cmakedefine HAVE_LOG 398
+#cmakedefine HAVE_EXP 399
 ```
 
 如果log和exp在系统上可用，那么我们将使用它们来计算函数中的平方根mysqrt。将以下代码添加到中的
 mysqrt函数中MathFunctions/mysqrt.cxx（#endif返回结果前不要忘了！）：
 
 ```
-#if defined(HAVE_LOG) && defined(HAVE_EXP)
+#if defined(HAVE_LOG) && defined(HAVE_EXP) 406
   double result = exp(log(x) * 0.5);
   std::cout << "Computing sqrt of " << x << " to be " << result
             << " using log and exp" << std::endl;
-#else
+#else 410
   double result = x;
 ```
 
 我们还需要修改mysqrt.cxx以包含cmath。
 
 ```
-#include <cmath>
+#include <cmath> 417
 ```
 
 跑过 cmake 可执行文件或 cmake-gui 配置项目，然后使用所选的构建工具进行构建，并运行Tutorial可执
@@ -437,7 +437,7 @@ TutorialConfig.h从构建目录打开生成的文件。也许它们在当前系�
 
 sqrt或mysqrt哪个函数现在可以提供更好的结果？
 
-### 指定编译定义
+### 指定编译定义 440
 
 除了in之外，还有更好的地方供我们保存HAVE_LOG和HAVE_EXP值TutorialConfig.h吗？让我们尝试使用 
 target_compile_definitions()。
@@ -463,7 +463,7 @@ if(NOT (HAVE_LOG AND HAVE_EXP))
   endif()
 endif()
 
-# add compile definitions
+# add compile definitions 466
 if(HAVE_LOG AND HAVE_EXP)
   target_compile_definitions(MathFunctions
                              PRIVATE "HAVE_LOG" "HAVE_EXP")
@@ -473,7 +473,7 @@ endif()
 完成这些更新后，继续并重新构建项目。运行内置的Tutorial可执行文件，并验证结果与本步骤前面的内容
 相同。
 
-## 添加自定义命令和生成的文件（步骤6）
+## 添加自定义命令和生成的文件（步骤6） 476
 
 假设，出于本教程的目的，我们决定不再使用平台log和exp函数，而是希望生成一个可在mysqrt函数中使用
 的预计算值表。在本节中，我们将在构建过程中创建表，然后将该表编译到我们的应用程序中。
@@ -553,7 +553,7 @@ double mysqrt(double x)
 
 运行Tutorial可执行文件，并验证它是否正在使用该表。
 
-## 构建安装程序（步骤7）
+## 构建安装程序（步骤7） 556
 
 接下来，假设我们想将项目分发给其他人，以便他们可以使用它。我们希望在各种平台上提供二进制和源代
 码分发。这与之前在“ 安装和测试”（第4步）中进行的安装有些不同，在安装和测试中，我们正在安装根据
@@ -590,7 +590,7 @@ cpack --config CPackSourceConfig.cmake
 
 运行在二进制目录中找到的安装程序。然后运行已安装的可执行文件，并验证其是否有效。
 
-## 添加对仪表盘的支持（步骤8）
+## 添加对仪表盘的支持（步骤8） 593
 
 添加将测试结果提交到仪表板的支持非常简单。我们已经在“ 测试支持”中为我们的项目定义了许多测试。现
 在，我们只需要运行这些测试并将其提交到仪表板即可。为了包括对仪表板的支持，我们将CTest顶层模块 
@@ -599,14 +599,14 @@ CMakeLists.txt。
 更换：
 
 ```
-# enable testing
+# enable testing 602
 enable_testing()
 ```
 
 带有：
 
 ```
-# enable dashboard scripting
+# enable dashboard scripting 609
 include(CTest)
 ```
 
@@ -639,7 +639,7 @@ ctest [-VV] -C Debug -D Experimental
 的 ctest可执行文件将构建并测试项目，并将结果提交到Kitware的公共仪表板：https ://my.cdash.org/
 index.php?project = CMakeTutorial 。
 
-## 混合静态和共享（步骤9）
+## 混合静态和共享（步骤9） 642
 
 在本节中，我们将展示 BUILD_SHARED_LIBS 变量可用于控制默认行为 add_library()，并允许在如何没有显
 式类型库（控制STATIC， SHARED，MODULE或OBJECT）构建的。
@@ -655,28 +655,28 @@ index.php?project = CMakeTutorial 。
 ```
 cmake_minimum_required(VERSION 3.10)
 
-# set the project name and version
+# set the project name and version 658
 project(Tutorial VERSION 1.0)
 
-# specify the C++ standard
+# specify the C++ standard 661
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# control where the static and shared libraries are built so that on windows
-# we don't need to tinker with the path to run the executable
+# control where the static and shared libraries are built so that on windows 665
+# we don't need to tinker with the path to run the executable 666
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
 
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 
-# configure a header file to pass the version number only
+# configure a header file to pass the version number only 673
 configure_file(TutorialConfig.h.in TutorialConfig.h)
 
-# add the MathFunctions library
+# add the MathFunctions library 676
 add_subdirectory(MathFunctions)
 
-# add the executable
+# add the executable 679
 add_executable(Tutorial tutorial.cxx)
 target_link_libraries(Tutorial PUBLIC MathFunctions)
 ```
@@ -688,16 +688,16 @@ CMakeLists.txt我们需要创建一个SqrtLibrary，USE_MYMATH启用后将有条
 最终结果MathFunctions/CMakeLists.txt应为：
 
 ```
-# add the library that runs
+# add the library that runs 691
 add_library(MathFunctions MathFunctions.cxx)
 
-# state that anybody linking to us needs to include the current source dir
-# to find MathFunctions.h, while we don't.
+# state that anybody linking to us needs to include the current source dir 694
+# to find MathFunctions.h, while we don't. 695
 target_include_directories(MathFunctions
                            INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}
                            )
 
-# should we use our own math functions
+# should we use our own math functions 700
 option(USE_MYMATH "Use tutorial provided math implementation" ON)
 if(USE_MYMATH)
 
@@ -727,11 +727,11 @@ if(USE_MYMATH)
   target_link_libraries(MathFunctions PRIVATE SqrtLibrary)
 endif()
 
-# define the symbol stating we are using the declspec(dllexport) when
-# building on windows
+# define the symbol stating we are using the declspec(dllexport) when 730
+# building on windows 731
 target_compile_definitions(MathFunctions PRIVATE "EXPORTING_MYMATH")
 
-# install rules
+# install rules 734
 install(TARGETS MathFunctions DESTINATION lib)
 install(FILES MathFunctions.h DESTINATION include)
 ```
@@ -739,12 +739,12 @@ install(FILES MathFunctions.h DESTINATION include)
 接下来，更新MathFunctions/mysqrt.cxx为使用mathfunctions和 detail名称空间：
 
 ```
-#include <iostream>
+#include <iostream> 742
 
-#include "MathFunctions.h"
+#include "MathFunctions.h" 744
 
 // include the generated table
-#include "Table.h"
+#include "Table.h" 747
 
 namespace mathfunctions {
 namespace detail {
@@ -789,15 +789,15 @@ double mysqrt(double x)
 最后，更新MathFunctions/MathFunctions.h为使用dll导出定义：
 
 ```
-#if defined(_WIN32)
-#  if defined(EXPORTING_MYMATH)
-#    define DECLSPEC __declspec(dllexport)
-#  else
-#    define DECLSPEC __declspec(dllimport)
-#  endif
-#else // non windows
-#  define DECLSPEC
-#endif
+#if defined(_WIN32) 792
+#  if defined(EXPORTING_MYMATH) 793
+#    define DECLSPEC __declspec(dllexport) 794
+#  else 795
+#    define DECLSPEC __declspec(dllimport) 796
+#  endif 797
+#else // non windows 798
+#  define DECLSPEC 799
+#endif 800
 
 namespace mathfunctions {
 double DECLSPEC sqrt(double x);
@@ -820,7 +820,7 @@ double DECLSPEC sqrt(double x);
 练习：我们修改MathFunctions.h为使用dll导出定义。使用CMake文档，您可以找到一个帮助器模块来简化此
 过程吗？
 
-## 添加生成器表达式（步骤10）
+## 添加生成器表达式（步骤10） 823
 
 Generator expressions 在生成系统的过程中进行评估，以生成特定于每个生成配置的信息。
 
@@ -843,7 +843,7 @@ Generator expressions 可以用于启用条件链接，编译时使用的条件�
 所以下面的代码：
 
 ```
-# specify the C++ standard
+# specify the C++ standard 846
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 ```
@@ -874,7 +874,7 @@ target_compile_options(tutorial_compiler_flags INTERFACE
 练习：修改MathFunctions/CMakeLists.txt以使所有目标都有一个target_link_libraries()致电至
 tutorial_compiler_flags。
 
-## 添加导出配置（步骤11）
+## 添加导出配置（步骤11） 877
 
 在教程的“ 安装和测试”（第4步）中，我们添加了CMake的功能，以安装项目的库和头文件。在构建安装程序
 （第7步）期间，我们添加了打包此信息的功能，以便可以将其分发给其他人。
@@ -937,21 +937,21 @@ install(EXPORT MathFunctionsTargets
 )
 
 include(CMakePackageConfigHelpers)
-# generate the config file that is includes the exports
+# generate the config file that is includes the exports 940
 configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
   "${CMAKE_CURRENT_BINARY_DIR}/MathFunctionsConfig.cmake"
   INSTALL_DESTINATION "lib/cmake/example"
   NO_SET_AND_CHECK_MACRO
   NO_CHECK_REQUIRED_COMPONENTS_MACRO
   )
-# generate the version file for the config file
+# generate the version file for the config file 947
 write_basic_package_version_file(
   "${CMAKE_CURRENT_BINARY_DIR}/MathFunctionsConfigVersion.cmake"
   VERSION "${Tutorial_VERSION_MAJOR}.${Tutorial_VERSION_MINOR}"
   COMPATIBILITY AnyNewerVersion
 )
 
-# install the configuration file
+# install the configuration file 954
 install(FILES
   ${CMAKE_CURRENT_BINARY_DIR}/MathFunctionsConfig.cmake
   DESTINATION lib/cmake/MathFunctions
@@ -968,7 +968,7 @@ export(EXPORT MathFunctionsTargets
 通过此导出调用，我们现在生成一个Targets.cmake，允许MathFunctionsConfig.cmake构建目录中的配置供
 其他项目使用，而无需安装它。
 
-## 打包调试和发布（步骤12）
+## 打包调试和发布（步骤12） 971
 
 注意：此示例对单配置生成器有效，而对多配置生成器（例如Visual Studio）无效。
 
