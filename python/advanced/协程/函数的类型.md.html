@@ -1,0 +1,197 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>~/F/note/python/advanced/协程/函数的类型.md.html</title>
+<meta name="Generator" content="Vim/8.1">
+<meta name="plugin-version" content="vim8.1_v1">
+<meta name="syntax" content="markdown">
+<meta name="settings" content="number_lines,use_css,pre_wrap,no_foldcolumn,expand_tabs,line_ids,prevent_copy=">
+<meta name="colorscheme" content="none">
+<style type="text/css">
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #ffffff; background-color: #000000; }
+body { font-family: monospace; color: #ffffff; background-color: #000000; }
+* { font-size: 1em; }
+.Identifier { color: #00ffff; font-weight: bold; }
+.Error { color: #ffffff; background-color: #ff6060; padding-bottom: 1px; }
+.Type { color: #87ffaf; }
+.LineNr { color: #ffff00; }
+.Title { color: #ffd7ff; }
+.Comment { color: #00ffff; }
+.Constant { color: #ff40ff; }
+.Special { color: #ffd7d7; }
+.htmlBold { font-weight: bold; }
+.Statement { color: #ffff00; }
+-->
+</style>
+
+<script type='text/javascript'>
+<!--
+
+/* function to open any folds containing a jumped-to line before jumping to it */
+function JumpToLine()
+{
+  var lineNum;
+  lineNum = window.location.hash;
+  lineNum = lineNum.substr(1); /* strip off '#' */
+
+  if (lineNum.indexOf('L') == -1) {
+    lineNum = 'L'+lineNum;
+  }
+  var lineElem = document.getElementById(lineNum);
+  /* Always jump to new location even if the line was hidden inside a fold, or
+   * we corrected the raw number to a line ID.
+   */
+  if (lineElem) {
+    lineElem.scrollIntoView(true);
+  }
+  return true;
+}
+if ('onhashchange' in window) {
+  window.onhashchange = JumpToLine;
+}
+
+-->
+</script>
+</head>
+<body onload='JumpToLine();'>
+<pre id='vimCodeElement'>
+<span id="L1" class="LineNr">  1 </span>
+<span id="L2" class="LineNr">  2 </span><span class="Comment">&lt;!</span><span class="Comment">-- vim-markdown-toc GFM --</span><span class="Comment">&gt;</span>
+<span id="L3" class="LineNr">  3 </span>
+<span id="L4" class="LineNr">  4 </span><span class="Statement">*</span> [python的几种函数形式]
+<span id="L5" class="LineNr">  5 </span><span class="Statement">    *</span> [普通函数]
+<span id="L6" class="LineNr">  6 </span><span class="Statement">    *</span> [生成器函数]
+<span id="L7" class="LineNr">  7 </span><span class="Statement">    *</span> [协程/异步协程]
+<span id="L8" class="LineNr">  8 </span><span class="Statement">    *</span> [异步生成器]
+<span id="L9" class="LineNr">  9 </span><span class="Statement">*</span> [协程关键字]
+<span id="L10" class="LineNr"> 10 </span><span class="Statement">    *</span> [yield]
+<span id="L11" class="LineNr"> 11 </span>        * [yield 生成器函数的特点]
+<span id="L12" class="LineNr"> 12 </span><span class="Statement">    *</span> [await]
+<span id="L13" class="LineNr"> 13 </span>        * [async def 的特点]
+<span id="L14" class="LineNr"> 14 </span>        * [await 的特点]
+<span id="L15" class="LineNr"> 15 </span><span class="Statement">*</span> [其他]
+<span id="L16" class="LineNr"> 16 </span><span class="Statement">    *</span> [没有异步的协程:]
+<span id="L17" class="LineNr"> 17 </span>
+<span id="L18" class="LineNr"> 18 </span><span class="Comment">&lt;!</span><span class="Comment">-- vim-markdown-toc --</span><span class="Comment">&gt;</span>
+<span id="L19" class="LineNr"> 19 </span>
+<span id="L20" class="LineNr"> 20 </span><span class="Special">##</span><span class="Title"> python的几种函数形式</span>
+<span id="L21" class="LineNr"> 21 </span><span class="Special">###</span><span class="Title"> 普通函数</span>
+<span id="L22" class="LineNr"> 22 </span><span class="Special">```</span>
+<span id="L23" class="LineNr"> 23 </span>def function():
+<span id="L24" class="LineNr"> 24 </span>    return 1
+<span id="L25" class="LineNr"> 25 </span>
+<span id="L26" class="LineNr"> 26 </span>print(type(function))
+<span id="L27" class="LineNr"> 27 </span>
+<span id="L28" class="LineNr"> 28 </span>&gt;&gt;&gt; function
+<span id="L29" class="LineNr"> 29 </span><span class="Special">```</span>
+<span id="L30" class="LineNr"> 30 </span>
+<span id="L31" class="LineNr"> 31 </span><span class="Special">###</span><span class="Title"> 生成器函数</span>
+<span id="L32" class="LineNr"> 32 </span><span class="Special">```</span>
+<span id="L33" class="LineNr"> 33 </span>def generator():
+<span id="L34" class="LineNr"> 34 </span>    yield 1
+<span id="L35" class="LineNr"> 35 </span>
+<span id="L36" class="LineNr"> 36 </span>print(type(coro()))
+<span id="L37" class="LineNr"> 37 </span>
+<span id="L38" class="LineNr"> 38 </span>&gt;&gt;&gt; generator
+<span id="L39" class="LineNr"> 39 </span><span class="Special">```</span>
+<span id="L40" class="LineNr"> 40 </span>
+<span id="L41" class="LineNr"> 41 </span><span class="Special">###</span><span class="Title"> 协程/异步协程</span>
+<span id="L42" class="LineNr"> 42 </span><span class="Special">```</span>
+<span id="L43" class="LineNr"> 43 </span>async def coro():
+<span id="L44" class="LineNr"> 44 </span>    return 1
+<span id="L45" class="LineNr"> 45 </span>
+<span id="L46" class="LineNr"> 46 </span>print(type(coro()))
+<span id="L47" class="LineNr"> 47 </span>
+<span id="L48" class="LineNr"> 48 </span>&gt;&gt;&gt; coroutine
+<span id="L49" class="LineNr"> 49 </span><span class="Special">```</span>
+<span id="L50" class="LineNr"> 50 </span>
+<span id="L51" class="LineNr"> 51 </span><span class="Special">###</span><span class="Title"> 异步生成器</span>
+<span id="L52" class="LineNr"> 52 </span><span class="Comment">&gt; </span>async<span class="Error">_</span>generator
+<span id="L53" class="LineNr"> 53 </span>
+<span id="L54" class="LineNr"> 54 </span><span class="Statement">1.</span> 只有async def 定义的协程中出现yield时，函数返回的是异步生成器
+<span id="L55" class="LineNr"> 55 </span>
+<span id="L56" class="LineNr"> 56 </span><span class="Statement">2.</span> AsyncGenerator的定义，
+<span id="L57" class="LineNr"> 57 </span>它需要实现<span class="htmlBold">aiter</span>和<span class="htmlBold">anext</span>两个核心方法，以及asend，athrow，aclose方法。
+<span id="L58" class="LineNr"> 58 </span>
+<span id="L59" class="LineNr"> 59 </span><span class="Statement">3.</span> 异步生成器要先asend后返回的是一个生成器，然后接着send,就是生成器的操作了。
+<span id="L60" class="LineNr"> 60 </span>
+<span id="L61" class="LineNr"> 61 </span><span class="Statement">4.</span> <span class="Identifier">&lt;</span><span class="Statement">font</span><span class="Identifier"> </span><span class="Type">color</span><span class="Identifier">=</span><span class="Constant">green</span><span class="Identifier">&gt;</span>await 不能用于异步生成器<span class="Identifier">&lt;/</span><span class="Statement">font</span><span class="Identifier">&gt;</span>。
+<span id="L62" class="LineNr"> 62 </span><span class="Special">```</span>
+<span id="L63" class="LineNr"> 63 </span>async def async_coro():
+<span id="L64" class="LineNr"> 64 </span>    yield 1
+<span id="L65" class="LineNr"> 65 </span>
+<span id="L66" class="LineNr"> 66 </span>print(type(async_coro()))
+<span id="L67" class="LineNr"> 67 </span>
+<span id="L68" class="LineNr"> 68 </span>&gt;&gt;&gt; async_generator
+<span id="L69" class="LineNr"> 69 </span><span class="Special">```</span>
+<span id="L70" class="LineNr"> 70 </span>
+<span id="L71" class="LineNr"> 71 </span><span class="Special">##</span><span class="Title"> 协程关键字</span>
+<span id="L72" class="LineNr"> 72 </span><span class="Special">###</span><span class="Title"> yield</span>
+<span id="L73" class="LineNr"> 73 </span><span class="Special">####</span><span class="Title"> yield 生成器函数的特点</span>
+<span id="L74" class="LineNr"> 74 </span><span class="Statement">1.</span> yield, yield from 的函数返回的是一个生成器。
+<span id="L75" class="LineNr"> 75 </span>
+<span id="L76" class="LineNr"> 76 </span><span class="Statement">2.</span> 生成器对象需要send和next
+<span id="L77" class="LineNr"> 77 </span>
+<span id="L78" class="LineNr"> 78 </span><span class="Statement">3.</span> yield from只针对生成器和iterable
+<span id="L79" class="LineNr"> 79 </span>
+<span id="L80" class="LineNr"> 80 </span><span class="Special">###</span><span class="Title"> await</span>
+<span id="L81" class="LineNr"> 81 </span><span class="Special">####</span><span class="Title"> async def 的特点</span>
+<span id="L82" class="LineNr"> 82 </span><span class="Statement">1.</span> async def 声明的函数返回一个coroutine
+<span id="L83" class="LineNr"> 83 </span>
+<span id="L84" class="LineNr"> 84 </span><span class="Statement">2.</span> coroutine可以通过调用这个协程的send方法给协程发送一个值。
+<span id="L85" class="LineNr"> 85 </span>
+<span id="L86" class="LineNr"> 86 </span><span class="Statement">3.</span> 协程对象在最底层还是通过yield 实现的
+<span id="L87" class="LineNr"> 87 </span>
+<span id="L88" class="LineNr"> 88 </span><span class="Statement">4.</span> await 和yield 的区别仅仅是await判断了一下 可等待对象的类型。
+<span id="L89" class="LineNr"> 89 </span>
+<span id="L90" class="LineNr"> 90 </span><span class="Statement">5.</span> 通过types.coroutine可以是的生成器可以和协程通用。
+<span id="L91" class="LineNr"> 91 </span>
+<span id="L92" class="LineNr"> 92 </span><span class="Statement">6.</span> types.coroutine只是将生成器加了一个标志位，这个标志位和原生协程有区别，但是await会执行这种由生成器转换的协程
+<span id="L93" class="LineNr"> 93 </span>
+<span id="L94" class="LineNr"> 94 </span><span class="Statement">7.</span> async def声明的函数没有用await的话，和生成器函数的协程是一样的:
+<span id="L95" class="LineNr"> 95 </span><span class="Statement">    -</span> 都是send(None)来启动协程，然后send发送value到协程中
+<span id="L96" class="LineNr"> 96 </span><span class="Statement">    -</span> 运行完后都会报StopIteration
+<span id="L97" class="LineNr"> 97 </span>
+<span id="L98" class="LineNr"> 98 </span><span class="Statement">8.</span> 不同之处：
+<span id="L99" class="LineNr"> 99 </span><span class="Statement">    -</span> coroutine 不是iterable的，只能调用send，而不能调用next
+<span id="L100" class="LineNr">100 </span>
+<span id="L101" class="LineNr">101 </span><span class="Special">####</span><span class="Title"> await 的特点</span>
+<span id="L102" class="LineNr">102 </span><span class="Statement">1.</span> await只能等待
+<span id="L103" class="LineNr">103 </span><span class="Statement">    -</span> 实现<span class="Special">`</span>__await__<span class="Special">`</span>的对象
+<span id="L104" class="LineNr">104 </span><span class="Statement">    -</span> 等待原生的coroutine对象
+<span id="L105" class="LineNr">105 </span><span class="Statement">    -</span> 由types.coroutine修饰的生成器对象
+<span id="L106" class="LineNr">106 </span>
+<span id="L107" class="LineNr">107 </span><span class="Statement">2.</span> await语法只能出现在通过async修饰的函数中，否则会报SyntaxError错误
+<span id="L108" class="LineNr">108 </span>
+<span id="L109" class="LineNr">109 </span><span class="Statement">3.</span> await后面的对象需要是一个Awaitable，或者实现了相关的协议。
+<span id="L110" class="LineNr">110 </span>
+<span id="L111" class="LineNr">111 </span><span class="Statement">4.</span> 在协程函数中，可以通过await语法来挂起自身的协程，并等待另一个协程完成直到返回结果
+<span id="L112" class="LineNr">112 </span>
+<span id="L113" class="LineNr">113 </span>
+<span id="L114" class="LineNr">114 </span><span class="Special">##</span><span class="Title"> 其他</span>
+<span id="L115" class="LineNr">115 </span><span class="Special">###</span><span class="Title"> 没有异步的协程:</span>
+<span id="L116" class="LineNr">116 </span><span class="Comment">&gt; </span>最底层协程没有异步，没有yield交出执行权。
+<span id="L117" class="LineNr">117 </span>
+<span id="L118" class="LineNr">118 </span><span class="Statement">1.</span> 代码
+<span id="L119" class="LineNr">119 </span>
+<span id="L120" class="LineNr">120 </span><span class="Special">```</span>
+<span id="L121" class="LineNr">121 </span>async def a():
+<span id="L122" class="LineNr">122 </span>    print(&quot;this is a&quot;)
+<span id="L123" class="LineNr">123 </span>    return 2
+<span id="L124" class="LineNr">124 </span>
+<span id="L125" class="LineNr">125 </span>async def b():
+<span id="L126" class="LineNr">126 </span>    c = await a()
+<span id="L127" class="LineNr">127 </span>    print(&quot;c is &quot;, c)
+<span id="L128" class="LineNr">128 </span>
+<span id="L129" class="LineNr">129 </span>d = b()
+<span id="L130" class="LineNr">130 </span>try:
+<span id="L131" class="LineNr">131 </span>    e = d.send(None)
+<span id="L132" class="LineNr">132 </span>except:
+<span id="L133" class="LineNr">133 </span>    pass
+<span id="L134" class="LineNr">134 </span><span class="Special">```</span>
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->

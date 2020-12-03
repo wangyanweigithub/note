@@ -64,12 +64,11 @@ post() 等。每个处理程序可以定义这些方法中的一个或多个来�
 3. 许多方法 RequestHandler 在子类中被重写，并在整个应用程序中使用。定义一个 BaseHandler 重写方法的类，例如 write_error 和
 get_current_user 然后把你自己的 BaseHandler 而不是 RequestHandler 对于所有特定的处理程序。
 
-处理请求输入¶
+### 处理请求输入¶
+1. 请求处理程序可以访问表示当前请求的对象 self.request . 参见类定义 HTTPServerRequest 获取完整的属性列表。
 
-请求处理程序可以访问表示当前请求的对象 self.request . 参见类定义 HTTPServerRequest 获取完整的属性列表。
-
-HTML表单使用的格式中的请求数据将为您进行分析，并在以下方法中可用 get_query_argument 和 get_body_argument .
-
+2. HTML表单使用的格式中的请求数据将为您进行分析，并在以下方法中可用 get_query_argument 和 get_body_argument .
+```
 class MyFormHandler(tornado.web.RequestHandler):
     def get(self):
         self.write('<html><body><form action="/myform" method="POST">'
@@ -80,6 +79,7 @@ class MyFormHandler(tornado.web.RequestHandler):
     def post(self):
         self.set_header("Content-Type", "text/plain")
         self.write("You wrote " + self.get_body_argument("message"))
+```
 
 由于HTML表单编码对于参数是单个值还是包含一个元素的列表不明确， RequestHandler 具有不同的方法以允许应用程序指示是否需要列表
 。对于列表，使用 get_query_arguments 和 get_body_arguments 而不是它们的单一对应物。
