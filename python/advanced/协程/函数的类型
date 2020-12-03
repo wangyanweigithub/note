@@ -1,0 +1,101 @@
+﻿## python的几种函数形式
+### 普通函数
+def function():
+	return 1
+
+print(type(function))
+>>> function
+
+### 生成器函数
+def generator():
+	yield 1
+
+print(type(coro()))
+>>> generator
+
+### 协程/异步协程
+async def coro():
+	return 1
+
+print(type(coro()))
+>>> coroutine
+
+### 异步生成器
+> async_generator
+
+1. 只有async def 定义的协程中出现yield时，函数返回的是异步生成器
+
+2. AsyncGenerator的定义，
+它需要实现__aiter__和__anext__两个核心方法，以及asend，athrow，aclose方法。
+
+3. 异步生成器要先asend后返回的是一个生成器，然后接着send,就是生成器的操作了。
+
+4. <font color=green>await 不能用于异步生成器</font>。
+async def async_coro():
+	yield 1
+
+print(type(async_coro()))
+
+>>> async_generator
+
+## 协程关键字
+### yield
+#### yield 生成器函数的特点
+1. yield, yield from 的函数返回的是一个生成器。
+
+2. 生成器对象需要send和next
+
+3. yield from只针对生成器和iterable
+
+### await #### async def 的特点
+1. async def 声明的函数返回一个coroutine
+
+2. coroutine可以通过调用这个协程的send方法给协程发送一个值。
+
+3. 协程对象在最底层还是通过yield 实现的
+
+4. await 和yield 的区别仅仅是await判断了一下 可等待对象的类型。
+
+5. 通过types.coroutine可以是的生成器可以和协程通用。
+
+6. types.coroutine只是将生成器加了一个标志位，这个标志位和原生协程有区别，但是await会执行这种由生成器转换的协程
+
+7. async def声明的函数没有用await的话，和生成器函数的协程是一样的:
+	- 都是send(None)来启动协程，然后send发送value到协程中
+	- 运行完后都会报StopIteration
+	
+8. 不同之处：
+	- coroutine 不是iterable的，只能调用send，而不能调用next
+	
+#### await 的特点
+1. await只能等待
+	- 实现`__await__`的对象
+	- 等待原生的coroutine对象
+	- 由types.coroutine修饰的生成器对象
+
+2. await语法只能出现在通过async修饰的函数中，否则会报SyntaxError错误
+
+3. await后面的对象需要是一个Awaitable，或者实现了相关的协议。
+
+4. 在协程函数中，可以通过await语法来挂起自身的协程，并等待另一个协程完成直到返回结果
+
+
+## 其他
+### 没有异步的协程:
+> 最底层协程没有异步，没有yield交出执行权。
+
+1. 代码
+
+async def a():
+    print("this is a")
+    return 2
+
+async def b():
+    c = await a()
+    print("c is ", c)
+
+d = b()
+try:
+    e = d.send(None)
+except:
+    pass
