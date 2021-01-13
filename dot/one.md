@@ -92,6 +92,7 @@ digraph graph1 {
 ## 结点属性和边属性
 1. 结点和边的属性设置非常简单，只需要在结点或者边的声明后面加上方括号
 ，然后在方括号里填写属性键值对即可。键值对之间使用逗号进行分割。
+
 ```
 a [shape = egg, label = "this is node a"];
 b [shape = circle, label = "this is node b"];
@@ -149,7 +150,6 @@ digraph graph1 {
 全局设置
 ```
 
-
 ## 其他应用
 1. 使dot支持中文
 	Graphviz默认是不支持中文的，输入的中文在生成的图中显示为一个空方块。
@@ -175,9 +175,9 @@ label="{<b1>|<b2>|<b3>}"
 ```
 
 5. 使用html标签生成表格
-	如果record生成的表格不符合预期，还可以使用html标签生成表格。只需要将结点的label属性设置为相应的
-html代码（用一对尖括号包含）即可。
-
+	如果record生成的表格不符合预期，还可以使用html标签生成表格。只需要将结点的label属性
+设置为相应的html代码（用一对尖括号包含）即可。
+```
 table1 [label=<
 <table>
     <tr>
@@ -190,70 +190,49 @@ table1 [label=<
     </tr>
 </table>
 >];
+```
 
-port属性可以为td增加一个锚点。
+6. port属性可以为td增加一个锚点。
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7. 表格锚点的应用
+	1. cell的锚点可以让使用者在cell之间画线。
+		引用cell的锚点的语法为：table: anchor_name
 
-4. 表格锚点的应用
+	2. 示例代码：
+	```
+	digraph example2 {
+		node [shape = record];
+		table1 [label = "{<head>cell1 | cell2 | cell3}"];
+		table2 [label = "{<head>cell1 | cell2}"];
 
-cell的锚点可以让使用者在cell之间画线。
+		table1: head -> table2: head;
+	}
+	```
 
-引用cell的锚点的语法为：table: anchor_name
+8. 生成图形
+	我们还可以巧妙地使用结点的某些属性来生成图形。如：
+	circle [label="", shape="circle", width=0.5, fixedsize=true, style=filled, color=black];
 
-示例代码：
+	就生成了一个实心黑色圆形。
 
-digraph example2 {
-    node [shape = record];
-    table1 [label = "{<head>cell1 | cell2 | cell3}"];
-    table2 [label = "{<head>cell1 | cell2}"];
-
-    table1: head -> table2: head;
-}
-
-example2
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-5. 生成图形
-
-我们还可以巧妙地使用结点的某些属性来生成图形。如：
-
-circle [label="", shape="circle", width=0.5, fixedsize=true, style=filled, color=black];
-
-就生成了一个实心黑色圆形。
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-6. 命令行全局设置
-
-不仅可以使用代码里的全局设置，还可以在命令行里进行全局设置，这样做的好处就是可以根据不同要求来生
-成图形。
-
+9. 命令行全局设置
+	不仅可以使用代码里的全局设置，还可以在命令行里进行全局设置，这样做的好处就是可以根据不同要
+求来生成图形。
+```
 dot -Grankdir=LR -Nshape="plaintext" -Earrowhead="odiamond" -Tpng example.dot -o example.png
+```
 
-Grankdir即 graph rankdir
-Nshape即 node shape
-Earrowhead即 edge arrowhead
+	- Grankdir即 graph rankdir
+	- Nshape即 node shape
+	- Earrowhead即 edge arrowhead
+	- 其他的属性均按照这种规则进行填写。
 
-其他的属性均按照这种规则进行填写。
+10. 添加注释
+	Dot的注释使用//（单行）或者/**/（多行）。
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-7. 添加注释
-
-Dot的注释使用//（单行）或者/**/（多行）。
-
-// 这是单行注释
-
-/*
-这是多行注释
-*/
-
-
-
-最后，关于graphviz结点的布局：
-
-    graphviz的节点出现在画布上的位置事实上是不确定的，依赖于所使用的布局算法，而不是在脚本中出现
-    的位置，这可能使刚开始接触graphviz的开发人员有点不适应。graphviz的强项在于自动布局，当图中的
-    顶点和边的数目变得很多的时候，才能很好的体会这一特性的好处。
+11. 最后，关于graphviz结点的布局：
+    - graphviz的节点出现在画布上的位置事实上是不确定的，依赖于所使用的布局算法，
+	而不是在脚本中出现的位置，这可能使刚开始接触graphviz的开发人员有点不适应。
+	
+	- graphviz的强项在于自动布局，当图中的顶点和边的数目变得很多的时候，
+	才能很好的体会这一特性的好处。
