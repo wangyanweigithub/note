@@ -1,4 +1,5 @@
 ## 图的声明
+
 ### digraph
 1. 使用digraph graph_name可以声明一个图，而图的具体实现代码则由一对花括号包含起来。
 ```
@@ -236,3 +237,6 @@ dot -Grankdir=LR -Nshape="plaintext" -Earrowhead="odiamond" -Tpng example.dot -o
 	
 	- graphviz的强项在于自动布局，当图中的顶点和边的数目变得很多的时候，
 	才能很好的体会这一特性的好处。
+
+## note
+1. 当node是record时, label加大括号是和rankdir方向一致,不加大括号时rankdir相反.
