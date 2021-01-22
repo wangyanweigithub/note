@@ -26,7 +26,7 @@ class _GeneratorContextManager(object):
         try:
             return next(self.gen)
         except StopInterupt:
-            raise RuntimeError("gene") from None
+            raise RuntimeError("gene")
 
     def __exit__(self, type, value, traceback):
         if type is None:

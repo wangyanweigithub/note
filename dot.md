@@ -1,5 +1,19 @@
-## 图的声明
 
+<!-- vim-markdown-toc GFM -->
+
+* [图的声明](#图的声明)
+	* [digraph](#digraph)
+	* [graph](#graph)
+	* [subgraph](#subgraph)
+* [结点和边的声明](#结点和边的声明)
+* [图的属性](#图的属性)
+* [结点属性和边属性](#结点属性和边属性)
+* [其他应用](#其他应用)
+* [note](#note)
+* [graphviz dot 使用步骤](#graphviz-dot-使用步骤)
+
+<!-- vim-markdown-toc -->
+## 图的声明
 ### digraph
 1. 使用digraph graph_name可以声明一个图，而图的具体实现代码则由一对花括号包含起来。
 ```
@@ -8,17 +22,20 @@ digraph graph1 {
 }
 ```
 
+
 2. 当图中某些内容同属一个类别时，我们可以声明一个子图将其包含在一起。
 使用**subgraph** cluster_subgraph_name可以在声明一个子图。
 
-3. 注意：子图的名字必须以cluster开始，否则解析引擎无法进行识别
+3. 使用->表述节点之间的关系
+
+4. 注意：子图的名字必须以cluster开始，否则解析引擎无法进行识别
 ```
 subgraph cluster_subgraph1 {
     // something
 }
 ```
 
-4. 下面我们来看一个具体例子：
+5. 下面我们来看一个具体例子：
 ```
 digraph example1 {
     label = "this is a graph";
@@ -32,10 +49,68 @@ digraph example1 {
 }
 ```
 
-4. 抛开那些还没讲到的语法。可以看到，这里布局引擎将子图里的c和d
+6. eg:
+```
+digraph g {
+	//edge[style=dashed]; //定义边的样式, 虚线
+	node[peripheries=2, style=filled, color="#eecc80"];
+	a->b [color=red, style=dashed]; //定义边的颜色, 红色 (b和方括号之间必须有空格)
+	b->c; //箭头, 三角形; 箭尾, 菱形
+	b->d [arrowhead=box]; //箭头, 长方形
+	b->e [dir=none]; //没有箭头
+	d->f [dir=both]; //双向箭头
+	f->h [label=go]; //定义edge的标签
+	f->k [arrowhead=diamond]; //更改箭头形状 (更多箭头形状请参考官方文档: 
+		//http://www.graphviz.org/content/arrow-shapes)
+	k->y [headlabel="哈哈", taillabel="洗洗"];
+}
+```
+
+7. 抛开那些还没讲到的语法。可以看到，这里布局引擎将子图里的c和d
 结点聚合在了一起，这在某些场景下是非常有用的，
 可以将逻辑上相近的内容放在一起显示。
 
+### graph
+1. 无向图
+```
+graph g {
+	edge[style=dashed]; //定义边的样式, 虚线
+	a -- b [color=red]; //定义边的颜色, 红色 (b和方括号之间必须有空格)
+}
+```
+
+### subgraph
+1. 使用subgraph定义子图
+```
+digraph g {
+	//定义一个子图, subgraph定义子图
+	subgraph cluster0 {
+		node[style=filled, color=white];  //定义子图中的节点的样式
+		style=filled; //定义子图的样式
+		color=red; //定义子图的填充色
+		a0->a1->a2->a3; //定义节点, 及节点之间的关系
+		label="process #1"; //定义子图的标签
+	}
+
+	//又定义一个子图
+	subgraph cluster1 {
+		node[style=filled, color=white];
+		style=filled;
+		color=blue; //定义子图的填充色
+		b0->b1->b2->b3; //定义节点及其关系
+		label="process #2";
+		labelColor=white;
+	}
+
+	//定义子图之间的关系
+	start->a0;
+	start->b0;
+	a1->b3;
+	b2->a3;
+	a3->end;
+	b3->end;
+}
+```
 ## 结点和边的声明
 1. Dot里结点的声明十分简单。键入结点名字node_name;即可声明一个结点，
 同时，结点默认的显示内容就是结点名字。
@@ -240,3 +315,11 @@ dot -Grankdir=LR -Nshape="plaintext" -Earrowhead="odiamond" -Tpng example.dot -o
 
 ## note
 1. 当node是record时, label加大括号是和rankdir方向一致,不加大括号时rankdir相反.
+
+## graphviz dot 使用步骤
+1. 安装graphvizbrew install graphviz (mac os x系统)
+2. 创建文本文件并命名为*.dot, 编写dot脚本
+3. 在第二部创建的文件中编写脚本
+4. 编译脚本, 输出图片
+	- 编译命令: dot -Tpng *.dot -o *.png
+	记得把 * 换成具体的文件名, 这样你就成功的用脚本渲染出你要绘制的图片啦

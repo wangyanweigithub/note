@@ -1,4 +1,5 @@
-1. 使用contextmanager的装饰器,函数需要定义一个yield.如果需要使用with的as关键字,字儿yield需要一个参数.
+1. 使用contextmanager的装饰器,函数需要定义一个yield.如果需要使用with的as关键字,
+字儿yield需要一个参数.
 
 2. contextmanager返回一个helper函数,helper函数返回一个_GeneratorContextManager.这个类实现了with的__enter__和__exit__魔法方法.
 
