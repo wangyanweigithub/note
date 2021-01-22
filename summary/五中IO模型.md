@@ -35,25 +35,24 @@
     > 此次请求结果的过程中，可以做其它事情。
 
 ## 四、五种I/O 模型
-
-#### 同步阻塞I/O模型
+### 同步阻塞I/O模型
 ![阻塞IO模型](G:\picture\program_graph\阻塞IO模型.png)
 
-#### 同步非阻塞I/O模型
+### 同步非阻塞I/O模型
 ![非阻塞IO模型](G:\picture\program_graph\非阻塞IO模型.png)
 
-#### I/O复用模型
+### I/O复用模型
 ![阻塞IO模型](G:\picture\program_graph\IO复用模型.png)
 
-#### 信号驱动I/O模型
+### 信号驱动I/O模型
 ![阻塞IO模型](G:\picture\program_graph\信号驱动IO模型.png)
 
 [信号驱动例子](https://blog.csdn.net/mcheaven/article/details/44303753)
 
-#### 异步I/O模型
+### 异步I/O模型
 ![阻塞IO模型](G:\picture\program_graph\异步IO模型.png)
 
-#### 总结
+### 总结
 1. 信号驱动I/O和IO多路复用有些相似，都是返回准备好读写的描述符，然后在这个描述符上可以进行阻塞的读写。不同是select是多路复用，而信号驱动是通过注册信号处理程序。
 2. 异步IO是真正的异步完成了读，当拷贝数据拷贝到了用户空间后，才返回成功指示，这时已经完成了读了。
 
