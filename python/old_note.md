@@ -1,54 +1,54 @@
 ﻿### 其他
-1. 根据python版本来选择导入的包
-```
-if is_py3:
-  def u(s):
-	return s
-else:
-  def u(s):
-	return s.decode('unicode-escape')
-```
-
-
-2. <font color=red>列表推导式可以有两个循环</font>
+1. <font color=red>列表推导式可以有两个循环: 笛卡尔积</font>
 ```
 [(i,j) for i in range(5) for j in range(4)]
 ```
 
-3. 函数加默认值时，有默认值的参数必须在没有默认值参数的后面，如:def a(a,b,c=1,d=2)，这样，顺序不能乱，赋值时可以都用列表，
-	也可以都用字典，如: a(1,3,*[3,4]),a(**{"a":1,"b":2,"c":3,"d":4}),a(1,2,*[3],**{"d":4})
+2. 函数加默认值时，有默认值的参数必须在没有默认值参数的后面，
+	1. 如:def a(a,b,c=1,d=2)，这样，顺序不能乱，赋值时可以都用列表，
+	2. 也可以都用字典，如: a(1,3,*[3,4]),a(**{"a":1,"b":2,"c":3,"d":4}),a(1,2,*[3],**{"d":4})
 
-4. 类函数中定义的函数如果有self说明时类实例函数，需要实例对象以后由对象调用，如果类中函数第一个参数时cls，用@classmethod修饰器修饰，说明时类方法。
+3. 类函数中定义的函数如果有self说明时类实例函数，需要实例对象以后由对象调用，
+如果类中函数第一个参数时cls，用@classmethod修饰器修饰，说明时类方法。
+	1. 注意：@classmethod 仅仅适用于单独的，与类本身的数据结构无关函数，其实用了它的函数，
+	与使用普通函数无异，甚至不能在参数里加入self，如果要在其中使用类的数据结构，
+	仍然需要将类实例化一次才可以，所以要小心使用。
 
-	1. 注意：@classmethod 仅仅适用于单独的，与类本身的数据结构无关函数，其实用了它的函数，与使用普通函数无异，
-		甚至不能在参数里加入self，如果要在其中使用类的数据结构，仍然需要将类实例化一次才可以，所以要小心使用。
-		classmethod修饰的函数第一个参数应该是cls，即调用类为第一个参数，而不能为空。
-		cls代表是类本身，如果没有用@classmethod装饰器装饰的话，调用带有cls参数的方法时需要把类本身当作参数传进来。
+	2. classmethod修饰的函数第一个参数应该是cls，即调用类为第一个参数，而不能为空。
+	cls代表是类本身，如果没有用@classmethod装饰器装饰的话，调用带有cls参数的方法时需
+	要把类本身当作参数传进来。
 
-5. enumerate接受列表或数组。
+4. enumerate接受列表或数组。
 ```
 def enumerate (collection ): 
-  'Generates an indexed series:  (0,coll[0]), (1,coll[1]) ...'       
-  i = 0 
-  it = iter (collection ) 
-  while 1 : 
-	   yield (i , it.next ()) 
-		   i += 1 
+	'Generates an indexed series:  (0,coll[0]), (1,coll[1]) ...'       
+	i = 0 
+	it = iter(collection) 
+	while 1 : 
+		yield (i , it.next()) 
+			i += 1 
 ```
 
-6. 要创建一个generator，有很多种方法。第一种方法很简单，只要把一个列表生成式的[]改成()，就创建了一个generator：
+5. 要创建一个generator，有很多种方法。第一种方法很简单，只要把一个列表生成式的[]改成()，
+就创建了一个generator：
 ```
 g = (x * x for x in range(10))
 g  // <generator object <genexpr> at 0x11...>
 ```
 
-7. yield生成器函数:函数是顺序执行，遇到return语句或者最后一行函数语句就返回。而变成generator的函数，在每次调用next()的时候执行，
-遇到yield语句返回，再次执行时从上次返回的yield语句处继续执行。
-	- **一个函数不管能不能执行到yield，只有有yield这个关键字，解释其就会将它解释为生成器，而不是函数。**
-	- **对嵌套yield from 来说，里层的return在外层的yield 的exeption里捕获。yield from 的值是里层协程的return。**
+6. yield生成器函数:
+	- 函数是顺序执行，遇到return语句或者最后一行函数语句就返回。
+	- 而变成generator的函数，在每次调用next()的时候执行，
+	遇到yield语句返回，再次执行时从上次返回的yield语句处继续执行。
+
+	- **一个函数不管能不能执行到yield，只有有yield这个关键字，解释其就会将它解释为生成器，
+	而不是函数。
+
+	- **对嵌套yield from 来说，里层的return在外层的yield 的exeption里捕获。
+	yield from 的值是里层协程的return。**
 
 
-8. 地板除：
+7. 地板除：
 	1. **所有的取整都是向左取整进行的**
 
 	2. eg
@@ -57,7 +57,7 @@ g  // <generator object <genexpr> at 0x11...>
 	-1.7 // 2 = -1
 	```
 
-9. 字典推导
+8. 字典推导
 ```
 my_phrase = ["No", "one", "expects", "the", "Spanish", "Inquisition"]
 my_dict = {key: value for value, key in enumerate(my_phrase)}
@@ -66,13 +66,14 @@ reversed_dict = {value: key for key, value in my_dict.items()}
 print(reversed_dict)
 ```
 
-10. 高阶函数：
+9. 高阶函数：
 	- map
 	- from functools import reduce: reduce
 	- filter
-	- sorted：它可以接受一个key函数来实现自定义的排序，key指定的函数将作用于list的每一个元素上，并根据key函数返回的结果进行排序。
+	- sorted：它可以接受一个key函数来实现自定义的排序，key指定的函数将作用于list的每
+	一个元素上，并根据key函数返回的结果进行排序。
 
-11. 将字典用在列表的场景时，会将字典的key成为使用的列表。
+10. 将字典用在列表的场景时，会将字典的key成为使用的列表。
 
 12. tornado.gen 的 coroutine 的实现已经改变了，一下函数不能那样用了
 	1. @coroutine decorator的定义如下
@@ -86,53 +87,23 @@ print(reversed_dict)
 		return start
 	```
 
-	2. 这是因为需要使用yield，但可能忘记第一次初始化，next(target)或者target.send(None),所以写来这个装饰器，
-	将yield的第一次next加上。
-	```
-	import time
-	from tornado.gen import coroutine
-	
-	def follow(thefile,target):
-		thefile.seek(0,2)   #go to the end of the file
-		while True:
-			line = thefile.readline()
-			if not line:
-				time.sleep(0.1)
-				continue
-				target.send(line)
-		
-		@coroutine
-		def printer():
-			while True:
-				line = yield
-				print(line)
-		
-		if __name__ == '__main__':
-			f = open("t.txt")                                                           
-			follow(f,printer())
-	```
-
-	3. 协程使用的就是yield关键字方法，像一个生成器。
-
-13. `__slots__` 方法:限制实例的属性
+12. `__slots__` 方法:限制实例的属性
 ```
 class Student(object):
 	__slots__ = ('name','age') #用tuple定义允许绑定的属性名称。
 ```
 
-    1. 注意，`__slots__`定义的属性仅对当前类实例起作用，对继承的子类是不起作用的。子类如果需要，可以重新定义`__slots__`.
+    1. 注意，`__slots__`定义的属性仅对当前类实例起作用，对继承的子类是不起作用的。
+	子类如果需要，可以重新定义`__slots__`.
 
-15. type 创建类
-    
-    1. 通过type()函数创建的类和直接写class是完全一样的，因为Python解释器遇到class定义时，仅仅是扫描一下class定义的语法，
-	然后调用type()函数创建出class。
-
+13. type 创建类
+    1. 通过type()函数创建的类和直接写class是完全一样的，因为Python解释器遇到class定义时，
+	仅仅是扫描一下class定义的语法，然后调用type()函数创建出class。
+	```
 			>>> def fn(self, name='world'): # 先定义函数
 			...     print('Hello, %s.' % name)
 					Hello = type('Hello', (object,), dict(hello=fn)) # 创建Hello class
-					h = Hello()
-					h.hello()
-			Hello, world
+	```
 
     2. 要创建一个class对象，type()函数依次传入3个参数：
 
