@@ -1699,7 +1699,7 @@ Docker构建支持实验性功能，例如缓存安装，构建机密和ssh转�
 Dockerfile示例examples
 
 在下面，您可以看到Dockerfile语法的一些示例。
-
+```
 # Nginx
 #
 # VERSION               0.0.1
@@ -1707,7 +1707,9 @@ Dockerfile示例examples
 FROM      ubuntu
 LABEL Description="This image is used to start the foobar executable" Vendor="ACME Products" Version="1.0"
 RUN apt-get update && apt-get install -y inotify-tools nginx apache2 openssh-server
+```
 
+```
 # Firefox over VNC
 #
 # VERSION               0.3
@@ -1724,7 +1726,9 @@ RUN bash -c 'echo "firefox" >> /.bashrc'
 
 EXPOSE 5900
 CMD    ["x11vnc", "-forever", "-usepw", "-create"]
+```
 
+```
 # Multiple images example
 #
 # VERSION               0.1
@@ -1732,10 +1736,13 @@ CMD    ["x11vnc", "-forever", "-usepw", "-create"]
 FROM ubuntu
 RUN echo foo > bar
 # Will output something like ===> 907ad6c2736f
+```
 
+```
 FROM ubuntu
 RUN echo moo > oink
 # Will output something like ===> 695d7793cbe4
 
 # You'll now have two images, 907ad6c2736f with /bar, and 695d7793cbe4 with
 # /oink.
+```

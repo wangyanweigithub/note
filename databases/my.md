@@ -1,84 +1,25 @@
-mysql
+## mysql 总结
+### Cheatsheet
 
-Table of Contents
+  - alter table `userinfo` drop index `email`; – 删除索引
+  - alter table `userinfo` add column `email` text not null; – 添加列
+  - ALTER TABLE `userinfo` ADD INDEX `index_key` (`field1`, `field2`) – 增加索引
+  - show indexes in `userinfo`; – 显示表索引
+  - alter table `userinfo` change `email` `email_ext` text; – 修改列定义
+  - show variables like 'max_%'; – 显示变量
+  - set global max_allowed_packet = 2 * 1024 * 1024; – 设置变量
 
-  • 1. Cheatsheet
-  • 2. 数据类型
-  • 3. Index索引
-      □ 3.1. 索引类型
-      □ 3.2. 索引特性
-      □ 3.3. 挑选索引
-  • 4. 存储引擎
-      □ 4.1. MyISAM
-      □ 4.2. InnoDB
-  • 5. 事务处理
-      □ 5.1. ACID
-      □ 5.2. 隔离性
-  • 6. 外键和引用完整性
-  • 7. 存储过程
-  • 8. 元数据
-      □ 8.1. SHOW
-      □ 8.2. information_schema
-      □ 8.3. mysql
-  • 9. 数据目录
-      □ 9.1. 目录位置
-      □ 9.2. 层次结构
-  • 10. 权限管理
-  • 11. 查询优化
-      □ 11.1. 层级估算
-      □ 11.2. 优化索引
-      □ 11.3. EXPLAIN
-      □ 11.4. 查询缓存
-  • 12. 备份复制
-      □ 12.1. 检查修复
-      □ 12.2. 数据备份
-      □ 12.3. 主从同步
-  • 13. 配置文件
-  • 14. 系统变量
-      □ 14.1. 日志相关
-      □ 14.2. 系统相关
-      □ 14.3. 存储引擎
-  • 15. 编程接口
-      □ 15.1. 超时重连
-      □ 15.2. 连接数量
-  • 16. 实用程序
-  • 17. 其他信息
-      □ 17.1. 安装环境
-      □ 17.2. 版本选择
-      □ 17.3. 测试套件
-      □ 17.4. MySQL技术内幕
+### Index索引
+1. 索引类型
 
-  • http://www.mysql.com/
-  • MySQL技术内幕
-  • Past, present and future of MySQL and variants: linux.conf.au 2014
-  • http://dev.mysql.com/doc/refman/5.6/en/index.html][MySQL">MySQL 5.6 Reference Manual]]
+	- 唯一索引 PRIMARY KEY & UNIQUE
+		- PRIMARY KEY必须是NOT NULL属性，而UNIQUE不需要
+		- 每个数据表只能有一个PRIMARY KEY
+	- 普通（非唯一）索引 INDEX
+	- FULLTEXT索引（只适用于MyISAM引擎）
+	- SPATIAL索引（必须NOT NULL属性）
 
-1 Cheatsheet
-
-  • alter table `userinfo` drop index `email`; – 删除索引
-  • alter table `userinfo` add column `email` text not null; – 添加列
-  • ALTER TABLE `userinfo` ADD INDEX `index_key` (`field1`, `field2`) – 增加索引
-  • show indexes in `userinfo`; – 显示表索引
-  • alter table `userinfo` change `email` `email_ext` text; – 修改列定义
-  • show variables like 'max_%'; – 显示变量
-  • set global max_allowed_packet = 2 * 1024 * 1024; – 设置变量
-
-2 数据类型
-
-#todo:
-
-3 Index索引
-
-3.1 索引类型
-
-  • 唯一索引 PRIMARY KEY & UNIQUE
-      □ PRIMARY KEY必须是NOT NULL属性，而UNIQUE不需要
-      □ 每个数据表只能有一个PRIMARY KEY
-  • 普通（非唯一）索引 INDEX
-  • FULLTEXT索引（只适用于MyISAM引擎）
-  • SPATIAL索引（必须NOT NULL属性）
-
-3.2 索引特性
+2. 索引特性
 
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┯━━━━━━━━┯━━━━━━━━━━━┓
 ┃           索引特性            │ MyISAM │  InnoDB   ┃
@@ -104,27 +45,30 @@ Table of Contents
 ┃ 索引和数据是否分离            │ N      │ Y         ┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┷━━━━━━━━┷━━━━━━━━━━━┛
 
-索引加快了检索速度，但是却降低了在带索引的数据列里插入删除以及修改的速度，因为不仅需要维护数据还
-需要维护索引。另外索引要占据磁盘空间。所以如果不需要某个特定的索引来加快查询速度，就不要创建它。
+	索引加快了检索速度，但是却降低了在带索引的数据列里插入删除以及修改的速度，
+因为不仅需要维护数据还需要维护索引。另外索引要占据磁盘空间。所以如果不需要某个特定的
+索引来加快查询速度，就不要创建它。
 
-3.3 挑选索引
+3. 挑选索引
+	- 尽量为用来搜索，分类或分组的数据列编制索引，不要为作为输出显示的数据列编制索引。
+	- 综合考虑各数据列的维度势。尽可能选择数值差异比较大也就是维度比较高的数据列来做索引。
+	- 对短小的值进行索引。
+	- 为字符串值的前缀编索引。（使用字符串最左边的n个字符来做索引）
+		- 如果数据列在前缀长度范围内具有足够的独一无二性，查询性能通常不会受到影响，
+		而是会得到改善
 
-  • 尽量为用来搜索，分类或分组的数据列编制索引，不要为作为输出显示的数据列编制索引。
-  • 综合考虑各数据列的维度势。尽可能选择数值差异比较大也就是维度比较高的数据列来做索引。
-  • 对短小的值进行索引。
-  • 为字符串值的前缀编索引。（使用字符串最左边的n个字符来做索引）
-      □ 如果数据列在前缀长度范围内具有足够的独一无二性，查询性能通常不会受到影响，而是会得到改善
-        。
-      □ 为数据列前缀而不是整个数据列编索引可以让索引本身更小并加快访问速度。
-  • 充分利用最左边的前缀。MySQL不能使用没有包含最左边前缀的搜索的索引。
-  • 适可而止，不要建立过多的索引。
-  • 让索引的类型与你打算进行的比较操作的类型保持匹配。
-      □ InnoDB总是使用BTree索引
-      □ MyISAM也使用BTree索引，但是遇到空间数据类型会改用RTree索引
-      □ MEMORY默认使用Hash索引，但是也支持BTree索引
-  • 利用“慢查询”日志找出性能低劣的查询。
+		- 为数据列前缀而不是整个数据列编索引可以让索引本身更小并加快访问速度。
 
-4 存储引擎
+	- 充分利用最左边的前缀。MySQL不能使用没有包含最左边前缀的搜索的索引。
+	- 适可而止，不要建立过多的索引。
+	- 让索引的类型与你打算进行的比较操作的类型保持匹配。
+		- InnoDB总是使用BTree索引
+		- MyISAM也使用BTree索引，但是遇到空间数据类型会改用RTree索引
+		- MEMORY默认使用Hash索引，但是也支持BTree索引
+
+	- 利用“慢查询”日志找出性能低劣的查询。
+
+### 存储引擎
 
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┯━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃                       存储引擎                       │                存储文件                ┃
@@ -155,95 +99,112 @@ Table of Contents
 ┃ NDB MySQL Cluster的专用存储引擎                      │                                        ┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┷━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
-#note: better just to focus on MyISAM and InnoDB
+1. note: better just to focus on MyISAM and InnoDB
 
-CREATE TABLE table(…) ENGINE = InnoDB/MyISAM optionA = … optionB = …; # 创建表格时指定存储引擎
+2. CREATE TABLE table(…) ENGINE = InnoDB/MyISAM optionA = … optionB = …; 
+	创建表格时指定存储引擎
 
-SHOW TABLE STATUS; # 可以查看表格元信息包括使用的存储引擎
+3. SHOW TABLE STATUS; # 可以查看表格元信息包括使用的存储引擎
 
-4.1 MyISAM
+1. MyISAM
 
-  • MySQL默认使用的存储引擎
-  • 通过FULLTEXT索引支持全文检索
-  • 支持空间数据类型和SPATIAL索引
-  • 数据组织
-      □ 每个数据表对应一个数据文件和索引文件
-      □ 数据文件.MYD和索引文件.MYI分开存放
-  • 并发控制
-      □ 使用了数据表级别的锁定机制来保证不同的客户不能同时修改同一数据表
-      □ 在更新量比较大的系统上会导致并发性能的下降
+- MySQL默认使用的存储引擎
+- 通过FULLTEXT索引支持全文检索
+- 支持空间数据类型和SPATIAL索引
+- 数据组织
+	- 每个数据表对应一个数据文件和索引文件
+	- 数据文件.MYD和索引文件.MYI分开存放
+- 并发控制
+	- 使用了数据表级别的锁定机制来保证不同的客户不能同时修改同一数据表
+	- 在更新量比较大的系统上会导致并发性能的下降
 
-4.2 InnoDB
+2. InnoDB
 
-  • 最早是由Innobase Oy公司开发，后来被Oracle收购
-  • 支持事务（提交和回滚）操作，还可以通过创建保存点（savepoint）来实现部分回滚（partial rollback
-    ）
-  • 系统崩溃之后可以自动恢复（相比MyISAM更透明）
-  • 外键和引用完整性支持，包括递归删除和更新
-  • 数据行级别的锁定和多版本共存，同时进行检索和更新操作的复杂查询里面有非常更好的并发性能（相比
-    MyISAM的数据表级别锁定）
-  • 数据组织
-      □ 默认情况下InnoDB会把所有数据表存储在一个共享表空间里面，而不是像MyISAM引擎每个数据表创建
-        单独文件
-      □ 表空间用类似一个虚拟文件系统方式来管理所有InnoDB数据表内容，可以由多个文件构成还可以包括
-        原始分区，数据表的大小可以不受系统对文件最大长度的限制 #note: InnoDB支持原始分区.
-      □ 允许每个数据表对应一个.ibd数据文件，但是使用这种方式数据表大小会受到文件最大长度的限制
-      □ #note: 即使分开存放，共享表空间还是会存放一些共享数据。因为最好不要通过操作文件系统方式来
-        操作InnoDB数据表
-      □ 但是无论使用上面两种方式的哪一种，InnoDB都是将数据和索引内容一起组织和存放的
-  • 并发控制
-      □ 使用了数据行级别的锁定机制，为客户对数据表的访问提供了更加细致的控制
-      □ 在某个客户修改某个数据行的同时，另外一个客户可以都去和修改同一数据表里面的另外一数据行
-      □ 如果有两个客户想同时修改某个数据行，先锁定该数据行的客户可以先修改它
-      □ 比数据表级别的锁定机制提供了更好的并发性能
-      □ 至于一个客户的事务在何时才能看到另外一个客户的事务做出的修改，属于事务隔离性方面的问题
+	- 最早是由Innobase Oy公司开发，后来被Oracle收购
+	- 支持事务（提交和回滚）操作，还可以通过创建保存点（savepoint）来实现部分回滚
+	（partial rollback）
 
-5 事务处理
+	- 系统崩溃之后可以自动恢复（相比MyISAM更透明）
+	- 外键和引用完整性支持，包括递归删除和更新
+	- 数据行级别的锁定和多版本共存，同时进行检索和更新操作的复杂查询里面有非常更好的
+	并发性能（相比MyISAM的数据表级别锁定）
 
-5.1 ACID
+	- 数据组织
+		- 默认情况下InnoDB会把所有数据表存储在一个共享表空间里面，而不是像MyISAM引擎
+		每个数据表创建单独文件
 
-事务机制的特性通常被概括为ACID，Atomic，Consistent，Isolated，Durable，他们分别代表事务机制应该具
-备的一个属性。
+		- 表空间用类似一个虚拟文件系统方式来管理所有InnoDB数据表内容，可以由多个文件
+		构成还可以包括原始分区，数据表的大小可以不受系统对文件最大长度的限制 
+		note: InnoDB支持原始分区.
 
-  • Atomic 构成一个事务的所有语句应该是一个独立的逻辑单元，要么全部执行成功，要么一个都不成功，不
-    能只执行他们当中的一部分。
-  • Consistent 数据库在事务开始执行之前和事务执行完毕之后都必须是稳定的。
-  • Isolated 事务不应该相互影响。
-  • Durable 如果事务执行成功，它的影响将被永久性地记录到数据库里。
+		- 允许每个数据表对应一个.ibd数据文件，但是使用这种方式数据表大小会受到文件最
+		大长度的限制
 
-5.2 隔离性
+		- note: 即使分开存放，共享表空间还是会存放一些共享数据。因为最好不要通过操作
+		文件系统方式来操作InnoDB数据表
 
-  • http://en.wikipedia.org/wiki/Isolation_(database_systems)
-  • http://www.ovaistariq.net/597/understanding-innodb-transaction-isolation-levels/
+		- 但是无论使用上面两种方式的哪一种，InnoDB都是将数据和索引内容一起组织和存放的
 
-InnoDB存储引擎实现的事务隔离级别机制能够让客户控制他们想看到其他事务做的修改。它提供了多种不同的
-隔离级别以允许或预防在多个事务同时运行时可能发生的各种各样的问题：
+	- 并发控制
+		- 使用了数据行级别的锁定机制，为客户对数据表的访问提供了更加细致的控制
+		- 在某个客户修改某个数据行的同时，另外一个客户可以都去和修改同一数据表里面的
+		另外一数据行
 
-  • 脏读（dirty read）某个事务所作的修改在它尚未被提交时就可以被其他事务看到。
-  • 不可重复读取（nonrepeatable read）同一个事务使用同一条select语句每次读取到的结果不一样。
-  • 幻影数据行（phantom row）某个事务突然看到一个它以前没有见过的数据行。
+		- 如果有两个客户想同时修改某个数据行，先锁定该数据行的客户可以先修改它
+		- 比数据表级别的锁定机制提供了更好的并发性能
+		- 至于一个客户的事务在何时才能看到另外一个客户的事务做出的修改，属于
+		事务隔离性方面的问题
 
-为了解决这些问题，InnoDB存储引擎提供了4种隔离级别。这些隔离级别用来确定允许某个事务看到与之同时执
-行的其他事务所做出的修改：（级别不断提高）
+### 事务处理
+#### ACID
+> 事务机制的特性通常被概括为ACID，Atomic，Consistent，Isolated，Durable，
+他们分别代表事务机制应该具备的一个属性。
 
-  • READ UNCOMMITED 允许事务看到其他事务尚未提交的数据行改动
-  • READ COMMITED 只允许事务看到其他事务已经提交的数据行改动
-      □ a lock-based concurrency control DBMS implementation keeps write locks (acquired on
-        selected data) until the end of the transaction, but read locks are released as soon as
-        the SELECT operation is performed (so the non-repeatable reads phenomenon can occur in
-        this isolation level, as discussed below). As in the previous level, range-locks are not
-        managed.
-      □ Putting it in simpler words, read committed is an isolation level that guarantees that
-        any data read is committed at the moment it is read. It simply restricts the reader from
-        seeing any intermediate, uncommitted, 'dirty' read. It makes no promise whatsoever that
-        if the transaction re-issues the read, it will find the same data; data is free to change
-        after it is read.
-  • REPEATABLE READ 如果某个事务两次执行同一个select语句，其结果是可重复的。也就是说如果两次期间
-    如果有数据修改的话，修改是隔离的。InnoDB默认的事务隔离级别。
-      □ a lock-based concurrency control DBMS implementation keeps read and write locks (acquired
+1. Atomic 构成一个事务的所有语句应该是一个独立的逻辑单元，要么全部执行成功，要么一个都
+不成功，不能只执行他们当中的一部分。
+
+2. Consistent 数据库在事务开始执行之前和事务执行完毕之后都必须是稳定的。
+
+3. Isolated 事务不应该相互影响。
+4. Durable 如果事务执行成功，它的影响将被永久性地记录到数据库里。
+
+#### 隔离性
+> http://en.wikipedia.org/wiki/Isolation_(database_systems)
+> http://www.ovaistariq.net/597/understanding-innodb-transaction-isolation-levels/
+
+1. InnoDB存储引擎实现的事务隔离级别机制能够让客户控制他们想看到其他事务做的修改。
+它提供了多种不同的隔离级别以允许或预防在多个事务同时运行时可能发生的各种各样的问题：
+
+	- 脏读（dirty read）某个事务所作的修改在它尚未被提交时就可以被其他事务看到。
+
+	- 不可重复读取（nonrepeatable read）同一个事务使用同一条select语句每次读取到的结果不一样
+
+	- 幻影数据行（phantom row）某个事务突然看到一个它以前没有见过的数据行。
+
+2. 为了解决这些问题，InnoDB存储引擎提供了4种隔离级别。这些隔离级别用来确定允许某个事务看
+到与之同时执行的其他事务所做出的修改：（级别不断提高）
+
+	- READ UNCOMMITED 允许事务看到其他事务尚未提交的数据行改动
+	- READ COMMITED 只允许事务看到其他事务已经提交的数据行改动
+		- a lock-based concurrency control DBMS implementation keeps write locks 
+		(acquired on selected data) until the end of the transaction, but read locks are 
+		released as soon as the SELECT operation is performed (so the non-repeatable reads 
+		phenomenon can occur in this isolation level, as discussed below). 
+		As in the previous level, range-locks are not managed.
+
+		- Putting it in simpler words, read committed is an isolation level that 
+		guarantees that any data read is committed at the moment it is read. 
+		It simply restricts the reader from seeing any intermediate, uncommitted, 
+		'dirty' read. It makes no promise whatsoever that if the transaction re-issues the 
+		read, it will find the same data; data is free to change after it is read.
+
+	- REPEATABLE READ 如果某个事务两次执行同一个select语句，其结果是可重复的。
+	也就是说如果两次期间如果有数据修改的话，修改是隔离的。InnoDB默认的事务隔离级别。
+
+      - a lock-based concurrency control DBMS implementation keeps read and write locks (acquired
         on selected data) until the end of the transaction. However, range-locks are not managed,
         so the phantom reads phenomenon can occur (see below).
-      □ As the text above describes, phantom reads is the only problem that SERIALIZABLE is
+      - As the text above describes, phantom reads is the only problem that SERIALIZABLE is
         helping you avoid, otherwise SERIALIZABLE is pretty much same as REPEATABLE-READ. InnoDB
         has a special locking feature called gap-locking which helps you avoid the phantom reads
         problem. In the case of gap locking, a lock is set on the gap between index records, or
@@ -251,14 +212,14 @@ InnoDB存储引擎实现的事务隔离级别机制能够让客户控制他们�
         phantom reads is to convert such reads to locking reads using SELECT with FOR UPDATE or
         LOCK IN SHARE MODE.（可以通过gap-locking来避免phantom read，这样避免使用SERIALIZABLE隔离
         性）
-  • SERIALIZABLE 这个隔离级别与REPEATABLE READ很相似，但对事务的隔离更加彻底，某个事务正在查看的
+  - SERIALIZABLE 这个隔离级别与REPEATABLE READ很相似，但对事务的隔离更加彻底，某个事务正在查看的
     数据行不允许其他事务修改，直到该事务完成为止。
-      □ With a lock-based concurrency control DBMS implementation, serializability requires read
+      - With a lock-based concurrency control DBMS implementation, serializability requires read
         and write locks (acquired on selected data) to be released at the end of the transaction.
         Also range-locks must be acquired when a SELECT query uses a ranged WHERE clause,
         especially to avoid the phantom reads phenomenon (see below). #note: 所以不仅仅只有read/
         write lock, 还有range-lock.
-      □ When using non-lock based concurrency control, no locks are acquired; however, if the
+      - When using non-lock based concurrency control, no locks are acquired; however, if the
         system detects a write collision among several concurrent transactions, only one of them
         is allowed to commit. See snapshot isolation for more details on this topic.
 
@@ -290,8 +251,8 @@ Isolation Levels vs Read Phenomena
 Isolation Levels vs Lock Duration In lock-based concurrency control, isolation level determines
 the duration that locks are held.
 
-  • "C" - Denotes that locks are held until the transaction commits.
-  • "S" - Denotes that the locks are held only during the currently executing statement. Note
+  - "C" - Denotes that locks are held until the transaction commits.
+  - "S" - Denotes that the locks are held only during the currently executing statement. Note
     that if locks are released after a statement, the underlying data could be changed by another
     transaction before the current transaction commits, thus creating a violation.
 
@@ -309,13 +270,13 @@ the duration that locks are held.
 
 不同隔离级别使用的锁：
 
-  • The READ-UNCOMMITTED isolation level has the least number of locking done,
-  • after that comes the READ-COMMITTED isolation level which removes most of the gap-locking and
+  - The READ-UNCOMMITTED isolation level has the least number of locking done,
+  - after that comes the READ-COMMITTED isolation level which removes most of the gap-locking and
     hence produces fewer deadlocks, also in the case of READ-COMMITTED, locking reads only lock
     the index records and not the gaps before/after them.
-  • REPEATABLE-READ has a higher level of locking as compared to READ-COMMITTED, UPDATE, DELETE
+  - REPEATABLE-READ has a higher level of locking as compared to READ-COMMITTED, UPDATE, DELETE
     use next-key locking, also locking reads also use next-key locking.
-  • SERIALIZABLE has the highest level of locking, all the simple SELECTs are automatically
+  - SERIALIZABLE has the highest level of locking, all the simple SELECTs are automatically
     converted to SELECT … LOCK IN SHARE MODE, and hence all records have shared locks.
 
 As I have mentioned in the "Locking and the isolation levels" section, SERIALIZABLE and
@@ -349,13 +310,13 @@ replication you have exact information about each data row changes.（不同事�
 
 #todo:
 
-  • SHOW DATABASES;
-  • SHOW CREATE DATABASE db_name;
-  • SHOW TABLES [FROM db_name];
-  • SHOW CREATE TABLE tbl_name;
-  • SHOW COLUMNS FROM tbl_name;
-  • SHOW INDEX FROM tbl_name;
-  • SHOW TABLE STATUS [FROM db_name];
+  - SHOW DATABASES;
+  - SHOW CREATE DATABASE db_name;
+  - SHOW TABLES [FROM db_name];
+  - SHOW CREATE TABLE tbl_name;
+  - SHOW COLUMNS FROM tbl_name;
+  - SHOW INDEX FROM tbl_name;
+  - SHOW TABLE STATUS [FROM db_name];
 
 8.2 information_schema
 
@@ -446,40 +407,40 @@ mysql> show tables in mysql;
 
 9.1 目录位置
 
-  • 源代码安装默认是 /usr/local/mysql/var
-  • 包安装默认是 /var/lib/mysql
-  • configure选项 –localstatedir 可以修改默认位置
-  • datadir 选项可以指定位置
+  - 源代码安装默认是 /usr/local/mysql/var
+  - 包安装默认是 /var/lib/mysql
+  - configure选项 –localstatedir 可以修改默认位置
+  - datadir 选项可以指定位置
 
 9.2 层次结构
 
-  • 每个数据库对应一个目录
-      □ .opt文件列出这个数据库默认使用的字符集和排序方式
-      □ 数据库内的数据表，视图和触发器对应于该数据库目录中的文件
-      □ 每个视图对应一个.frm文件，数据表也对应一个.frm文件
-      □ 和某个数据表tbl相关的触发器定义和相关信息，存储在tbl.trg文件里面
-      □ 同一个数据表可以有多个触发器，而服务器把他们的定义集中保存在同一个.trg文件里面
-  • 服务器进程ID文件。
-      □ HOSTNAME.pid
-  • 服务器生成状态和日志文件。
-      □ HOSTNAME.err 错误日志
-      □ HOSTNAME.log 一般查询日志
-      □ HOSTNAME-bin.nnnnnn 二进制文件（修改数据语句和内容）
-      □ HOSTNAME-bin.index 二进制文件的索引文件
-      □ HOSTNAME-relay-bin.nnnnnn 延迟日志
-      □ HOSTNAME-relay-bin.index 延迟日志索引
-      □ master.info 主服务器信息
-      □ relay-log.info 延迟信息
-      □ HOSTNAME-slow.log 慢查询日志
+  - 每个数据库对应一个目录
+      - .opt文件列出这个数据库默认使用的字符集和排序方式
+      - 数据库内的数据表，视图和触发器对应于该数据库目录中的文件
+      - 每个视图对应一个.frm文件，数据表也对应一个.frm文件
+      - 和某个数据表tbl相关的触发器定义和相关信息，存储在tbl.trg文件里面
+      - 同一个数据表可以有多个触发器，而服务器把他们的定义集中保存在同一个.trg文件里面
+  - 服务器进程ID文件。
+      - HOSTNAME.pid
+  - 服务器生成状态和日志文件。
+      - HOSTNAME.err 错误日志
+      - HOSTNAME.log 一般查询日志
+      - HOSTNAME-bin.nnnnnn 二进制文件（修改数据语句和内容）
+      - HOSTNAME-bin.index 二进制文件的索引文件
+      - HOSTNAME-relay-bin.nnnnnn 延迟日志
+      - HOSTNAME-relay-bin.index 延迟日志索引
+      - master.info 主服务器信息
+      - relay-log.info 延迟信息
+      - HOSTNAME-slow.log 慢查询日志
           ☆ 判断是否为慢查询和下面两个指标相关
           ☆ long_query_time（单位秒） # 判断多长时间为慢
           ☆ min_examined_row_limit # 只有被查询这么多次之后才有资格被记录到日志里面
 
 10 权限管理
 
-  • GRANT ALL PRIVILEGES ON <db>().<table>() TO 'user'@'host' IDENTIFIED BY 'password' # 授权
-  • SET PASSWORD for 'user'@'host' = password('123456') # 重置密码
-  • FLUSH PRIVILEGES # 刷新权限表
+  - GRANT ALL PRIVILEGES ON <db>().<table>() TO 'user'@'host' IDENTIFIED BY 'password' # 授权
+  - SET PASSWORD for 'user'@'host' = password('123456') # 重置密码
+  - FLUSH PRIVILEGES # 刷新权限表
 
 11 查询优化
 
@@ -497,22 +458,22 @@ calculation. 假设不考虑page cache的话，那么查询一条记录通常需
 
 11.2 优化索引
 
-  • 对数据表进行分析
-      □ 生成关于索引值分布情况的统计数据，帮助优化器对索引的使用效果做出更准确的评估
-      □ 默认情况下当把有索引数据列与常数比较的时候，优化起会假设相关索引里的键值是均匀分布的，同
+  - 对数据表进行分析
+      - 生成关于索引值分布情况的统计数据，帮助优化器对索引的使用效果做出更准确的评估
+      - 默认情况下当把有索引数据列与常数比较的时候，优化起会假设相关索引里的键值是均匀分布的，同
         时还会对索引进行一次快速检查以估算需要用到多少个索引项
-      □ 使用ANALYSE TABLE语句来进行分析，频率根据数据表变化频繁程度而定
-  • 对容易产生碎片的数据表进行整理，定期使用OPTIMIZE TABLE语句有助于防止数据表查询性能的降低
-  • 使用EXPLAIN语句验证优化器操作 # 可以告诉查询计划，是否使用索引以及如何使用索引等
-  • 提示优化器
-      □ FORCE INDEX, USE INDEX, IGNORE INDEX
-      □ STRAIGHT_JOIN # 强制优化器按照特定顺序来做JOIN
-  • 尽量使用数据类型相同的数据列进行比较
-  • 使带索引的数据列在比较表达式中单独出现
-      □ f(x) < 4, 这样就需要遍历所有x并且作用f然后比较。所以最好是可以x < f^-1(4)
-  • 不要在LIKE模式的开始位置使用通配符
-  • 试验各种查询的变化格式，并且需要多次运行它们
-  • 避免过多使用MySQL的自动类型转换功能 #note: 隐式类型转换会可能会阻碍索引的使用
+      - 使用ANALYSE TABLE语句来进行分析，频率根据数据表变化频繁程度而定
+  - 对容易产生碎片的数据表进行整理，定期使用OPTIMIZE TABLE语句有助于防止数据表查询性能的降低
+  - 使用EXPLAIN语句验证优化器操作 # 可以告诉查询计划，是否使用索引以及如何使用索引等
+  - 提示优化器
+      - FORCE INDEX, USE INDEX, IGNORE INDEX
+      - STRAIGHT_JOIN # 强制优化器按照特定顺序来做JOIN
+  - 尽量使用数据类型相同的数据列进行比较
+  - 使带索引的数据列在比较表达式中单独出现
+      - f(x) < 4, 这样就需要遍历所有x并且作用f然后比较。所以最好是可以x < f^-1(4)
+  - 不要在LIKE模式的开始位置使用通配符
+  - 试验各种查询的变化格式，并且需要多次运行它们
+  - 避免过多使用MySQL的自动类型转换功能 #note: 隐式类型转换会可能会阻碍索引的使用
 
 11.3 EXPLAIN
 
@@ -549,14 +510,14 @@ mysql> explain SELECT * from t1 WHERE k < 20 AND k > 10;
 |  1 | SIMPLE      | t1    | ALL  | NULL          | NULL | NULL    | NULL |   50 | Using where |
 +----+-------------+-------+------+---------------+------+---------+------+------+-------------+
 
-  • select_type 简单选择 #todo: ???
-  • table 数据表
-  • type 优化器可以用来搜索的区间（ALL表示只能全部扫描）
-  • possible_keys 可以用来做搜索的keys
-  • key/key_len 最终选择用来做搜索的key和其长度
-  • ref 是否参考其他数据表字段
-  • row 处理多少行数据
-  • Extra #todo: ???
+  - select_type 简单选择 #todo: ???
+  - table 数据表
+  - type 优化器可以用来搜索的区间（ALL表示只能全部扫描）
+  - possible_keys 可以用来做搜索的keys
+  - key/key_len 最终选择用来做搜索的key和其长度
+  - ref 是否参考其他数据表字段
+  - row 处理多少行数据
+  - Extra #todo: ???
 
 可以看到这个检索只能够使用全表扫描，下面来看看加上索引的效果
 
@@ -571,10 +532,10 @@ mysql> explain SELECT * from t1 WHERE k < 20 AND k > 10;
 |  1 | SIMPLE      | t1    | range | k             | k    | 4       | NULL |    8 | Using where |
 +----+-------------+-------+-------+---------------+------+---------+------+------+-------------+
 
-  • type=range 表明可以有范围查询
-  • possible_keys 可以使用k来做搜索
-  • key/key_len 最后也是使用k来做搜索，并且长度为4字节
-  • rows 只需要处理8个数据行
+  - type=range 表明可以有范围查询
+  - possible_keys 可以使用k来做搜索
+  - key/key_len 最后也是使用k来做搜索，并且长度为4字节
+  - rows 只需要处理8个数据行
 
 为t1加上索引之后，然后看看语句2的效果
 
@@ -593,35 +554,35 @@ mysql> explain SELECT * from t1 INNER JOIN t2 WHERE t1.k = t2.k;
 如果数据很少更新的话，那么开启查询缓存是有利的。如果数据表被更新的话，所有与之相关的查询缓存都会
 失效并且被删除。
 
-  • configure阶段 –without-query-cache 可以构建不带查询缓存的服务器
-  • have_query_cache 是否支持查询缓存
-  • query_cache_type
-      □ 0 不使用查询缓存
-      □ 1 开启，但是不包括SELECT SQL_NO_CACHE开头的查询
-      □ 2 开启，但是只包括SELECT SQL_CACHE开头的查询
-  • query_cache_size 查询缓存大小，字节为单位
-  • query_cache_limit 缓存最大结果集合大小，比这个值大的查询结果不能被缓存
+  - configure阶段 –without-query-cache 可以构建不带查询缓存的服务器
+  - have_query_cache 是否支持查询缓存
+  - query_cache_type
+      - 0 不使用查询缓存
+      - 1 开启，但是不包括SELECT SQL_NO_CACHE开头的查询
+      - 2 开启，但是只包括SELECT SQL_CACHE开头的查询
+  - query_cache_size 查询缓存大小，字节为单位
+  - query_cache_limit 缓存最大结果集合大小，比这个值大的查询结果不能被缓存
 
 12 备份复制
 
 12.1 检查修复
 
-  • CHECK TABLE
-  • REPAIR TABLE
-  • mysqlcheck
+  - CHECK TABLE
+  - REPAIR TABLE
+  - mysqlcheck
 
 12.2 数据备份
 
 数据库备份按照它们的格式可以分为两大类
 
-  • 文本格式备份，通过使用mysqldump程序把数据表内容输出成为SQL语句
-  • 二进制备份，直接复制包含数据表内容的文件（不是特别推荐）
+  - 文本格式备份，通过使用mysqldump程序把数据表内容输出成为SQL语句
+  - 二进制备份，直接复制包含数据表内容的文件（不是特别推荐）
 
 有效加载数据基于下面几个基本原则
 
-  • 批量加载效率比单行加载的效率高 # 减少刷新频率和IO操作
-  • 加载有索引的数据表比加载无索引的数据表慢 # 更新索引
-  • 较短SQL语句比较长SQL语句快 # 更少的语法分析以及更少的传输量
+  - 批量加载效率比单行加载的效率高 # 减少刷新频率和IO操作
+  - 加载有索引的数据表比加载无索引的数据表慢 # 更新索引
+  - 较短SQL语句比较长SQL语句快 # 更少的语法分析以及更少的传输量
 
 12.3 主从同步
 
@@ -656,32 +617,32 @@ realy-log执行修改自己的数据库，达到同步的目的。relay-log里�
 
 binlog-format有三种选择
 
-  • STATEMENT 基于语句，比较简短但是控制粒度不高
-  • ROW 基于数据行，比较冗余但是控制粒度好
-  • MIXED 混合。优先选择基于数据行，确有必要时候使用基于语句
+  - STATEMENT 基于语句，比较简短但是控制粒度不高
+  - ROW 基于数据行，比较冗余但是控制粒度好
+  - MIXED 混合。优先选择基于数据行，确有必要时候使用基于语句
 
 基本命令：
 
-  • show binary logs; # 所有binlog
-  • show master logs; # 所有binlog
-  • show binlog events; # 察看binlog内容
-  • show master status; # 当前master进度
-  • reset master; # 清除所有binlog
-  • reset slave; # 清除所有relaylog
-  • start/stop slave # 启动停止复制
-      □ IO_THREAD 只启动停止IO线程
-      □ SQL_THREAD 只启动停止SQL线程
-  • purge master/binary logs to 'log-bin.000012'; # 将log-bin.000012之前的binlog都删除
-  • change master to master_host='', master_user='', master_password='', master_log_file='',
+  - show binary logs; # 所有binlog
+  - show master logs; # 所有binlog
+  - show binlog events; # 察看binlog内容
+  - show master status; # 当前master进度
+  - reset master; # 清除所有binlog
+  - reset slave; # 清除所有relaylog
+  - start/stop slave # 启动停止复制
+      - IO_THREAD 只启动停止IO线程
+      - SQL_THREAD 只启动停止SQL线程
+  - purge master/binary logs to 'log-bin.000012'; # 将log-bin.000012之前的binlog都删除
+  - change master to master_host='', master_user='', master_password='', master_log_file='',
     master_log_pos='' # 初始化复制坐标
-      □ 初始复制状态会记录在master.info文件，并且随着镜像工作进展而刷新这个文件
+      - 初始复制状态会记录在master.info文件，并且随着镜像工作进展而刷新这个文件
 
 半同步(semi-sync)
 
-  • http://www.db110.com/?p=3364
-  • http://code.google.com/p/google-mysql-tools/wiki/SemiSyncReplication
-  • http://code.google.com/p/google-mysql-tools/wiki/SemiSyncReplicationDesign
-  • http://dev.mysql.com/doc/refman/5.5/en/replication-semisync.html
+  - http://www.db110.com/?p=3364
+  - http://code.google.com/p/google-mysql-tools/wiki/SemiSyncReplication
+  - http://code.google.com/p/google-mysql-tools/wiki/SemiSyncReplicationDesign
+  - http://dev.mysql.com/doc/refman/5.5/en/replication-semisync.html
 
 很早之前做了一个mysql集群主从切换模块，里面就涉及到了半同步。按照半同步的定义（全同步的语义应该就
 是等待所有的slave都同步完成，强一致性），半同步还是会存在丢数据的可能，半同步的语义仅仅是认为一个
@@ -689,87 +650,87 @@ slave同步到数据之后的话同步就完成。但是如果master挂掉同时
 据的话），那么就会存在数据丢失的可能（仅仅是提供最终一致性可能）。Semisynchronous replication can
 be used as an alternative to asynchronous replication:
 
-  • A slave indicates whether it is semisynchronous-capable when it connects to the master.（
+  - A slave indicates whether it is semisynchronous-capable when it connects to the master.（
     slave必须声明自己是semi-sync的）
-  • If semisynchronous replication is enabled on the master side and there is at least one
+  - If semisynchronous replication is enabled on the master side and there is at least one
     semisynchronous slave, a thread that performs a transaction commit on the master blocks after
     the commit is done and waits until at least one semisynchronous slave acknowledges that it
     has received all events for the transaction, or until a timeout occurs.（master也必须声明自己
     是semi-sync的，并且至少一个semi-sync slave连接上来，才会开启semi-sync模式。事务必须至少有一个
     semi-sync slave确认之后才会成功返回）
-  • The slave acknowledges receipt of a transaction's events only after the events have been
+  - The slave acknowledges receipt of a transaction's events only after the events have been
     written to its relay log and flushed to disk.（slave的确认是relay log完全刷到磁盘上）
-  • If a timeout occurs without any slave having acknowledged the transaction, the master reverts
+  - If a timeout occurs without any slave having acknowledged the transaction, the master reverts
     to asynchronous replication. When at least one semisynchronous slave catches up, the master
     returns to semisynchronous replication.（如果超时之前没有确认事务的话，那么master会转到async
     模式，直到有一个semi-sync slave追上为止）
-  • Semisynchronous replication must be enabled on both the master and slave sides. If
+  - Semisynchronous replication must be enabled on both the master and slave sides. If
     semisynchronous replication is disabled on the master, or enabled on the master but on no
     slaves, the master uses asynchronous replication.（slave和master两端都必须打开semi-sync）
 
 GTID(global trx id)(since MySQL 5.6)
 
-  • https://dev.mysql.com/doc/refman/5.6/en/replication-gtids.html
-  • http://www.mysqlperformanceblog.com/2013/02/08/
+  - https://dev.mysql.com/doc/refman/5.6/en/replication-gtids.html
+  - http://www.mysqlperformanceblog.com/2013/02/08/
     how-to-createrestore-a-slave-using-gtid-replication-in-mysql-5-6/
 
 需要使用下面参数
 
-  • gtid_mode=ON
-  • log-bin
-  • log-slave-updates
-  • enforce-gtid-consistency=true
-  • server_id
-  • #note: much eaiser to handle master-slave replication and failover situation
+  - gtid_mode=ON
+  - log-bin
+  - log-slave-updates
+  - enforce-gtid-consistency=true
+  - server_id
+  - #note: much eaiser to handle master-slave replication and failover situation
 
 13 配置文件
 
-  • ~/.my.cnf overrides /etc/my.cnf
-  • [client] MySQL客户端程序选项组标记
-  • [server] MySQL服务端程序选项组标记
-  • [mysqld] MySQL服务端程序选项组标记
-  • [mysqld-X.Y] MySQL服务端程序选项组标记，但是只有X.Y这个版本才会读取
-  • [mysqld<nnnn>] MySQL服务实例<nnnn>选项组标记，启动多实例时候有用
-  • [mysqld_safe] mysqld_safe程序选项组标记
-  • [mysqld_multi] mysqld_multi程序选项组标记
-  • [mysql_install_db] mysql_install_db程序选项组标记
+  - ~/.my.cnf overrides /etc/my.cnf
+  - [client] MySQL客户端程序选项组标记
+  - [server] MySQL服务端程序选项组标记
+  - [mysqld] MySQL服务端程序选项组标记
+  - [mysqld-X.Y] MySQL服务端程序选项组标记，但是只有X.Y这个版本才会读取
+  - [mysqld<nnnn>] MySQL服务实例<nnnn>选项组标记，启动多实例时候有用
+  - [mysqld_safe] mysqld_safe程序选项组标记
+  - [mysqld_multi] mysqld_multi程序选项组标记
+  - [mysql_install_db] mysql_install_db程序选项组标记
 
 14 系统变量
 
-  • http://www.mysqlperformanceblog.com/2014/01/28/10-mysql-settings-to-tune-after-installation/
+  - http://www.mysqlperformanceblog.com/2014/01/28/10-mysql-settings-to-tune-after-installation/
 
 系统变量按照其作用范围的大小分为两个级别
 
-  • 全局级 # 全面影响整个服务器的操作，比如key_buffer_size控制MyISAM的索引数据缓冲区大小
-  • 会话级 # 只印象服务器如何对待一个给定的客户链接，比如autocommit控制是否自动提交事务
+  - 全局级 # 全面影响整个服务器的操作，比如key_buffer_size控制MyISAM的索引数据缓冲区大小
+  - 会话级 # 只印象服务器如何对待一个给定的客户链接，比如autocommit控制是否自动提交事务
 
 可以通过下面两个命令来察看
 
-  • SHOW VARIABLES # 优先会话级别
-      □ SHOW GLOBAl VARIABLES
-      □ SHOW SESSION/LOCAL VARIABLES
-  • mysqladmin variables # 全局级别
+  - SHOW VARIABLES # 优先会话级别
+      - SHOW GLOBAl VARIABLES
+      - SHOW SESSION/LOCAL VARIABLES
+  - mysqladmin variables # 全局级别
 
 在SQL语句变量先使用会话级别，然后再使用全局级别，也可以显式指定
 
-  • @@SESSION.var_name
-  • @@LOCAL.var_name
-  • @@GLOBAL.var_name
+  - @@SESSION.var_name
+  - @@LOCAL.var_name
+  - @@GLOBAL.var_name
 
 MySQL服务器提供的状态变量使我们可以及时掌握它的实际运行状况。状态变量也分为全局和会话级别，可以通
 过下面命令察看
 
-  • SHOW STATUS
-  • SHOW GLOBAL STATUS
-  • SHOW LOCAL/SESSION STATUS
+  - SHOW STATUS
+  - SHOW GLOBAL STATUS
+  - SHOW LOCAL/SESSION STATUS
 
 14.1 日志相关
 
 刷新日志
 
-  • FLUSH LOG & mysqladmin flush-logs
-  • 出错日志会关闭并且重命名为-old后缀文件，然后重新打开新文件写
-  • 二进制和中继日志会关闭当前文件，然后打开下一个顺序编号的新文件
+  - FLUSH LOG & mysqladmin flush-logs
+  - 出错日志会关闭并且重命名为-old后缀文件，然后重新打开新文件写
+  - 二进制和中继日志会关闭当前文件，然后打开下一个顺序编号的新文件
 
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┯━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃             选项              │                             内容                              ┃
@@ -862,25 +823,25 @@ http://dev.mysql.com/doc/refman/5.6/en/innodb-parameters.html
 
 innodb_data_file_path的格式这里需要详细解释，每个文件之间通过;分隔，每个文件规格说明如下
 
-  • path:size # 文件初始大小size字节，并且不可扩展
-  • path:size:autoextend # 文件初始大小size字节，但是允许自动扩展 #note: 通常写在最后一项
+  - path:size # 文件初始大小size字节，并且不可扩展
+  - path:size:autoextend # 文件初始大小size字节，但是允许自动扩展 #note: 通常写在最后一项
 
 比如innodata1:50M;innodata2:100M;innodata3:200M:autoextend
 
 InnoDB可以使用未经过格式化的硬盘分区，有几个理由值得考虑这么做：
 
-  • 不受文件系统控制
-  • 保证整个存储空间连续性，减少存储空间碎片化
-  • 减少文件系统管理层开销
+  - 不受文件系统控制
+  - 保证整个存储空间连续性，减少存储空间碎片化
+  - 减少文件系统管理层开销
 
 但是考虑不要使用硬盘分区来构成表空间时，有个很重要的因素：有许多系统备份软件只针对文件系统，不能
 对硬盘分区进行备份。这意味着使用硬盘分区来构成表空间将会给系统备份工作增加困难。
 
 innodb_flush_log_at_trx_commit 可以用来控制提交事务时写入磁盘的方式
 
-  • 0. 隔段时间log_buffer会写入log_file并且刷入磁盘
-  • 1（默认值). 每次提交事务都会将log_buffer写入log_file并且刷入磁盘
-  • 2. 每次提交事务都会将log_buffer写入log_file, 但是隔段时间再刷入磁盘
+  - 0. 隔段时间log_buffer会写入log_file并且刷入磁盘
+  - 1（默认值). 每次提交事务都会将log_buffer写入log_file并且刷入磁盘
+  - 2. 每次提交事务都会将log_buffer写入log_file, 但是隔段时间再刷入磁盘
 
 间隔时间由 innodb_flush_log_at_timeout 控制，默认是1s
 
@@ -903,9 +864,9 @@ JDBC连接数据库出现如下问题
 定autoReconnect=true这个选项支持自动重连。但是autoReconnect只是对MySQL4以及更老的版本适用，对于
 MySQL5不适用。接下来看看timeout这个参数。MySQL5手册中对两个变量有如下的说明：
 
-  • interactive_timeout：服务器关闭交互式连接前等待活动的秒数。交互式客户端定义为在
+  - interactive_timeout：服务器关闭交互式连接前等待活动的秒数。交互式客户端定义为在
     mysql_real_connect()中使用CLIENT_INTERACTIVE选项的客户端。又见wait_timeout
-  • wait_timeout:服务器关闭非交互连接之前等待活动的秒数。在线程启动时，根据全局wait_timeout值或全
+  - wait_timeout:服务器关闭非交互连接之前等待活动的秒数。在线程启动时，根据全局wait_timeout值或全
     局interactive_timeout值初始化会话wait_timeout值，取决于客户端类型(由mysql_real_connect()的连
     接选项CLIENT_INTERACTIVE定义)，又见interactive_timeout
 
@@ -914,14 +875,14 @@ MySQL5不适用。接下来看看timeout这个参数。MySQL5手册中对两个�
 
 但是很明显这个问题治标不治本，最好设想出一个办法可以自动重连。实现自动重连大致无非三种实现：
 
-  • 每次操作之前检查连接是否OK。这样比较简单，但是有overhead.
-  • 存在单独线程检查连接是否OK。这样overhead比较小，但是实现有点麻烦。
-  • 每次直接执行SQL。如果出现连接错误的话，那么重新连接再次执行SQL。这个方法overhead比较小，同时
+  - 每次操作之前检查连接是否OK。这样比较简单，但是有overhead.
+  - 存在单独线程检查连接是否OK。这样overhead比较小，但是实现有点麻烦。
+  - 每次直接执行SQL。如果出现连接错误的话，那么重新连接再次执行SQL。这个方法overhead比较小，同时
     相对来说也比较简单。
 
 15.2 连接数量
 
-  • http://www.mysqlperformanceblog.com/2014/01/23/
+  - http://www.mysqlperformanceblog.com/2014/01/23/
     percona-server-improve-scalability-percona-thread-pool/
 
 mysql最大连接数目可以通过参数max_connections进行配置，默认的连接数目是比较低的，对于需要处理大量
@@ -952,10 +913,10 @@ mysql> show status like '%connect%';
 
 对于status状态来说有下面几个和connection相关的数值
 
-  • Aborted_connects 尝试已经失败的MySQL服务器的连接的次数。
-  • Connections 试图连接MySQL服务器的次数。
-  • Max_used_connections 同时使用的连接的最大数目。
-  • Threads_connected 当前打开的连接的数量。
+  - Aborted_connects 尝试已经失败的MySQL服务器的连接的次数。
+  - Connections 试图连接MySQL服务器的次数。
+  - Max_used_connections 同时使用的连接的最大数目。
+  - Threads_connected 当前打开的连接的数量。
 
 修改最大连接数目之后，连接端可能会出现如下错误
 
@@ -1022,33 +983,33 @@ MySQL（5.6） Installation Layout for Generic Unix/Linux Binary Package
 ┃ support-files │                                                                               ┃
 ┗━━━━━━━━━━━━━━━┷━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
-  • mysql_install_db # 初始化基本表
-      □ –user 用户
-      □ –datadir 数据目录
-      □ –basedir 安装目录
-      □ –defaults-file 配置文件
-      □ 用户问题 http://anothermysqldba.blogspot.com/2013/05/
+  - mysql_install_db # 初始化基本表
+      - –user 用户
+      - –datadir 数据目录
+      - –basedir 安装目录
+      - –defaults-file 配置文件
+      - 用户问题 http://anothermysqldba.blogspot.com/2013/05/
         warning-because-user-was-set-to-mysql.html
-      □ 权限问题 http://www.huoxingfan.com/834.html
-  • mysqld # 服务端
-  • mysql # 客户端
-  • mysqld_safe # 启动脚本
-      □ –skip-grant-tables # 忽略权限表 #note: 可以用来重置密码
-      □ –skip-networking # 不启动网络接口
-      □ –defaults-file 配置文件
-  • mysql.server # 启停脚本
-      □ 对mysqld_safe的包装，不接受任何参数
-      □ 提供start/stop/restart方法
-  • mysqld_multi # 启动多个MySQL实例
-      □ –defaults-file # Read only this configuration file, do not read the standard system-wide
+      - 权限问题 http://www.huoxingfan.com/834.html
+  - mysqld # 服务端
+  - mysql # 客户端
+  - mysqld_safe # 启动脚本
+      - –skip-grant-tables # 忽略权限表 #note: 可以用来重置密码
+      - –skip-networking # 不启动网络接口
+      - –defaults-file 配置文件
+  - mysql.server # 启停脚本
+      - 对mysqld_safe的包装，不接受任何参数
+      - 提供start/stop/restart方法
+  - mysqld_multi # 启动多个MySQL实例
+      - –defaults-file # Read only this configuration file, do not read the standard system-wide
         and user-specific files
-      □ –defaults-extra-file # Read this configuration file in addition to the standard
+      - –defaults-extra-file # Read this configuration file in addition to the standard
         system-wide and user-specific files
-  • mysqlbinlog # 察看二进制日志文件
-  • mysqladmin # 系统管理程序，包括关停服务器，检查配置，监控工作状态等
-  • mysqlcheck # 数据库检查，分析，优化以及对受损数据表进行修复
-  • mysqldump # 制作数据库文本备份
-      □ SOURCE file # 导入SQL文件
+  - mysqlbinlog # 察看二进制日志文件
+  - mysqladmin # 系统管理程序，包括关停服务器，检查配置，监控工作状态等
+  - mysqlcheck # 数据库检查，分析，优化以及对受损数据表进行修复
+  - mysqldump # 制作数据库文本备份
+      - SOURCE file # 导入SQL文件
 
 17 其他信息
 
@@ -1057,25 +1018,25 @@ MySQL（5.6） Installation Layout for Generic Unix/Linux Binary Package
 Not all platforms are equally well-suited for running MySQL. How well a certain platform is
 suited for a high-load mission-critical MySQL server is determined by the following factors:
 
-  • General stability of the thread library. A platform may have an excellent reputation
+  - General stability of the thread library. A platform may have an excellent reputation
     otherwise, but MySQL is only as stable as the thread library it calls, even if everything
     else is perfect.
-  • The capability of the kernel and the thread library to take advantage of symmetric
+  - The capability of the kernel and the thread library to take advantage of symmetric
     multi-processor (SMP) systems. In other words, when a process creates a thread, it should be
     possible for that thread to run on a CPU different from the original process.
-  • The capability of the kernel and the thread library to run many threads that acquire and
+  - The capability of the kernel and the thread library to run many threads that acquire and
     release a mutex over a short critical region frequently without excessive context switches.
     If the implementation of pthread_mutex_lock() is too anxious to yield CPU time, this hurts
     MySQL tremendously. If this issue is not taken care of, adding extra CPUs actually makes
     MySQL slower.
-  • General file system stability and performance.
-  • Table size. If your tables are large, performance is affected by the ability of the file
+  - General file system stability and performance.
+  - Table size. If your tables are large, performance is affected by the ability of the file
     system to deal with large files and dealing with them efficiently.
-  • Our level of expertise here at Oracle Corporation with the platform. If we know a platform
+  - Our level of expertise here at Oracle Corporation with the platform. If we know a platform
     well, we enable platform-specific optimizations and fixes at compile time. We can also
     provide advice on configuring your system optimally for MySQL.
-  • The amount of testing we have done internally for similar configurations.
-  • The number of users that have run MySQL successfully on the platform in similar
+  - The amount of testing we have done internally for similar configurations.
+  - The number of users that have run MySQL successfully on the platform in similar
     configurations. If this number is high, the likelihood of encountering platform-specific
     surprises is much smaller.
 
@@ -1084,11 +1045,11 @@ suited for a high-load mission-critical MySQL server is determined by the follow
 The naming scheme in MySQL 5.6 uses release names that consist of three numbers and a suffix; for
 example, mysql-5.6.1-m1. The numbers within the release name are interpreted as follows:
 
-  • The first number (5) is the major version and describes the file format. All MySQL 5 releases
+  - The first number (5) is the major version and describes the file format. All MySQL 5 releases
     have the same file format.
-  • The second number (6) is the release level. Taken together, the major version and release
+  - The second number (6) is the release level. Taken together, the major version and release
     level constitute the release series number.
-  • The third number (1) is the version number within the release series. This is incremented for
+  - The third number (1) is the version number within the release series. This is incremented for
     each new release. Usually you want the latest version for the series you have chosen.
 
 For each minor update, the last number in the version string is incremented. When there are major
@@ -1099,17 +1060,17 @@ Release names also include a suffix to indicates the stability level of the rele
 within a series progress through a set of suffixes to indicate how the stability level improves.
 The possible suffixes are:
 
-  • mN (for example, m1, m2, m3, …) indicate a milestone number. MySQL development uses a
+  - mN (for example, m1, m2, m3, …) indicate a milestone number. MySQL development uses a
     milestone model, in which each milestone proceeds through a small number of versions with a
     tight focus on a small subset of thoroughly tested features. Following the releases for one
     milestone, development proceeds with another small number of releases that focuses on the
     next small set of features, also thoroughly tested. Features within milestone releases may be
     considered to be of pre-production quality.
-  • rc indicates a Release Candidate. Release candidates are believed to be stable, having passed
+  - rc indicates a Release Candidate. Release candidates are believed to be stable, having passed
     all of MySQL's internal testing, and with all known fatal runtime bugs fixed. However, the
     release has not been in widespread use long enough to know for sure that all bugs have been
     identified. Only minor fixes are added.
-  • If there is no suffix, it indicates that the release is a General Availability (GA) or
+  - If there is no suffix, it indicates that the release is a General Availability (GA) or
     Production release. GA releases are stable, having successfully passed through all earlier
     release stages and are believed to be reliable, free of serious bugs, and suitable for use in
     production systems. Only critical bugfixes are applied to the release.
@@ -1122,10 +1083,10 @@ previously found bugs, the test suite keeps getting better.
 
 All releases have been tested at least with these tools:
 
-  • An internal test suite. The mysql-test directory contains an extensive set of test cases. We
+  - An internal test suite. The mysql-test directory contains an extensive set of test cases. We
     run these tests for every server binary. See Section 23.1.2, "The MySQL Test Suite," for more
     information about this test suite.
-  • The MySQL benchmark suite. This suite runs a range of common queries. It is also a test to
+  - The MySQL benchmark suite. This suite runs a range of common queries. It is also a test to
     determine whether the latest batch of optimizations actually made the code faster. See
     Section 8.12.2, "The MySQL Benchmark Suite."
 
@@ -1139,24 +1100,24 @@ concurrency, stress, high volume, upgrade and downgrade.
 
 MySQL基础知识
 
-  • MySQL和SQL入门
-  • 使用SQL管理数据
-  • 数据类型
-  • 存储程序
-  • 查询优化
+  - MySQL和SQL入门
+  - 使用SQL管理数据
+  - 数据类型
+  - 存储程序
+  - 查询优化
 
 MySQL的编程接口
 
-  • MySQL程序设计
-  • 用C语言编写MySQL程序
-  • 用Perl DBI编写MySQL程序
-  • 用PHP编写MySQL程序
+  - MySQL程序设计
+  - 用C语言编写MySQL程序
+  - 用Perl DBI编写MySQL程序
+  - 用PHP编写MySQL程序
 
 MySQL的系统管理
 
-  • MySQL系统管理简介
-  • MySQL的数据目录
-  • MySQL数据库的日常管理
-  • 访问控件和安全
-  • MySQL数据库的维护，备份和复制
+  - MySQL系统管理简介
+  - MySQL的数据目录
+  - MySQL数据库的日常管理
+  - 访问控件和安全
+  - MySQL数据库的维护，备份和复制
 

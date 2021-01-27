@@ -108,7 +108,7 @@ set syntax=on
 " 去掉输入错误的提示声音
 set noeb
 " 在处理未保存或只读文件的时候，弹出确认
-set confirm
+"set confirm
 " 自动缩进
 set autoindent
 set cindent
@@ -252,6 +252,8 @@ nmap    b  <C-b><CR>
 imap <C-c> <font color=red></font><Left><Left><Left><Left><Left><Left><Left>
 imap <C-g> <font color=green></font><Left><Left><Left><Left><Left><Left><Left>
 
+imap <C-l> ><CR>#include<
+
 iab xtime <C-r>=strftime("%H-%M")<cr>
 iab xdate <C-r>=strftime("%Y-%m-%d")<cr>
 iab _in def __init__(self):<Left>
@@ -259,8 +261,8 @@ iab _in def __init__(self):<Left>
 map <F4> :call Dot()<CR>
 func! Dot()
 	exec "w"
-	exec "!dot % -Tpng -o %.png"
-	exec "!xdg-open %.png"
+	exec "!dot % -Tpng -o i%<.png"
+	exec "!xdg-open i%<.png"
 endfunc
 
 " 修改Emmet默认快捷键 将默认的<C-y>修改成<C-e>方便操作
