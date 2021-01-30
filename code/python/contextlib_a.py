@@ -19,6 +19,7 @@ class _GeneratorContextManager(object):
         self.__doc__= doc
 
     def _recreate_cm(self):
+        print("_recreate_cm")
         return self.__class__(self.func, self.args, self.kwds)
 
     def __enter__(self):

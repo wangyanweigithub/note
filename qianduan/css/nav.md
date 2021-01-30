@@ -1,7 +1,6 @@
-基本的垂直导航条
-
-通过HTML创建一个无序列表
-
+### 基本的垂直导航条
+1. 通过HTML创建一个无序列表
+```
 <div>
 <ul class="nav">
         <li><a href="#">home</a></li>
@@ -12,10 +11,11 @@
         <li><a href="#">home</a></li>
 </ul>
 </div>
+```
 
+2. 利用css处理样式
 
-利用css处理样式
-
+```
 <style type="text/css">
         ul.nav{
                 padding:0px;
@@ -50,15 +50,11 @@
 
          }
 </style>
+```
 
-结果
-
-[Center]
-
-创建简单的水平导航条
-
-HTML代码
-
+### 创建简单的水平导航条
+1.HTML代码
+```
 <div>
         <ol class="pagination">
         <!-- 如果要在标签中显示"<"或者">"等特殊字符，可以使用“&”开头，“;”结尾，中间加上字符对应的编码就可以啦 <对应<  >对应>-->
@@ -71,10 +67,11 @@ HTML代码
                 <li><a href="#" rel="next">Next > ></a></li>
         </ol>
 </div>
+```
 
+2. css代码
 
-css代码
-
+```
 ol.pagination{
                 margin:0px;
                 padding:0px;
@@ -100,13 +97,11 @@ ol.pagination{
         ol.pagination a[rel="prev"],ol.pagination a[rel="next"]{
                 border:none;
         }
+```
 
-[Center]
-
-创建图形化导航栏
-
-html代码
-
+### 创建图形化导航栏
+1. html代码
+```
 <div>
 <ul class="nav">
         <li class="first"><a href="#">home</a></li>
@@ -117,9 +112,11 @@ html代码
         <li><a href="#">home</a></li>
 </ul>
 </div>
+```
 
-css代码
+2. css代码
 
+```
 <style type="text/css">
         ul.nav{
                 padding:0px;
@@ -154,15 +151,11 @@ css代码
         }
 
 </style>
+```
 
-
-[Center]
-
-“滑动门”标签页式导航
-
-HTMl代码同上
-css代码
-
+### “滑动门”标签页式导航
+1. css代码
+```
 <style type="text/css">
         ul.nav{
                 padding:0px;
@@ -191,15 +184,11 @@ css代码
         }
 
 </style>
+```
 
-
-运行结果
-[Center]
-
-下拉菜单
-
-html代码
-
+### 下拉菜单
+1. html代码
+```
 <div>
 <ul class="nav">
         <li class="first"><a href="#">home</a></li>
@@ -217,9 +206,11 @@ html代码
         <li><a href="#">home</a></li>
 </ul>
 </div>
+```
 
-css代码
+2. css代码
 
+```
 <style type="text/css">
         ul.nav,ul.nav ul{
                 padding:0px;
@@ -260,14 +251,11 @@ css代码
                 display:block;
         }
 </style>
+```
 
-运行结果
-当鼠标没有悬停在第二个导航框的时候
-[Center]
-当鼠标悬停在第二个导航框的时候
-[Center]
-css3制作动态导航菜单
-
+### css3制作动态导航菜单
+1. css
+```
         .nav{
                   width:560px;
                   height: 50px;
@@ -313,7 +301,4 @@ css3制作动态导航菜单
                   color:#fff;
                   text-decoration: none;
                 }
-
-运行结果
-[Center]
-当鼠标放在连接上时  字体会向右倾斜十度
+```
