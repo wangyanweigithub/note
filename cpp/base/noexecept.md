@@ -1,4 +1,4 @@
-﻿### 新类型
+﻿## 新类型
 > long long int
 
 1. long long int 并不是 C++11 最先引入的，其实早在 C99，long long int 就已经被纳入 C 标准中，

@@ -3,21 +3,6 @@
 
 * [cpp grammar](#cpp-grammar)
 * [cpp advanced](#cpp-advanced)
-* [cpp libraries](#cpp-libraries)
-* [并发](#并发)
-	* [多线程](#多线程)
-	* [多进程](#多进程)
-	* [协程](#协程)
-* [cpp 模块](#cpp-模块)
-	* [boost](#boost)
-		* [asio](#asio)
-		* [opencv](#opencv)
-* [cpp 编译](#cpp-编译)
-	* [cmake](#cmake)
-	* [g++](#g)
-	* [makefile](#makefile)
-	* [clang](#clang)
-* [cpp 检测/优化](#cpp-检测优化)
 * [其他](#其他)
 
 <!-- vim-markdown-toc -->
@@ -65,25 +50,7 @@
 
 7. 模板特化:  advanced/模板特化.md
 
-## cpp libraries
-## 并发
-### 多线程
-### 多进程
-### 协程
-
-## cpp 模块
-### boost
-#### asio
-#### opencv
-
-## cpp 编译
-### cmake
 1. cmake.md
-### g++
-### makefile
-### clang
-
-## cpp 检测/优化
 
 ## 其他
 1. 面试: 面试题/one.md
