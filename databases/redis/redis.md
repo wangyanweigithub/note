@@ -1,30 +1,31 @@
 
 <!-- vim-markdown-toc GFM -->
 
-* [redis设计与实现 25]
-	* [toc 26]
-		* [数据结构 27]
-		* [单机数据库的实现 72]
-		* [多机数据库的实现 121]
-		* [独立功能的实现 265]
-* [redis笔记 306]
-	* [持久化 307]
-		* [RDB 308]
-		* [AOF持久化 345]
-* [redis源码解析 400]
-	* [redis数据结构 401]
-		* [sds 402]
-		* [链表 443]
-		* [hash 538]
-		* [跳跃表 717]
-		* [ziplist压缩表 765]
-		* [sentinel 831]
+* [redis设计与实现 1](#redis设计与实现-1)
+		* [数据结构 3](#数据结构-3)
+		* [单机数据库的实现 48](#单机数据库的实现-48)
+		* [多机数据库的实现 97](#多机数据库的实现-97)
+		* [独立功能的实现 241](#独立功能的实现-241)
+* [redis笔记 282](#redis笔记-282)
+	* [持久化 283](#持久化-283)
+		* [RDB 284](#rdb-284)
+		* [AOF持久化 321](#aof持久化-321)
+* [redis源码解析 376](#redis源码解析-376)
+	* [redis数据结构 377](#redis数据结构-377)
+		* [sds 378](#sds-378)
+		* [链表 419](#链表-419)
+		* [hash 514](#hash-514)
+		* [跳跃表 693](#跳跃表-693)
+		* [ziplist压缩表 741](#ziplist压缩表-741)
+		* [sentinel 807](#sentinel-807)
+* [redis 命令总结 876](#redis-命令总结-876)
+	* [set 877](#set-877)
+	* [删除 886](#删除-886)
+	* [子元素: 898](#子元素-898)
 
 <!-- vim-markdown-toc -->
-
-## redis设计与实现 25
-### toc 26
-#### 数据结构 27
+## redis设计与实现 1
+#### 数据结构 3
 1. 简单动态字符串
 	- sds定义
 
@@ -69,7 +70,7 @@
 	- 对象共享
 	- 对象的空转时长
 
-#### 单机数据库的实现 72
+#### 单机数据库的实现 48
 8. 数据库
 	- 服务器中的数据库
 	- 切换数据库
@@ -118,7 +119,7 @@
 		- 更新服务器每秒执行命令次数
 	- 初始化服务器
 	
-#### 多机数据库的实现 121
+#### 多机数据库的实现 97
 14. 复制
 	- 旧版赋值功能的实现
 	- 旧版赋值功能的缺陷
@@ -262,7 +263,7 @@
 	- 复制与故障转移
 	- 消息
 
-#### 独立功能的实现 265
+#### 独立功能的实现 241
 17. 发布与订阅
 	- 频道的订阅与退订
 	- 模式的订阅与退订
@@ -303,9 +304,9 @@
 	- 成为监视器
 	- 向监视器发送命令信息
 	
-## redis笔记 306
-### 持久化 307
-#### RDB 308
+## redis笔记 282
+### 持久化 283
+#### RDB 284
 1. RDB 生成:
 	1. 有两个Redis命令可以用于生成RDB文件
 		- SAVE: 阻塞
@@ -342,7 +343,7 @@
 	4. 带有过期键的	`key_value_pairs`
 		| EXPIRETIME_MS | ms | TYPE | key | value |
 
-#### AOF持久化 345
+#### AOF持久化 321
 1. AOF持久化的实现: AOF持久化功能的实现可以分为三个步骤:
 	- 命令追加(append)
 	- 文件写入
@@ -397,9 +398,9 @@
 
 	2. AOF重写缓冲区的作用: p148
 
-## redis源码解析 400
-### redis数据结构 401
-#### sds 402
+## redis源码解析 376
+### redis数据结构 377
+#### sds 378
 1. sds的数据结构:
 	```
 	typedef char *sds;
@@ -440,7 +441,7 @@
 	}
 	```
 
-#### 链表 443
+#### 链表 419
 1. 链表的数据结构:
 	```
 	typedef struct listNode {
@@ -535,7 +536,7 @@
 	#definelistGetMatchMethod(l)((l)->match)
 	```
 
-#### hash 538
+#### hash 514
 1. 结构
 	```
 	/*
@@ -714,7 +715,7 @@
 	1. rehashing时,将ht[0]->table[h]的kv转移到ht[1]tale[k]时,当ht[0]开始转移时,ht[0]的table[h]的所有还未转移的kv都访问不到了,知道table[h]这一个数组的所有
 kv都转移完才可以找到,但是因为redis是单线程,所以redis才没有发生异常,如果转移过程中,有别的线程读取正在转移的哪一行,会发生找不到.
 
-#### 跳跃表 717
+#### 跳跃表 693
 1. 结构:
 	```
 	/* ZSETs use a specialized version of Skiplists */
@@ -762,7 +763,7 @@ kv都转移完才可以找到,但是因为redis是单线程,所以redis才没有
 	} zskiplist;
 	```
 
-#### ziplist压缩表 765
+#### ziplist压缩表 741
 1. ziplist中实体对象结构:
 	```
 	/*
@@ -828,7 +829,7 @@ kv都转移完才可以找到,但是因为redis是单线程,所以redis才没有
 	*/
 	```
 
-#### sentinel 831
+#### sentinel 807
 1. sentinelState 结构体:
 ```
 struct sentinelState {
@@ -896,3 +897,38 @@ typedef struct sentinelRedisInstance {
 	//...
 } sentinelRedisInstance;
 ```
+
+## redis 命令总结 876
+### set 877
+> set表示`k->v`的意思.所有具有索引的kv对都有set.
+
+1. string: set key value
+2. list:   lset key index value. 索引是下标值
+3. hash:   hset key field value. 索引是key,和string类似.
+
+4. set/zset 无序且没有索引,所有set/zset没有set命令.只有sadd,spop(随机),srem
+
+### 删除 886
+1. 总结:
+	1. 有序的删除小标: rem
+	2. 无序的使用删除key的, del
+	3. trim: 剪切切片的用trim
+
+2. 详细 
+	1. string: del
+	2. list: ltrim, lrem, lrange
+	3. hash: hdel
+	4. set/zset: srem
+
+### 子元素: 898
+1. 总结:
+	1. 获取容器的子元素切片:
+		- lrange
+		- hvals, hkeys
+
+	2. set无序所有没有切片,只有判断是否包含这个元素:
+		- sismember, smembers
+	
+	3. zset通过值可以有多种获取切片的方法
+		- zrane, zrangebyscore, zrangebylex, zrevrange
+		- zrevrangebyscore

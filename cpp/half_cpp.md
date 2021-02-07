@@ -1,3 +1,4 @@
+
 ## 问题 23
 1. 有了auto为什么还需要decltype
     1. auto只能让编译器确定变量的类型，而decltype可以确定一种类型来定义变量。
@@ -1018,7 +1019,7 @@ int main() {
 
             4. 友元和类方法是一致的。
 
-﻿## C++17 简介
+## C++17 简介
 1. 主要入选特性
 	非类型模板参数的 auto
 	std::variant<>
@@ -1225,9 +1226,8 @@ int fun() 
 	3. 一个函数对象(function object,该对象拥有operator()),附带的args被传递作为实参.
 
 	4. 一个lambda,严格地说,它是一种函数对象.
-## base
-1. 50.md
-﻿## istream
+
+## istream
 > 使用isteam对象当做条件时，其效果是检测流的状态。
 
 1. 例子
@@ -1245,7 +1245,7 @@ istream对象的状态变为无效。处理无效的状态的istream对象会使
 	1. windows 系统的文件结束符是**Ctrl+Z**，然后按Enter或Return键。
 	2. unix系统和Max OS是**Ctrl+D**
     
-﻿## lambda 表达式
+## lambda 表达式
 1. C++11提供了对匿名函数的支持,称为Lambda函数(也叫Lambda表达式). Lambda表达式具体形式如下:
 
 　　　　[capture](parameters)->return-type{body}
@@ -1384,7 +1384,7 @@ istream对象的状态变为无效。处理无效的状态的istream对象会使
 				std::cout << "generic(1,2) = " << generic(1, 2) << std::endl;
 				std::cout << "generic(1.1,2.2) = " << generic(1.1, 2.2) << std::endl;
 			}
-﻿## 新类型
+## 新类型
 > long long int
 
 1. long long int 并不是 C++11 最先引入的，其实早在 C99，long long int 就已经被纳入 C 标准中，
@@ -1465,7 +1465,8 @@ istream对象的状态变为无效。处理无效的状态的istream对象会使
 ### 总结
 1. noexcept 是最为重要的特性，它的一个功能在于能够阻止异常的扩散传播，
 让编译器能最大限度的优化我们的代码。
-﻿## 函数对象包装器
+
+## 函数对象包装器
 1. std::function
 	1. Lambda 表达式的本质是一个函数对象，当 Lambda 表达式的捕获列表为空时，
 		Lambda 表达式还能够作为一个函数指针进行传递，例如：
@@ -1534,7 +1535,8 @@ istream对象的状态变为无效。处理无效的状态的istream对象会使
 
 ## 匿名函数
 1. [=]以=caputure值，表明：在lambda被声明时已有效的所有符号都以by value形式传进lambda体内。
-﻿### 基础知识
+
+### 基础知识
 1. 基本类型：
    int、short、long、float、double、unsigned、boolean、char、long double
 
@@ -1562,7 +1564,7 @@ http://www.cnblogs.com/yc_sunniwell/archive/2010/07/14/1777416.html
 
 8. c++ 纯虚函数，在函数方发声明的最后加上 “= 0” 
 	virtual void clear() = 0;
-﻿## 面向对象增强
+## 面向对象增强
 1. 委托构造
 > C++11 引入了委托构造的概念，这使得构造函数可以在同一个类中一个构造函数调用另一个构造函数，从而达到简化代码的目的：
 
@@ -1708,7 +1710,7 @@ http://www.cnblogs.com/yc_sunniwell/archive/2010/07/14/1777416.html
 			这时，下面的代码将能够被编译：
 
 			std::cout << new_enum::value3 << std::endl
-﻿## 模板与泛型编程
+## 模板与泛型编程
 > c++primer 5 16：
 
 1. 所谓泛型编程就是以独立与任何类型的方式编写代码。使用泛型程序时，
@@ -1991,7 +1993,8 @@ http://www.cnblogs.com/yc_sunniwell/archive/2010/07/14/1777416.html
 4. 类模板的部分特化
 
 ### 重载与函数模板
-﻿## 多线程
+
+## 多线程
 ### C++ 11/14 高速上手教程 - 语言级线程支持
 1. 本节内容包括：
     1. 对标准库的扩充: 语言级线程支持
@@ -2161,7 +2164,7 @@ http://www.cnblogs.com/yc_sunniwell/archive/2010/07/14/1777416.html
 			producer.join();
 			consumer.join();
 		}
-﻿## 右值
+## 右值
 ### 右值引用
 1. 右值引用是 C++11 引入的与 Lambda 表达式齐名的重要特性之一。它的引入解决了 C++ 中大量的历史遗留问题，消除了诸如 std::vector、std::string 之类的额外开销，也才使得函数对象容器 std::function 成为了可能。
 
@@ -2449,7 +2452,8 @@ http://www.cnblogs.com/yc_sunniwell/archive/2010/07/14/1777416.html
 
 4. move 仅仅是一个static_cast,做的就是将变量去掉，只要它存储的值。看 advanced/函数返回值优化..md.
 5. 如果一个值是右值(没有变量名),就会自动调用右值引用或移动构造函数，记得**右值引用是一种类型，可以适配多态函数**
-﻿## 正则表达式库
+
+## 正则表达式库
 1. 对标准库的扩充: 正则表达式库
 	1. 正则表达式简介
 		- 普通字符
@@ -2567,7 +2571,8 @@ http://www.cnblogs.com/yc_sunniwell/archive/2010/07/14/1777416.html
 			foo.txt sub-match[1]: foo
 			sub-match[0]: bar.txt
 			bar.txt sub-match[1]: bar
-﻿##  智能指针和引用计数
+
+##  智能指针和引用计数
 - RAII 与引用计数
 - std::shared_ptr
 - std::unique_ptr
