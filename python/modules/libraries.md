@@ -1,33 +1,34 @@
 ﻿<!-- vim-markdown-toc GFM -->
 
-* [内置函数]
-	* [常规]
-	* [高级]
-	* [描述器]
-	* [编译]
-	* [判断类型]
-	* [functional]
-		* [itertools]
-		* [map, filter, reduce]
-	* [反射]
-* [内置常量]
-	* [逻辑值判断]
-	* [迭代器]
-	* [上下文管理器类型]
-	* [模块]
-	* [对象方法]
-* [容器]
-	* [iter]
-	* [slice]
-	* [dict]
-		* [dict 构造函数]
-		* [dict视图对象]
-	* [frozenset([iterable])]
-* [容器类型]
-* [其他]
-* [易错点]
-	* [引用与拷贝]
-	* [python 10大易错知识点]
+* [内置函数](#内置函数)
+	* [常规](#常规)
+	* [高级](#高级)
+	* [描述器](#描述器)
+	* [编译](#编译)
+	* [判断类型](#判断类型)
+	* [functional](#functional)
+		* [itertools](#itertools)
+		* [map, filter, reduce](#map-filter-reduce)
+	* [反射](#反射)
+* [内置常量](#内置常量)
+	* [逻辑值判断](#逻辑值判断)
+	* [迭代器](#迭代器)
+	* [上下文管理器类型](#上下文管理器类型)
+	* [模块](#模块)
+	* [对象方法](#对象方法)
+* [容器](#容器)
+	* [iter](#iter)
+	* [slice](#slice)
+	* [dict](#dict)
+		* [dict 构造函数](#dict-构造函数)
+		* [dict视图对象](#dict视图对象)
+	* [frozenset([iterable])](#frozensetiterable)
+* [容器类型](#容器类型)
+* [其他](#其他)
+* [易错点](#易错点)
+	* [引用与拷贝](#引用与拷贝)
+	* [python 10大易错知识点](#python-10大易错知识点)
+	* [subprocess](#subprocess)
 
 <!-- vim-markdown-toc -->
 ## 内置函数
@@ -706,3 +707,9 @@ print(options.filename)
 						A.address = "earch"
 
 		3. 这样，这个类本身就被改变了，address这个属性存在于类A的__dict__属性中。
+
+### subprocess
+1. Popen指定了stdout，输出全部重定向。输出的命令没有在shell里执行：
+	subprocess.Popen(["clear"], stdout=PIPE)
+没有清屏，只是输出了一串乱码，这串乱码就是实际执行清屏的操作符，
+decode后执行eval就会清屏。
