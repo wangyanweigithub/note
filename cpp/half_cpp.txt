@@ -4,14 +4,72 @@
     1. auto只能让编译器确定变量的类型，而decltype可以确定一种类型来定义变量。
 
 2. 字面值 "hello " 是什么类型，string还是 const char *。
+
 3. mutable 使用场景。
+	- 它是为突破const限定而设置的.const函数修改一个mutable不会报错.
+	- 这个关键字只能用于非静态和非常量数据成员。如果一个类的成员被指定为mutable类型，
+	那么调用const成员函数就可以为这个声明为mutable类型的成员赋值。
+
+	```
+	class A {
+	public:
+			bool flag;
+			void test() const {
+				flag = true;
+			}
+	};
+
+	void main() {
+		A a;
+		a.test();
+	}
+	编译出错: l-value specifies const object;
+	使用mutable的定义,只需把flag类型前加mutable即可.
+
+	```
 
 4. map 下标运算返回的类型是mapped_type，那直接对下标的++，是怎么运算的，mapped_type可以直接进行算术运算吗？
+	key_type:是key的类型,
+	mapped_type指的是值的类型,值如果是int类型,那么mapped_type就是int.
+	是为了方便map操作设置的类型.可能是一个template.
+
 5. 迭代器返回的是指针还是引用，不是拷贝。
+	迭代器是广义上的指针,事实上,它可以是指针,也可以是一个对其执行类似指针的
+操作: 如解引用,递增.
+	通过将指针广义化为迭代器,让STL能够为各种不同的容器类提供统一的接口.
+
 6. return hash<string> () (sd.isbn())  什么意思
+	第一个括号生成hasher,然后第二对括号立即调用,相当与:
+	```
+	std::hash<string> hasher;
+	return hasher(sd.isbn());
+	```
 7. static member copy construct 
+
+7. 类的静态成员,必须显示定义,不能出现在构造函数初始化列表中.因为静态成员不是属于对象
+的属性,而是类对象的成员.而构造函数用于生成一个对象,所以静态成员不能在构造函数中初始化.
+```
+class Fred {
+public:
+	Fred();
+private:
+	int i;
+	static int j;
+}
+
+Fred::Fred(): i(10), j(20) {} //wrong
+
+int Fred::j = 42; //right
+```
+
+注意: 在给static member赋值时,加上了一个int???
+	不能在类定义的地方直接初始化,因为c++ 拒绝在类内初始化一个非const static 的变量.
+
+	
 8. 聚合类
+
 9. 申请对象一定要用new吗
+
 10. 为什么重载运算符时，要用复合赋值运算符来定义算符运算符，为什不不能反过来。
 
 ## 基本类型 38
