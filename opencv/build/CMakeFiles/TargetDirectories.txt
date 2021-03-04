@@ -1,3 +1,0 @@
-/home/wang/note/opencv/build/CMakeFiles/rebuild_cache.dir
-/home/wang/note/opencv/build/CMakeFiles/edit_cache.dir
-/home/wang/note/opencv/build/CMakeFiles/main.dir
