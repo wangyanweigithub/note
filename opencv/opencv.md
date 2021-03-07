@@ -330,6 +330,13 @@
 			double threshold2, int apertureSize=3, bool L2gradient=false)
 	```
 
+	- sobel:
+	```
+	void Sobel(InputArray src, OutputArray dst, int ddepth, int dx, int dy, int ksize=3, 
+			double scale=1, double delta=0, int borderType=BORDER_DEFAULT)
+
+	```
+
 ## 直方图与匹配
 
 ### 直方图计算与绘制
@@ -556,11 +563,24 @@
 	- 滞后阈值
 
 2. sobel 算子: 主要用于边缘检测的离散微分算子
-	1. 它结合了高斯平滑和微分求导,用来计算图像灰度函数的近似梯度
-	2. 在图像任意一点使用,都将会产生对应的梯度或其法矢量.
+	1. [原理](http://blog.sciencenet.cn/blog-425437-1139187.html)
 
-	3. 计算过程:
-		- 
+	2. 它结合了高斯平滑和微分求导,用来计算图像灰度函数的近似梯度
+
+	3. 在图像任意一点使用,都将会产生对应的梯度或其法矢量.
+
+	4. 计算过程: 
+		1. 分别在x和y两个方向上求导:
+			- 水平变化: 图像与奇数大小的内核G[x]进行卷积
+			- 垂直变化: 另一个卷积核
+
+		2. 在图像的每一点,结合以上两个结果求出近似梯度
+			1. ```G = math.sqrt(G[x]**2 + G[y]**2)```
+			2. 有时有下面更简单的替换: ```G = |G[x]| + |G[y]|```
+
+3. Laplacia 算子
+	
+
 ### 霍夫变换
 
 ### 重映射
