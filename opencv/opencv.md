@@ -41,18 +41,18 @@
 		* [图像的矩](#图像的矩)
 		* [分水岭算法](#分水岭算法)
 		* [图像修补](#图像修补)
-	* [图像变换](#图像变换)
-		* [基于OpenCV的边缘检测](#基于opencv的边缘检测)
-		* [霍夫变换](#霍夫变换)
-		* [重映射](#重映射)
-		* [仿射变换](#仿射变换)
-		* [直方图均衡化](#直方图均衡化)
 	* [图像处理/imgproc](#图像处理imgproc)
 		* [平滑处理](#平滑处理)
 		* [滤波](#滤波)
 		* [漫水填充](#漫水填充)
 		* [图像金字塔与图片尺寸缩放](#图像金字塔与图片尺寸缩放)
 		* [阈值化:](#阈值化)
+	* [图像变换](#图像变换)
+		* [基于OpenCV的边缘检测](#基于opencv的边缘检测)
+		* [霍夫变换](#霍夫变换)
+		* [重映射](#重映射)
+		* [仿射变换](#仿射变换)
+		* [直方图均衡化](#直方图均衡化)
 
 <!-- vim-markdown-toc -->
 # OpenCV
@@ -292,7 +292,43 @@
 
 		```
 
+	- 图像金字塔
+		1. pyrUp:
+		```
+		void pyrUp(InputArray src, OutputArray dst, const Size& dstsize=sieze(), 
+			int borderType=BORDER_DEFAULT)
+		```
 
+		2. pyrDown:
+		```
+		void pyrDown(InputArray src, OutputArray dst, const Size& dstsize=sieze(), 
+			int borderType=BORDER_DEFAULT)
+		```
+
+	- 尺寸调整
+	```
+	void resize(InputArray src, OutputArray dst, Size dsize, double fx=0, double fy=0,
+			int interpolation=INTER_LINEAR)
+	```
+
+	- 阈值化
+		1. threshold:
+		```
+		void threshold(InputArray src, OutputArray dst, double thresh, 
+			double maxval, int type)
+		```
+
+		2. adaptiveThreshold
+		```
+		void adaptiveThreshold(InputArray src, OutputArray dst, double maxValue, int adaptiveMethod,
+				int thresholdType, int blockSize, double c)
+		```
+
+	- canny: 对于canny使用,推荐高低阈值比在2:1 到3:1之间
+	```
+	void Canny(inputArray image, OutputArray edges, double threshold, 
+			double threshold2, int apertureSize=3, bool L2gradient=false)
+	```
 
 ## 直方图与匹配
 
@@ -337,18 +373,6 @@
 ### 分水岭算法
 
 ### 图像修补
-
-## 图像变换
-
-### 基于OpenCV的边缘检测
-
-### 霍夫变换
-
-### 重映射
-
-### 仿射变换
-
-### 直方图均衡化
 
 ## 图像处理/imgproc
 
@@ -495,17 +519,53 @@
 	- 使用先前同样的内核(乘以4)与放大后的图像卷积,获得"新增像素"的近似值
 
 4. 普拉斯金字塔
+	0. 缩小后再放大的图像会比原来的图像更加模糊，应为在缩放的过程中丢失了一些信息，如果想在
+	缩小和放大整个过程中减少信息的丢失，这些数据信息就是普拉斯金字塔。
+
 	1. 第i层的定义``` L[i] = G[i] - UP(G[i+1]*g[5*5]) ```
 
 	2. G[i]是第i层的图像,UP()操作是讲原图像中位置为(x,y)的像素映射到目标图像的(2x+1, 2y+1)
 	位置,即向上取样.*表示卷积,g[5*5]是5*5的高斯内核
 
 5. 普拉斯运算:```L[i] = G[i] - PyrUp(G[i+1])```
+	- PyrUp(G[i+1]) 是对G[i+1]层放大，就是成为新的G[i]层
+	- 而原始的G[i]层减去缩小放大后的G[i]层，就是缩放过程中丢失的信息。
 
 4. 尺寸调整函数: resize()
 
 ### 阈值化:
-
 1. 固定阈值操作: Threshold()
+	典型应用是对灰度图像进行阈值操作得到二值图像(compare()函数也可以达到此目的)或者是去掉噪声.
+
 2. 自适应阈值操作: adaptiveThreshold()
+
+## 图像变换
+### 基于OpenCV的边缘检测
+1. 边缘检测的一般步骤
+	- 滤波: 过滤噪声
+	- 增强: 凸显出灰度点邻域强度值有显著变化的点.可以通过梯度来实现.
+	- 检测: 阈值化来检测过滤.
+
+2. canny 算子步骤:
+	- 消除噪声
+
+	- 计算梯度幅值和方向
+
+	- 非极大值抑制
+
+	- 滞后阈值
+
+2. sobel 算子: 主要用于边缘检测的离散微分算子
+	1. 它结合了高斯平滑和微分求导,用来计算图像灰度函数的近似梯度
+	2. 在图像任意一点使用,都将会产生对应的梯度或其法矢量.
+
+	3. 计算过程:
+		- 
+### 霍夫变换
+
+### 重映射
+
+### 仿射变换
+
+### 直方图均衡化
 
