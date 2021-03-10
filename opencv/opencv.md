@@ -358,6 +358,12 @@
 		double scale=1, double delta=0, intborderType=BORDER_DEFAULT)
 	```
 
+	- 标准霍夫变换: HoughLines()
+	```
+	void HoughLines(InputArray src, OutputArray lines, double rho, double theta, 
+			int threshold, double srn=0, double stn=0)
+	```
+
 ## 图像处理/imgproc 360
 
 ### 平滑处理 362
@@ -586,6 +592,18 @@
 2. 多尺度霍夫变换: HoughLines
 
 3. 累计概率霍夫变换: HoughLinesP
+
+4. 霍夫曼空间: 将一条直线的方程式转化为斜率和截距的二次方程,叫做霍夫曼空间.
+	霍夫曼空间中的点表示的是笛卡尔坐标系的直线,笛卡尔坐标系的点,表示的是霍夫曼空间的直线.
+	霍夫曼空间的线的交点,表示这些x,y有同样的斜率和截距,则交点处的点在同一条直线上.
+
+5. 步骤:
+	- 将二值图像转换为极坐标系
+	- 以1度步长,计算所有参数空间的直线上点的值
+	- 统计这些值,将出现的值次数大于阈值的当做一条直线
+	- 画图这些直线
+	- 注意: 参数空间的一个点在函数空间就是一条直线.极坐标的r和theta,是到直线距离为r,夹角为
+	theta的直线.
 
 ### 重映射 580
 
