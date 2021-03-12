@@ -380,7 +380,26 @@
 	void equalizeHist(InputArray src, OutputArray dst);
 	```
 
-	-??
+	- calcHist:
+	```
+	void calcHist(const Mat* img, int nimages, const int* channels, InputArray mask, OutputArray hist, 
+			int dims, const int* histSize, const float** ranges, bool uniform=true, bool accumulate=false)
+	```
+
+	- minMaxLoc:
+	```
+	void minMaxLoc(InputArray src, double* minVal, double* maxVal=0, Point* minLoc=0, 
+			Point* maxLoc=0, InputArray mask=noArray())
+	```
+
+	- compareHist:
+	```
+	double compareHist(InputArray H1, InputArray H2, int method)
+
+	double compareHist(const SparseMat& H1, const SparseMat& H2, int method)
+	```
+
+	-???
 ## 图像处理/imgproc
 
 ### 平滑处理
@@ -672,10 +691,17 @@
 
 ### 图像修补
 ## 直方图与匹配
+1. dims: 统计的特征的数目
+2. bins: 每个特征空间子区段的数目, bins=16...
+3. range: 每个特征空间的取值范围,最大值和最小值的数组,range=[0, 255]
 
 ### 直方图计算与绘制
+1. 使用calcHist函数来计算直方图数据
+2. 然后使用绘图函数画出来:如矩形,直线...
 
 ### 直方图对比
+1. 要对比两个直方图,首先必须选取一个衡量直方图相似度的对比标准(d(H1, H2)).
+	compareHist()函数返回对比两个直方图的相似度.返回值就是d(H1, H2);
 
 ### 反向投影
 
